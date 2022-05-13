@@ -1,0 +1,37 @@
+.app-layout {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  align-items: stretch;
+  align-content: stretch;
+  justify-content: flex-start;
+
+  &__sidebar {
+    flex: 0 0 auto;
+    width: var(--sidebar-W, 240px);
+  }
+
+  &__container {
+    display: flex;
+    flex: 1 1 auto;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    align-content: stretch;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: calc(100% - var(--sidebar-W, 240px));
+  }
+
+  &__header {
+    flex: 0 0 auto;
+    position: relative;
+    height: var(--header-H, 150px);
+  }
+
+  &__content {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: calc(100% - var(--header-H, 150px));
+  }
+}
