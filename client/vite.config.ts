@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import Components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
-
+import { parse } from 'path';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -26,6 +26,54 @@ export default defineConfig({
       '@layout': resolve(__dirname + '/src/Layout'),
       '@scss': resolve(__dirname + '/src/assets/scss'),
       '@image': resolve(__dirname + '/src/assets/image'),
+    },
+  },
+  build: {
+    minify: false,
+    sourcemap: 'hidden',
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            const name = id.toString().split('node_modules/')[1].split('/')[0];
+            if (['@vue', 'vue', 'vue-demi'].includes(name)) return 'vue';
+            if ('sanitize.css' === name) return 'sanitize';
+            return name;
+          } else if (id.includes('scss')) {
+            const pathList = id.toString().split('scss/')[1].split('/');
+            const name = pathList[pathList.length - 1].split('?')[0];
+            if (name === 'bootstrap-icons.css') return 'bootstrap-icons';
+            console.log('manualChunks ->> [%s]', pathList.join(', '));
+          }
+        },
+        entryFileNames: '[name].[hash].js',
+        chunkFileNames({ facadeModuleId }) {
+          if (facadeModuleId !== null) {
+            const [_, model, name] = facadeModuleId.substring(facadeModuleId.indexOf('src') + 4).match(/^(\w+)\/(\w+)/);
+            return `view/${model.toLocaleLowerCase()}/${name.toLocaleLowerCase()}.[hash].js`;
+          } else {
+            return 'modules/[name].[hash].js';
+          }
+        },
+        assetFileNames({ name }) {
+          const info = parse(name);
+          const fonts = ['.woff', '.woff2'];
+          if (fonts.includes(info.ext)) {
+            return 'assets/fonts/[name].[hash].[ext]';
+          }
+          const image = ['.jpg', '.png', '.webm', '.gif'];
+          if (image.includes(info.ext)) {
+            return 'assets/image/[name].[hash].[ext]';
+          }
+          return 'assets/[name].[hash].[ext]';
+        },
+      },
+    },
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
     },
   },
 });

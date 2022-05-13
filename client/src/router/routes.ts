@@ -7,6 +7,9 @@ export const routes: RouteRecordRaw[] = [{
   children: [{
     path: 'home',
     component: () => import(/* webpackChunkName: "home" */ '@page/Home/index.vue'),
+  }, {
+    path: 'article/:id',
+    component: () => import(/* webpackChunkName: "article"*/ '@page/Article/index.vue'),
   }],
 }, {
   path: '/admin',
