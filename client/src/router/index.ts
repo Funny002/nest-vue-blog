@@ -7,11 +7,11 @@ const router = createRouter({
   history: createWebHistory(),
   scrollBehavior: (to, from, savedPosition) => {
     if (to.hash) {
-      return { el: to.hash, behavior: 'smooth' };
+      return {el: to.hash, behavior: 'smooth'};
     } else if (savedPosition) {
       return savedPosition;
     } else {
-      return { top: 0 };
+      return {top: 0};
     }
   },
   routes,

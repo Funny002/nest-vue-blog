@@ -12,7 +12,7 @@ export default defineConfig({
       dirs: ['src/components'],
       resolvers: [ElementPlusResolver({
         importStyle: 'sass',
-        version: '2.1.11',
+        version: '2.2.0',
       })],
     }),
   ],
@@ -24,6 +24,7 @@ export default defineConfig({
       '@admin': resolve(__dirname + '/src/admin'),
       '@utils': resolve(__dirname + '/src/utils'),
       '@layout': resolve(__dirname + '/src/Layout'),
+      '@router': resolve(__dirname + '/src/router'),
       '@scss': resolve(__dirname + '/src/assets/scss'),
       '@image': resolve(__dirname + '/src/assets/image'),
     },
@@ -44,10 +45,13 @@ export default defineConfig({
             const name = pathList[pathList.length - 1].split('?')[0];
             if (name === 'bootstrap-icons.css') return 'bootstrap-icons';
             console.log('manualChunks ->> [%s]', pathList.join(', '));
+          } else if (id.includes('src/utils/')) {
+            return 'utils';
           }
         },
         entryFileNames: '[name].[hash].js',
-        chunkFileNames({ facadeModuleId }) {
+        chunkFileNames({facadeModuleId}) {
+          console.log('chunkFileNames ->>', facadeModuleId);
           if (facadeModuleId !== null) {
             const [_, model, name] = facadeModuleId.substring(facadeModuleId.indexOf('src') + 4).match(/^(\w+)\/(\w+)/);
             return `view/${model.toLocaleLowerCase()}/${name.toLocaleLowerCase()}.[hash].js`;
@@ -55,7 +59,7 @@ export default defineConfig({
             return 'modules/[name].[hash].js';
           }
         },
-        assetFileNames({ name }) {
+        assetFileNames({name}) {
           const info = parse(name);
           const fonts = ['.woff', '.woff2'];
           if (fonts.includes(info.ext)) {

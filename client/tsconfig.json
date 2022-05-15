@@ -40,6 +40,12 @@
       ],
       "@layout/*": [
         "src/Layout/*"
+      ],
+      "@router": [
+        "src/router"
+      ],
+      "@router/*": [
+        "src/router/*"
       ]
     }
   },

@@ -16,6 +16,6 @@ export const System = registerAs('system', () => ({
   cookie: 'asrtt67y8ujomkjkiuH$%zda',
   limit: {
     windowMs: 30 * 60 * 1000,
-    max: 20,
+    max: 100,
   },
 } as SystemOptions));

@@ -25,7 +25,9 @@ async function bootstrap() {
   // 日志
   app.useLogger(logger);
   // cors
-  if (config.cors) { app.enableCors();}
+  if (config.cors) {
+    app.enableCors();
+  }
   // 文档
   const options = new DocumentBuilder().setTitle('Api').setVersion('0.0.1').build();
   SwaggerModule.setup('api-doc', app, SwaggerModule.createDocument(app, options));

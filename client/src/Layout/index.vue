@@ -11,9 +11,9 @@
     </div>
     <div class='app-layout__content' @scroll='onScroll'>
       <router-view v-slot='{ Component, route }'>
-        <transition-group :name='route.meta.transition||""'>
+        <transition :name='route.meta.transition || ""'>
           <component :is='Component' />
-        </transition-group>
+        </transition>
       </router-view>
       <div class='app-layout__footer'>
         © {{ new Date().getFullYear() }}
