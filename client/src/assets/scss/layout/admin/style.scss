@@ -1,0 +1,67 @@
+.admin-layout {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  flex-direction: row;
+  align-content: stretch;
+  justify-content: flex-start;
+
+  &__sidebar {
+    height: 100vh;
+    background-color: #ffffff;
+    width: var(--admin-sidebar, 200px);
+  }
+
+  &__content {
+    height: 100vh;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    align-content: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: calc(100vw - var(--admin-sidebar, 200px));
+  }
+
+  &__nav {
+    width: 100%;
+    flex: 0 0 auto;
+  }
+
+  &__header {
+    height: 40px;
+    display: flex;
+    padding: 0 16px;
+    align-items: center;
+    background-color: #ffffff;
+
+    &--dropdown {
+      height: 40px;
+      display: flex;
+      padding: 0 10px;
+      cursor: pointer;
+      user-select: none;
+      align-items: center;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, .1);
+      }
+
+      &-name {
+        padding-left: 10px;
+      }
+
+      &-menu {
+        width: 40px;
+      }
+    }
+  }
+
+  &__body {
+    width: 100%;
+    padding: 0 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: calc(100% - 90px);
+  }
+}

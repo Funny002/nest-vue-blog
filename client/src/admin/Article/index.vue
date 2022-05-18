@@ -1,3 +1,3 @@
 <template>
-  Admin/home
+  Admin/article
 </template>

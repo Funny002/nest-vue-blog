@@ -18,11 +18,38 @@ export const routes: RouteRecordRaw[] = [{
   children: [{
     path: 'home',
     component: () => import(/* webpackChunkName: "admin" */ '@admin/Home/index.vue'),
+  }, {
+    path: 'article',
+    component: () => import(/* webpackChunkName: "admin" */ '@admin/Article/index.vue'),
+  }, {
+    path: 'users',
+    component: () => import(/* webpackChunkName: "admin" */ '@admin/Users/index.vue'),
+  }, {
+    path: 'discuss',
+    component: () => import(/* webpackChunkName: "admin" */ '@admin/Discuss/index.vue'),
+  }, {
+    path: 'image',
+    component: () => import(/* webpackChunkName: "admin" */ '@admin/Image/index.vue'),
+  }, {
+    path: 'files',
+    component: () => import(/* webpackChunkName: "admin" */ '@admin/Files/index.vue'),
+  }, {
+    path: 'types',
+    component: () => import(/* webpackChunkName: "admin" */ '@admin/Types/index.vue'),
+  }, {
+    path: 'tage',
+    component: () => import(/* webpackChunkName: "admin" */ '@admin/Tage/index.vue'),
+  }, {
+    path: 'setting',
+    component: () => import(/* webpackChunkName: "admin" */ '@admin/Setting/index.vue'),
+  }, {
+    path: 'userInfo',
+    component: () => import(/* webpackChunkName: "admin" */ '@admin/UserInfo/index.vue'),
   }],
 }, {
   path: '/login',
   component: () => import(/* webpackChunkName: "layout" */ '@page/Login/index.vue'),
 }, {
   path: '/:pathMatch(.*)',
-  component: () => import(/* webpackChunkName: "error" */ '@page/Error/404.vue'),
+  component: () => import(/* webpackChunkName: "error" */ '@layout/Error/index.vue'),
 }];
