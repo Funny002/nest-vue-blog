@@ -15,8 +15,31 @@
   }
 
   &__content {
-    width: 100%;
     height: 30px;
+    display: flex;
     flex: 2 2 auto;
+    overflow: hidden;
+    align-items: center;
+  }
+
+  &__tags {
+    height: 30px;
+    padding: 0 5px;
+
+    & + & {
+      margin-left: 5px;
+    }
+
+    i {
+      font-size: 14px;
+    }
+
+    &--close {
+      margin-left: 5px;
+
+      &:hover {
+        color: var(--el-color-error);
+      }
+    }
   }
 }

@@ -27,6 +27,7 @@ export default defineConfig({
       '@router': resolve(__dirname + '/src/router'),
       '@scss': resolve(__dirname + '/src/assets/scss'),
       '@image': resolve(__dirname + '/src/assets/image'),
+      '@components': resolve(__dirname + '/src/components'),
     },
   },
   build: {

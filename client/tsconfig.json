@@ -44,6 +44,9 @@
       "@router": [
         "src/router"
       ],
+      "@components": [
+        "src/components"
+      ],
       "@router/*": [
         "src/router/*"
       ]

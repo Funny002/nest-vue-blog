@@ -1,3 +1,10 @@
+.admin-layout--animation > .admin-layout {
+  &__sidebar,
+  &__content {
+    transition: width .3s;
+  }
+}
+
 .admin-layout {
   display: flex;
   flex-wrap: nowrap;
@@ -8,8 +15,36 @@
 
   &__sidebar {
     height: 100vh;
+    transition: width .3s;
     background-color: #ffffff;
     width: var(--admin-sidebar, 200px);
+
+    &--logo {
+      height: 45px;
+      padding: 5px 0;
+
+      > img {
+        width: 30px;
+        height: 30px;
+        margin: 0 auto;
+        display: block;
+      }
+    }
+  }
+
+  &__menu {
+    border-right: 0;
+    overflow-y: auto;
+    user-select: none;
+    overflow-x: hidden;
+    height: calc(100vh - 45px);
+
+    .el-menu-item,
+    .el-sub-menu__title,
+    &--item .el-menu-item {
+      height: 40px;
+      line-height: 40px;
+    }
   }
 
   &__content {
@@ -25,23 +60,29 @@
 
   &__nav {
     width: 100%;
+    height: 95px;
     flex: 0 0 auto;
+
+    &--collapse {
+      //
+    }
   }
 
   &__header {
-    height: 40px;
+    height: 45px;
     display: flex;
-    padding: 0 16px;
+    padding: 0 10px;
     align-items: center;
     background-color: #ffffff;
 
     &--dropdown {
-      height: 40px;
+      height: 45px;
       display: flex;
       padding: 0 10px;
       cursor: pointer;
       user-select: none;
       align-items: center;
+      transition: background-color .3s;
 
       &:hover {
         background-color: rgba(0, 0, 0, .1);
@@ -53,6 +94,20 @@
 
       &-menu {
         width: 40px;
+      }
+    }
+
+    &--btn {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 4px;
+      transition: background-color .3s;
+
+      &:hover {
+        color: #000;
+        background-color: rgba(0, 0, 0, .1);
       }
     }
   }
