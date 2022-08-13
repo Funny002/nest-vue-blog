@@ -1,19 +1,30 @@
 <template>
-  <el-config-provider size="small" :locale="config.locale" :button="config.button">
-    <router-view/>
-  </el-config-provider>
+  <nav>
+    <router-link to="/">Home</router-link> |
+    <router-link to="/about">About</router-link>
+  </nav>
+  <router-view />
 </template>
 
-<script lang="ts" setup>
-import { reactive, ref } from 'vue'
-import Zh_Cn from 'element-plus/es/locale/lang/zh-cn';
+<style lang="scss">
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
 
-const config = reactive({
-  locale: ref(Zh_Cn),
-  button: reactive({
-    autoInsertSpace: true,
-  }),
-})
-</script>
+nav {
+  padding: 30px;
 
-<style lang='css' src='@scss/bootstrap-icons.css'/>
+  a {
+    font-weight: bold;
+    color: #2c3e50;
+
+    &.router-link-exact-active {
+      color: #42b983;
+    }
+  }
+}
+</style>

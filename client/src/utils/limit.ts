@@ -1,1 +1,0 @@
-export const SizeLimit = (target: number, min = -Infinity, max = Infinity) => Math.min(Math.max(target, min), max);

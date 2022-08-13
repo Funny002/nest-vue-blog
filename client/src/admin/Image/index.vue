@@ -1,3 +1,0 @@
-<template>
-  Admin/image
-</template>

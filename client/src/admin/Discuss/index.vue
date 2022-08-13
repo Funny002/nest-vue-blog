@@ -1,3 +1,0 @@
-<template>
-  Admin/Discuss
-</template>

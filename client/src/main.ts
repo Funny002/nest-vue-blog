@@ -1,16 +1,5 @@
-import { createPinia } from 'pinia';
-import { createApp } from 'vue';
-import Router from '@router';
-import App from './App.vue';
-import '@scss/__base.scss';
+import { createApp } from "vue";
+import App from "./App.vue";
+import router from "./router";
 
-/**
- * =============================================================================
- * 样式一致性
- * =============================================================================
- */
-import 'sanitize.css/forms.css';
-import 'sanitize.css/sanitize.css';
-import 'sanitize.css/typography.css';
-
-createApp(App).use(Router).use(createPinia()).mount('#app');
+createApp(App).use(router).mount("#app");

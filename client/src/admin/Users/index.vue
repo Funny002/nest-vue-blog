@@ -1,3 +1,0 @@
-<template>
-  Admin/users
-</template>

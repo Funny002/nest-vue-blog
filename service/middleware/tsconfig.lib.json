@@ -2,8 +2,8 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "declaration": true,
-    "outDir": "../../dist/middleware"
+    "outDir": "../dist/middleware"
   },
-  "include": ["src/**/*"],
+  "include": ["**/*"],
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
 }
