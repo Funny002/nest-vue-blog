@@ -4,6 +4,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
 
+/** Jwt策略 */
 @Injectable()
 export class JwtAuthStrategy extends PassportStrategy(Strategy, JwtAuth_Key_Name) {
   constructor(private readonly configService: ConfigService) {

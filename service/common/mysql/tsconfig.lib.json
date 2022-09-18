@@ -1,8 +1,8 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "declaration": false,
-    "outDir": "../../dist/apps/service"
+    "declaration": true,
+    "outDir": "../../dist/common/mysql"
   },
   "include": ["**/*"],
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]

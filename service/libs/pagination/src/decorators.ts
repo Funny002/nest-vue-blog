@@ -1,11 +1,13 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
+/** 默认分页配置声明 */
 interface DefaultPagination {
   minLimit: number;
   maxLimit: number;
   defaultOrderKey: 'DESC' | 'ASC';
 }
 
+/** 管道 ~ 获取分页参数 */
 export const PaginationParams = createParamDecorator((data: Partial<DefaultPagination> = {}, input: ExecutionContext) => {
   let {
     query: { pageCount, pageSize, orderBy, orderKey, ...params },

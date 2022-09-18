@@ -4,6 +4,7 @@ import { JwtAuthService } from './JwtAuth.service';
 import { ConfigService } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 
+/** Jwt模块 */
 @Module({
   imports: [
     JwtModule.registerAsync({
@@ -20,4 +21,5 @@ import { Module } from '@nestjs/common';
   providers: [ConfigService, JwtService, JwtAuthService],
   exports: [JwtModule, JwtService, JwtAuthService],
 })
-export class JwtAuthModel {}
+export class JwtAuthModel {
+}

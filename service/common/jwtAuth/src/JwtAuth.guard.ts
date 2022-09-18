@@ -5,6 +5,7 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { IS_PUBLIC } from '../index';
 
+/** Jwt网关 */
 @Injectable()
 export class JwtAuthGuard extends AuthGuard(JwtAuth_Key_Name) {
   //

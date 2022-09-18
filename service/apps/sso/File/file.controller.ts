@@ -1,7 +1,7 @@
 import { FileDownloadDto, FileOperationDto, FilePrepareDto, FileShardUploadDto, FileUploadFileDto } from '@app/dto/file.dto';
 import { Body, Controller, Get, Post, Put, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { ApiBody, ApiConsumes, ApiOperation, ApiProduces, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBadRequestResponse, ApiBody, ApiConsumes, ApiOperation, ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FileService } from './file.service';
 import { noAuth } from '@app/common/jwtAuth';
 

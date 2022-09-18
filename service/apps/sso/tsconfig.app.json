@@ -4,6 +4,6 @@
     "declaration": false,
     "outDir": "../../dist/apps/sso"
   },
-  "include": ["src/**/*"],
+  "include": ["**/*"],
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
 }
