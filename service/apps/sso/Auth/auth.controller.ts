@@ -2,7 +2,7 @@ import { Controller, Get, Post, Version } from '@nestjs/common';
 import { ApiBasicAuth, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 
-@ApiTags('Auth')
+@ApiTags('Auth 登录/注册')
 @ApiBasicAuth()
 @Controller('auth')
 export class AuthController {

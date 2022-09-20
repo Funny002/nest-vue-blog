@@ -1,13 +1,13 @@
 export * from './src/decorators';
 
 /** 分页声明 */
-interface PaginationRequest {
+export interface PaginationOptions {
   pageSize: number;
   pageCount: number;
 }
 
 /** 分页响应声明 */
-interface PaginationResponse<T = any> extends PaginationRequest {
+export interface PaginationResponse<T = any> extends PaginationOptions {
   hasNext: boolean;
   total: number;
   list: T[];
@@ -20,9 +20,9 @@ export class Pagination {
    * @param total
    * @param list
    */
-  of<T = any>({ pageSize, pageCount }: PaginationRequest, total: number, list: T[]): PaginationResponse<T> {
+  of<T = any>({ pageSize, pageCount }: PaginationOptions, total: number, list: T[]): PaginationResponse<T> {
     const maxPage = Math.floor(total / pageSize) + (total % pageCount ? 1 : 0);
-
+    
     return { pageSize, pageCount, hasNext: pageCount < maxPage, total, list };
   }
 }

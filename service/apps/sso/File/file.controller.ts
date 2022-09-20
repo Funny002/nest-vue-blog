@@ -5,7 +5,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { FileService } from './file.service';
 import { noAuth } from '@app/common/jwtAuth';
 
-@ApiTags('File')
+@ApiTags('File 文件管理')
 @Controller('file')
 export class FileController {
   constructor(private readonly fileService: FileService) {}

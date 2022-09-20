@@ -1,5 +1,5 @@
 // 权限
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, Index, Tree, TreeParent } from 'typeorm';
 import { BaseModel } from '@app/mysql';
 
 export enum PowerState {
@@ -7,9 +7,20 @@ export enum PowerState {
   disable
 }
 
+export enum PowerType {
+  URL,
+  Operate,
+  Group
+}
+
 @Entity()
+@Tree('closure-table')
+@Index('index', ['type', 'name', 'mutex'])
+@Index('unique', ['keys'], { unique: true })
 export class Power extends BaseModel {
-  @Column({ comment: '分类' }) type: string;
+  @Column({ comment: '分类', enum: PowerType }) type: PowerType;
+  
+  @TreeParent() parent: number;
   
   @Column({ comment: '标识' }) keys: string;
   
