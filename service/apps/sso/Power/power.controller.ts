@@ -1,29 +1,46 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Req } from '@nestjs/common';
-import { PaginationParams, PaginationRequest } from '@app/pagination';
-import { SsoPowerCreateDto, SsoPowerSaveDto } from '@app/dto/sso.power.dto';
-import { ApiHeader, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req } from '@nestjs/common';
+import { SsoPowerCreateDto, SsoPowerSaveDto, SsoPowerTreeDto } from '@app/dto/sso.power.dto';
+import { Pagination, PaginationParams, PaginationRequest } from '@app/pagination';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PowerService } from './power.service';
 import { Request } from 'express';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Power } from '@app/mysql';
+import { Repository } from 'typeorm';
+import { FindOptionsSelect } from 'typeorm/find-options/FindOptionsSelect';
 
 @ApiTags('Power 权限')
 @Controller('power')
 export class PowerController {
-  constructor(private readonly powerService: PowerService) {
-  }
+  constructor(
+    private readonly powerService: PowerService,
+    @InjectRepository(Power) private powerRepository: Repository<Power>,
+  ) {}
   
   @Post('create')
   @ApiOperation({ summary: '添加权限' })
   async createPower(@Req() req: Request, @Body() body: SsoPowerCreateDto) {
+    return (await this.powerService.addPower(body))?.id;
   }
   
   @Get('list')
   @ApiOperation({ summary: '获取权限 ~ 分页列表' })
   async getPowerList(@Req() req: Request, @PaginationParams() page: PaginationRequest) {
+    const select: FindOptionsSelect<Power> = {};
+    
+    const where = this.powerService.handleWhere(page.params);
+    
+    const list = await this.powerRepository.find({ select, where, skip: (page.pageCount - 1) * page.pageSize, take: page.pageSize });
+    
+    const total = await this.powerRepository.countBy(where);
+    
+    return Pagination.of(page, total, list);
   }
   
-  @Get('tree/:id')
+  @Get('tree')
   @ApiOperation({ summary: '获取权限 ~ 树' })
-  async getPowerTree(@Req() req: Request, @Param('id') id = 0) {
+  async getPowerTree(@Req() req: Request, @Query() query: SsoPowerTreeDto) {
+    return await this.powerService.getTree(query.keys, Math.max(0, +query.depth) || undefined);
   }
   
   @Get('info/:id')

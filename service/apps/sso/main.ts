@@ -5,6 +5,7 @@ import { UseSwagger } from '@app/common/swagger';
 import { useMiddleware } from '@app/middleware';
 import { NestFactory } from '@nestjs/core';
 import { SsoModule } from './sso.module';
+import { UseInterceptor } from '@app/interceptor';
 
 /** 服务启动引导 */
 async function bootstrap() {
@@ -23,10 +24,12 @@ async function bootstrap() {
   app.enableCors();
   // Api多版本
   app.enableVersioning();
+  // 拦截器
+  UseInterceptor(app);
   // 启用中间件
   useMiddleware(app, { limit: SsoModule.limit });
   // 验证管道
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe(SsoModule.verify));
   // 创建 swagger
   const version = UseSwagger(app, SsoModule.version);
   // 启用混合应用

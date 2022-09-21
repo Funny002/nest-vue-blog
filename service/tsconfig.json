@@ -22,6 +22,7 @@
       "@app/common": ["common"],
       "@app/common/*": ["common/*"],
       "@app/middleware": ["middleware"],
+      "@app/interceptor": ["interceptor"],
       "@app/mysql": ["mysql"],
       "@app/dto": ["dto"],
       "@app/dto/*": ["dto/*"],

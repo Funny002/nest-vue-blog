@@ -1,5 +1,4 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { PaginationOptions } from '../index';
 
 /** 默认分页配置声明 */
 export interface DefaultPagination {
@@ -9,8 +8,10 @@ export interface DefaultPagination {
 }
 
 /** 分页 声明 */
-export interface PaginationRequest<T = any> extends PaginationOptions {
+export interface PaginationRequest<T = any> {
   order?: { [key: string]: 'DESC' | 'ASC' }
+  pageCount: number;
+  pageSize: number;
   params: T
 }
 

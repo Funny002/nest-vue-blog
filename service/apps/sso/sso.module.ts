@@ -36,12 +36,15 @@ export class SsoModule {
   static port: number;
   static version: string;
   static limit: AppSystem['limit'];
+  static verify: AppSystem['verify'];
   
   constructor(private readonly configService: ConfigService) {
     // 获取配置
     const config = this.configService.get<AppSystem>(SSO_NAME);
     // Api版本
     SsoModule.version = config.version;
+    // 管道验证
+    SsoModule.verify = config.verify;
     // 请求限制
     SsoModule.limit = config.limit;
     // 服务端口

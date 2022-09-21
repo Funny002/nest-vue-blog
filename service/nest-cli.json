@@ -60,6 +60,15 @@
         "tsConfigPath": "middleware/tsconfig.lib.json"
       }
     },
+    "interceptor": {
+      "type": "library",
+      "root": "interceptor",
+      "entryFile": "index",
+      "sourceRoot": "interceptor",
+      "compilerOptions": {
+        "tsConfigPath": "interceptor/tsconfig.lib.json"
+      }
+    },
     "mysql": {
       "type": "library",
       "root": "mysql",

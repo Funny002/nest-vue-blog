@@ -1,3 +1,4 @@
+import { ValidationPipeOptions } from '@nestjs/common/pipes/validation.pipe';
 import { registerAs } from '@nestjs/config';
 
 /** 服务配置声明 */
@@ -8,7 +9,8 @@ export interface AppSystem {
   limit?: {
     windowMs: number;
     max: number;
-  }
+  },
+  verify?: ValidationPipeOptions
 }
 
 /** sso服务配置名 */
@@ -20,6 +22,11 @@ export const Sso = registerAs(SSO_NAME, (): AppSystem => ({
   port: 9871,
   prefix: '',
   version: '1',
+  verify: {
+    whitelist: true,
+    transform: true,
+    stopAtFirstError: true,
+  },
 }));
 /** 服务配置 */
 export const Service = registerAs(Service_NAME, (): AppSystem => ({

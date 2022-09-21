@@ -39,6 +39,7 @@
     "helmet": "^6.0.0",
     "ioredis": "^5.2.3",
     "mysql": "^2.18.1",
+    "nestjs-i18n": "^9.1.10",
     "passport": "^0.6.0",
     "passport-github2": "^0.1.12",
     "passport-google-oidc": "^0.1.0",
@@ -103,6 +104,7 @@
       "^@app/config(|/.*)$": "<rootDir>/config/$1",
       "^@app/common(|/.*)$": "<rootDir>/common/$1",
       "^@app/middleware(|/.*)$": "<rootDir>/middleware/$1",
+      "^@app/interceptor(|/.*)$": "<rootDir>/interceptor/$1",
       "^@app/mysql(|/.*)$": "<rootDir>/mysql/$1",
       "^@app/dto(|/.*)$": "<rootDir>/dto/$1",
       "^@app/pagination(|/.*)$": "<rootDir>/libs/pagination/$1"

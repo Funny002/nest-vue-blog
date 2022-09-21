@@ -1,16 +1,16 @@
 // 权限
-import { Column, Entity, Index, Tree, TreeParent } from 'typeorm';
+import { Column, Entity, Index, Tree, TreeChildren, TreeParent } from 'typeorm';
 import { BaseModel } from '@app/mysql';
 
 export enum PowerState {
+  disable,
   enable,
-  disable
 }
 
 export enum PowerType {
   URL,
   Operate,
-  Group
+  Group,
 }
 
 @Entity()
@@ -20,7 +20,9 @@ export enum PowerType {
 export class Power extends BaseModel {
   @Column({ comment: '分类', enum: PowerType }) type: PowerType;
   
-  @TreeParent() parent: number;
+  @TreeParent() parent: Power;
+  
+  @TreeChildren() children: Power[];
   
   @Column({ comment: '标识' }) keys: string;
   
