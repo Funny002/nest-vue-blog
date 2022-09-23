@@ -87,6 +87,15 @@
         "tsConfigPath": "dto/tsconfig.lib.json"
       }
     },
+    "tools": {
+      "type": "library",
+      "root": "tools",
+      "entryFile": "index",
+      "sourceRoot": "tools",
+      "compilerOptions": {
+        "tsConfigPath": "tools/tsconfig.lib.json"
+      }
+    },
     "pagination": {
       "type": "library",
       "root": "libs/pagination",
