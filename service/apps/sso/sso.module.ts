@@ -11,7 +11,7 @@ import { Module } from '@nestjs/common';
 // import { FileModule } from './File/file.module';
 // import { RoleModule } from './Role/role.module';
 // import { oAuthModule } from './oAuth/oAuth.module';
-// import { PowerModule } from './Power/power.module';
+import { PowerModule } from './Power/power.module';
 
 @Module({
   imports: [
@@ -24,7 +24,7 @@ import { Module } from '@nestjs/common';
     // oAuthModule,
     // FileModule,
     // RoleModule,
-    // PowerModule,
+    PowerModule,
   ],
   providers: [
     // JwtService,
