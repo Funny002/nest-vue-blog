@@ -1,5 +1,5 @@
 /** 权限创造Dto声明 */
-import { ArrayMinSize, IsDivisibleBy, IsNotEmpty, IsNumberString, IsOptional, Min, Validate } from 'class-validator';
+import { ArrayMinSize, IsAlphanumeric, IsArray, IsDivisibleBy, IsNotEmpty, IsNumber, IsNumberString, IsOptional, IsString, Min, Validate } from 'class-validator';
 import { PowerState, PowerType } from '@app/mysql';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -29,7 +29,7 @@ export class SsoPowerCreateDto {
   @IsOptional()
   @Min(1)
   @IsDivisibleBy(1)
-  @ApiProperty({ description: '父级' })
+  @ApiProperty({ description: '父级', required: false })
   parent: number;
 }
 

@@ -1,5 +1,6 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
-import { BaseModel, User } from '@app/mysql';
+import { BaseModel } from '@app/mysql/common';
+import { User } from '@app/mysql';
 
 @Entity()
 export class UserOauth extends BaseModel {

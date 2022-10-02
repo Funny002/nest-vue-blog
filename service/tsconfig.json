@@ -24,6 +24,7 @@
       "@app/middleware": ["middleware"],
       "@app/interceptor": ["interceptor"],
       "@app/mysql": ["mysql"],
+      "@app/mysql/*": ["mysql/*"],
       "@app/tools": ["tools"],
       "@app/tools/*": ["tools/*"],
       "@app/dto": ["dto"],

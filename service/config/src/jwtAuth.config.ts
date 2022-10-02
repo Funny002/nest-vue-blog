@@ -1,7 +1,4 @@
 import { registerAs } from '@nestjs/config';
-import { JwtModuleOptions } from '@nestjs/jwt/dist/interfaces/jwt-module-options.interface';
-
-export { JwtModuleOptions } from '@nestjs/jwt/dist/interfaces/jwt-module-options.interface';
 
 /** 配置参数声明 */
 export interface JwtAuthOptions {
@@ -12,7 +9,7 @@ export interface JwtAuthOptions {
 /** JWT解析后配置声明 */
 export interface JwtPayLoad {
   [key: string]: any;
-
+  
   exp: number;
   iat: number;
 }

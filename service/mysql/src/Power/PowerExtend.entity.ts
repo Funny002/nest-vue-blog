@@ -1,8 +1,9 @@
 import { Entity, OneToMany, OneToOne } from 'typeorm';
-import { BaseModel, Power, User } from '@app/mysql';
+import { PowerModel } from '@app/mysql/common';
+import { Power, User } from '@app/mysql';
 
 @Entity()
-export class PowerExtend extends BaseModel {
+export class PowerExtend extends PowerModel {
   // 主键绑定
   @OneToOne(type => User, user => user.id) uid: User;
   

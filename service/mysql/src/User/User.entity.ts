@@ -1,5 +1,5 @@
-import { Column, Entity, OneToMany } from 'typeorm';
-import { BaseModel, PowerRole } from '@app/mysql';
+import { BaseModel } from '@app/mysql/common';
+import { Column, Entity } from 'typeorm';
 
 export enum UserState {
   enable,
@@ -19,7 +19,7 @@ export class User extends BaseModel {
   @Column({ comment: '头像', nullable: true }) avatar: string;
   
   // @Column({ comment: '权限' })
-  @OneToMany(type => PowerRole, PowerRole => PowerRole.keys) rower: PowerRole;
+  // @OneToMany(type => PowerRole, PowerRole => PowerRole.keys) rower: PowerRole;
   
   @Column({ type: 'enum', enum: UserState, default: UserState.disable, comment: '状态' }) state: UserState;
 }
