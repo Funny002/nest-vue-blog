@@ -8,14 +8,14 @@ export function unique(...args: any[]): any[] {
 }
 
 export function hasOverlap(target: any[], value: any[]) {
-  let [start, end] = [target, value];
+  let [start, end] = [unique(target), unique(value)];
   if (start.length < end.length) {
     [start, end] = [end, start];
   }
   return end.some(v => start.includes(v));
 }
 
-export function non_overlapping(target: any[], value: any[]) {
+export function non_overlap(target: any[], value: any[]) {
   return unique(target).reduce(function (val, item) {
     if (!value.includes(item)) {
       return [...val, item];
@@ -24,7 +24,7 @@ export function non_overlapping(target: any[], value: any[]) {
   }, []);
 }
 
-export function overlapping(target: any[], value: any[]) {
+export function overlap(target: any[], value: any[]) {
   return unique(target).reduce(function (val, item) {
     if (value.includes(item)) {
       return [...val, item];

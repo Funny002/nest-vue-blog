@@ -39,6 +39,7 @@ export class SsoPowerCreateDto {
 export class SsoPowerSaveDto extends SsoPowerCreateDto {
 }
 
+/** 获取树 */
 export class SsoPowerTreeDto {
   @IsString()
   @IsNotEmpty()

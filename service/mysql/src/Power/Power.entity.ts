@@ -1,9 +1,8 @@
 import { Column, Entity, Index, Tree, TreeChildren, TreeParent } from 'typeorm';
-import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
 import { SsoPowerCreateDto } from '@app/dto/sso.power.dto';
+import { ManualException } from '@app/common/error';
 import { PowerModel } from '@app/mysql/common';
 import { hasOverlap } from '@app/tools/array';
-import { ManualException } from '@app/common/error';
 
 export enum PowerState {
   disable,
@@ -31,33 +30,13 @@ export class Power extends PowerModel {
   
   @Column({ comment: '状态', type: 'enum', enum: PowerState, default: PowerState.enable }) state: PowerState;
   
-  /**
-   * 判断子级是否相互排斥
-   */
-  static async hasMutualRepulsion<T extends Power>(this: { new(): T } & typeof Power, where: FindOptionsWhere<T>, depth: number = 0): Promise<boolean> {
-    const list = await this.getFindChildren(where, depth);
-    
-    if (list) {
-      const [keys, mutex]: [string[], string[]] = [[], []];
-      
-      for (const item of list) {
-        keys.push(item.keys);
-        mutex.push(...item.mutex);
-      }
-      
-      return hasOverlap(keys, mutex);
-    }
-    
-    throw new ManualException('父级不存在');
-  }
-  
   static async of_create(body: SsoPowerCreateDto): Promise<Power> {
     const power = new Power();
-    power.keys = body.keys;
-    power.name = body.name;
-    power.type = body.type;
-    power.mutex = body.mutex;
-    power.state = body.state;
+    power.keys = body.keys; // 标识
+    power.name = body.name; // 名称
+    power.type = body.type; // 分类
+    power.mutex = body.mutex; // 排斥
+    power.state = body.state; // 状态
     
     if (body.parent) {
       const parent = await this.getInfoKeys({ id: body.parent });
@@ -74,10 +53,16 @@ export class Power extends PowerModel {
     }
     
     if (power.parent && power.mutex.length) {
-      const state = await this.hasMutualRepulsion({ id: power.parent.id });
+      const list = await this.getFindChildren({ id: power.parent.id }, 0);
       
-      if (state) {
-        throw new ManualException('该组包含相互排斥的权限');
+      const { keys, mutex }: { [key: string]: string[] } = list.reduce(function (value, { keys, mutex }) {
+        value.mutex.push(...mutex);
+        value.keys.push(keys);
+        return value;
+      }, { keys: [], mutex: [] });
+      
+      if (hasOverlap(keys, power.mutex) || mutex.indexOf(power.keys)) {
+        throw new ManualException('包含排斥的权限');
       }
     }
     

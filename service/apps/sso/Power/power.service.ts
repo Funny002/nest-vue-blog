@@ -30,38 +30,11 @@ export class PowerService {
     return where;
   }
   
-  async hasKey<T = FindOptionsWhere<Power>>(data: T | T[]): Promise<boolean> {
-    return (await this.powerRepository.countBy(data)) > 0;
-  }
-  
-  async getId(id: number): Promise<Power | null> {
-    return await this.powerRepository.findOneBy({ id });
-  }
-  
-  async getChildrenList(parent: Power, depth = 1): Promise<Power[]> {
-    return await this.dataSource.manager.getTreeRepository(Power).findDescendants(parent, { depth });
-  }
-  
-  async addPower(data: SsoPowerCreateDto): Promise<Power> {
-    // 保证 keys 或 name 是唯一
-    const state = await this.hasKey([{ keys: data.keys }, { name: data.name }]);
-    
-    if (state) {
-      throw new ManualException('标识或昵称已存在');
+  async addList(body: SsoPowerCreateDto): Promise<Power> {
+    if (await Power.hasKeys({ keys: body.keys })) {
+      throw new ManualException('标识已存在');
     }
     
-    return await this.powerRepository.save(await Power.of_create(data));
-  }
-  
-  async getTree(keys: string, depth: number = 0) {
-    const state = await this.hasKey({ keys: keys });
-    
-    if (!state) {
-      throw new ManualException(`未找到标识为${keys}的数据`);
-    }
-    
-    const parent = await this.powerRepository.findOneBy({ keys });
-    
-    return await this.dataSource.manager.getTreeRepository(Power).findDescendantsTree(parent, { depth: depth || undefined });
+    return this.powerRepository.save(await Power.of_create(body));
   }
 }

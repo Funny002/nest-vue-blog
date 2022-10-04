@@ -20,13 +20,13 @@ export class PowerController {
   
   @Post('create')
   @ApiOperation({ summary: '添加权限' })
-  async createPower(@Req() req: Request, @Body() body: SsoPowerCreateDto) {
-    return (await this.powerService.addPower(body)).id;
+  async create(@Req() req: Request, @Body() body: SsoPowerCreateDto) {
+    return (await this.powerService.addList(body)).id;
   }
   
   @Get('list')
   @ApiOperation({ summary: '获取权限 ~ 分页列表' })
-  async getPowerList(@Req() req: Request, @PaginationParams() page: PaginationRequest) {
+  async list(@Req() req: Request, @PaginationParams() page: PaginationRequest) {
     const select: FindOptionsSelect<Power> = {};
     
     const where = this.powerService.handleWhere(page.params);
@@ -40,23 +40,20 @@ export class PowerController {
   
   @Get('tree')
   @ApiOperation({ summary: '获取权限 ~ 树' })
-  async getPowerTree(@Req() req: Request, @Query() query: SsoPowerTreeDto) {
-    return await this.powerService.getTree(query.keys, Math.max(0, +(query.depth || 0)) || undefined);
+  async tree(@Req() req: Request, @Query() query: SsoPowerTreeDto) {
+    return await Power.getTreeChildren({ keys: query.keys }, Math.max(0, +(query.depth || '0')));
   }
   
   @Get('info/:id')
   @ApiOperation({ summary: '获取权限详情' })
-  async GetPowerInfo(@Req() req: Request, @Param('id') id: number) {
+  async info(@Req() req: Request, @Param('id') id: number) {
     return await Power.getInfoKeys({ id });
   }
   
   @Put('save/:id')
   @ApiOperation({ summary: '修改权限' })
-  async savePower(@Req() req: Request, @Param('id') id: number, @Body() body: SsoPowerSaveDto) {
-    
-    const parent = await Power.getInfoKeys({ id });
-    
-    if (!parent) {
+  async save(@Req() req: Request, @Param('id') id: number, @Body() body: SsoPowerSaveDto) {
+    if (!(await Power.hasKeys({ id }))) {
       throw new ManualException('未找到数据');
     }
     
@@ -65,7 +62,7 @@ export class PowerController {
   
   @Delete('remove/:id')
   @ApiOperation({ summary: '删除权限' })
-  async removePower(@Req() req: Request, @Param('id') id: number, @Query('state') state: boolean) {
+  async remove(@Req() req: Request, @Param('id') id: number, @Query('state') state: boolean) {
     const list = await Power.getFindChildren({ id: id }, 0);
     
     if (!list) {

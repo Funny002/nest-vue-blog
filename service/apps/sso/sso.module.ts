@@ -1,5 +1,5 @@
 import { AppSystem, ConfigGlobal, JwtAuth, Mysql, Sso, SSO_NAME } from '@app/config';
-import { Power, PowerRole, User, UserOauth } from '@app/mysql';
+import { Power, PowerRole, User } from '@app/mysql';
 // import { JwtAuthGuard } from '@app/common/jwtAuth';
 import { ConfigService } from '@nestjs/config';
 import { MysqlModel } from '@app/common/mysql';
@@ -7,10 +7,9 @@ import { MysqlModel } from '@app/common/mysql';
 // import { APP_GUARD } from '@nestjs/core';
 import { Module } from '@nestjs/common';
 // 应用模块
-// import { AuthModule } from './Auth/auth.module';
-// import { FileModule } from './File/file.module';
-// import { RoleModule } from './Role/role.module';
-// import { oAuthModule } from './oAuth/oAuth.module';
+import { AuthModule } from './Auth/auth.module';
+import { FileModule } from './File/file.module';
+import { RoleModule } from './Role/role.module';
 import { PowerModule } from './Power/power.module';
 
 @Module({
@@ -18,13 +17,12 @@ import { PowerModule } from './Power/power.module';
     // config
     ConfigGlobal.use(Sso, Mysql, JwtAuth),
     // mysql
-    MysqlModel.use(Power, PowerRole, User, UserOauth),
+    MysqlModel.use(Power, PowerRole, User),
     // module
-    // AuthModule,
-    // oAuthModule,
-    // FileModule,
-    // RoleModule,
+    AuthModule,
+    FileModule,
     PowerModule,
+    RoleModule,
   ],
   providers: [
     // JwtService,
