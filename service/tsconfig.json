@@ -29,7 +29,8 @@
       "@app/tools/*": ["tools/*"],
       "@app/dto": ["dto"],
       "@app/dto/*": ["dto/*"],
-      "@app/pagination": ["libs/pagination"]
+      "@app/pagination": ["libs/pagination"],
+      "@app/captcha": ["libs/captcha/src"]
     }
   }
 }

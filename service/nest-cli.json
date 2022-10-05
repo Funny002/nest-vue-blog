@@ -104,6 +104,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/pagination/tsconfig.lib.json"
       }
+    },
+    "captcha": {
+      "type": "library",
+      "root": "libs/captcha",
+      "entryFile": "index",
+      "sourceRoot": "libs/captcha",
+      "compilerOptions": {
+        "tsConfigPath": "libs/captcha/tsconfig.lib.json"
+      }
     }
   }
 }

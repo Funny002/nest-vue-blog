@@ -4,7 +4,9 @@ import { ConfigModule } from '@nestjs/config';
 
 export * from './src/app.config';
 export * from './src/mysql.config';
+export * from './src/redis.config';
 export * from './src/jwtAuth.config';
+export * from './src/captcha.config';
 
 /** 简单的引用 Config */
 export class ConfigGlobal {

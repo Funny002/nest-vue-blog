@@ -1,6 +1,5 @@
 import { BaseModel } from '@app/mysql/common';
 import { Column, Entity } from 'typeorm';
-import { SsoUserCreateDto } from '@app/dto/sso.user.dto';
 
 export enum UserState {
   enable,
@@ -26,9 +25,4 @@ export class User extends BaseModel {
   @Column({ comment: '权限', type: 'simple-array', default: null }) rower: string[];
   
   @Column({ comment: '状态', type: 'enum', enum: UserState, default: UserState.disable }) state: UserState;
-  
-  static async of_create(body: SsoUserCreateDto): Promise<User> {
-    const user = new User();
-    return user;
-  }
 }

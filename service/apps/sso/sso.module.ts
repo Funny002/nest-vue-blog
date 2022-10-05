@@ -1,4 +1,4 @@
-import { AppSystem, ConfigGlobal, JwtAuth, Mysql, Sso, SSO_NAME } from '@app/config';
+import { AppSystem, Captcha, ConfigGlobal, JwtAuth, Mysql, Redis, Redis_Name, RedisOptions, Sso, SSO_NAME } from '@app/config';
 import { Power, PowerRole, User } from '@app/mysql';
 // import { JwtAuthGuard } from '@app/common/jwtAuth';
 import { ConfigService } from '@nestjs/config';
@@ -11,13 +11,21 @@ import { AuthModule } from './Auth/auth.module';
 import { FileModule } from './File/file.module';
 import { RoleModule } from './Role/role.module';
 import { PowerModule } from './Power/power.module';
+import { RedisModule } from '@svtslv/nestjs-ioredis';
 
 @Module({
   imports: [
     // config
-    ConfigGlobal.use(Sso, Mysql, JwtAuth),
+    ConfigGlobal.use(Sso, Mysql, Redis, JwtAuth, Captcha),
     // mysql
     MysqlModel.use(Power, PowerRole, User),
+    // redis
+    RedisModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        return { config: configService.get<RedisOptions>(Redis_Name) };
+      },
+    }),
     // module
     AuthModule,
     FileModule,
