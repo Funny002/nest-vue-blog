@@ -35,19 +35,19 @@ export class AuthController {
     }
   }
   
-  @Post('hasToken')
+  @Get('hasToken')
   @ApiOperation({ summary: '验证令牌' })
   async HasToken() {
     // 验证令牌
   }
   
-  @Get('Code')
+  @Get('code')
   @ApiOperation({ summary: '获取验证码' })
   async GetCode() {
     // 获取验证码
   }
   
-  @Post('Code')
+  @Post('code')
   @ApiOperation({ summary: '发送验证码' })
   async SendCode(@Req() req: Request, @Body() body: SsoAuthSendCodeDto) {
     if (await User.hasKeys({ email: body.email })) {
