@@ -1,24 +1,5 @@
-# client
+# NestJS Blog
 
-## Project setup
-```
-npm install
-```
+用 [VueJs](https://cn.vuejs.org/) 框架搭建一个博客，尽可能的添加一些 ` 无用的代码 ` 并且让他运行起来。
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+> 这是一个前端服务，后端请切换分支
