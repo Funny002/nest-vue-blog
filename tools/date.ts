@@ -26,12 +26,12 @@ export function dateFormat(format = 'y-m-d', value: Date | string | number = new
 
 export const handleParamsDate = (params: string | string[], format = 'Y-M-D H:I'): FindOperator<any> => {
   const date: any = { start: params, end: params };
-  
+
   if (hasType(params, 'array')) {
     [date.start, date.end] = params;
   }
-  
+
   const a = new Date(date.end);
-  
+
   return Between(dateFormat(format, date.start), dateFormat(format, a.setDate(a.getDate() + 1)));
 };

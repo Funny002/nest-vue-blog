@@ -21,5 +21,4 @@ import { Module } from '@nestjs/common';
   providers: [ConfigService, JwtService, JwtAuthService],
   exports: [JwtModule, JwtService, JwtAuthService],
 })
-export class JwtAuthModel {
-}
+export class JwtAuthModel {}

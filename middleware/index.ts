@@ -6,7 +6,7 @@ import helmet from 'helmet';
 
 /** 中间件配置声明*/
 interface middlewareOptions {
-  limit: AppSystem['limit']
+  limit: AppSystem['limit'];
 }
 
 /** 引入中间件 */

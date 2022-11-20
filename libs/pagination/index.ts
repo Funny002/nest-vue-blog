@@ -16,16 +16,16 @@ export class Pagination {
    */
   static of<T = any>(page: PaginationRequest, total: number, list: T[]): PaginationResponse<T> {
     let pageOrder = {};
-    
+
     const { pageSize, pageCount, order, params } = page;
-    
+
     const maxPage = Math.floor(total / pageSize) + (total % pageCount ? 1 : 0);
-    
+
     if (order) {
       const orderBy = Object.keys(order)[0];
       pageOrder = { orderBy, orderKey: order[orderBy] };
     }
-    
+
     return { ...pageOrder, params, pageSize, pageCount, hasNext: pageCount < maxPage, total, list };
   }
 }
