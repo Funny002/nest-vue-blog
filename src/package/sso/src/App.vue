@@ -1,10 +1,18 @@
 <template>
-  <div>
-    App
-  </div>
+  <n-config-provider abstract :locale="zhCN" :date-locale="dateZhCN">
+    <router-view/>
+  </n-config-provider>
 </template>
 
-<script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
+<script lang="ts">
+import { zhCN, dateZhCN, NConfigProvider } from 'naive-ui';
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+  name: 'App',
+  components: { NConfigProvider },
+  setup() {
+    return { zhCN, dateZhCN };
+  },
+});
 </script>

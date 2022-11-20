@@ -1,4 +1,4 @@
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
+import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
 import Components from 'unplugin-vue-components/vite';
 import AutoImport from 'unplugin-auto-import/vite';
 import vue from '@vitejs/plugin-vue';
@@ -10,12 +10,15 @@ export default defineConfig({
   plugins: [
     vue(),
     AutoImport({
-      resolvers: [ElementPlusResolver()],
+      imports: ['vue', 'vue-router'],
+      dts: resolve(__dirname, 'types/index.d.ts'),
+      dirs: [resolve(__dirname, 'src/components')],
     }),
     Components({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [NaiveUiResolver()],
     }),
   ],
+  base: './',
   publicDir: resolve(__dirname, 'public'),
   resolve: {
     alias: {
@@ -29,7 +32,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        sso: resolve(__dirname, '/src/package/sso/index.html'),
+        sso: 'src/package/sso/index.html',
       },
       output: {
         chunkFileNames: 'js/[name].[hash].js',

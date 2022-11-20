@@ -1,6 +1,6 @@
-import { useRouter } from '@plugin/router';
+import { createPinia } from 'pinia';
 import { createApp } from 'vue';
-import routes from './routes';
+import router from './routes';
 import App from './App.vue';
 
-createApp(App).use(useRouter(routes)).mount('#app');
+createApp(App).use(router).use(createPinia()).mount('#app');

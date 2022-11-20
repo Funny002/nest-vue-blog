@@ -1,0 +1,28 @@
+.var-navMenu {
+  width: 100%;
+  display: flex;
+  --spacing: 10px;
+  align-items: stretch;
+
+  > * {
+    flex: 0 0 auto;
+
+    + * {
+      margin-left: var(--spacing, 5px);
+    }
+  }
+
+  &__nav {
+    height: 100%;
+    flex: 1 1 auto;
+
+    .n-scrollbar-content {
+      display: flex;
+      align-items: center;
+
+      > * + * {
+        margin-left: var(--spacing, 5px);
+      }
+    }
+  }
+}
