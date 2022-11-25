@@ -18,7 +18,8 @@
       "@stores/*": ["src/stores/*"],
       "@plugin/*": ["src/plugin/*"],
       "@scss/*": ["src/assets/scss/*"],
-      "@models/*": ["src/components/*"]
+      "@models/*": ["src/components/*"],
+      "@sso/*": ["src/package/sso/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],

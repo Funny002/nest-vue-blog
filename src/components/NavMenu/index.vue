@@ -1,15 +1,15 @@
 <template>
   <div class="var-navMenu">
-
-    <n-button v-if="data.hasNav" size="small">
+    
+    <n-button v-if="data.hasNav" size="small" @click="onBtnClick('left')">
       <template v-slot:icon>
         <icon-left/>
       </template>
     </n-button>
-
+    
     <n-scrollbar ref="scrollbarRef" x-scrollable class="var-navMenu__nav">
-      <template v-for="item of props.data" :key="item.name">
-        <n-button size="small" :type="props.active === item.name ? 'primary' : ''" :key-name="item.name" @contextmenu="handleContextMenu">
+      <template v-for="item of props.list" :key="item.name">
+        <n-button size="small" :type="props.active === item.name ? 'primary' : ''" :key-name="item.name" @contextmenu="handleContextMenu" @click="onBtnClick(item)">
           <template v-if="item.icon" v-slot:icon>
             <n-icon :component="item.icon"/>
           </template>
@@ -17,13 +17,13 @@
         </n-button>
       </template>
     </n-scrollbar>
-
-    <n-button v-if="data.hasNav" size="small">
+    
+    <n-button v-if="data.hasNav" size="small" @click="onBtnClick('right')">
       <template v-slot:icon>
         <icon-right/>
       </template>
     </n-button>
-
+    
     <n-dropdown trigger="hover" :options="optionsList" @select="handleSelect">
       <n-button size="small">
         <template v-slot:icon>
@@ -31,8 +31,8 @@
         </template>
       </n-button>
     </n-dropdown>
-
-    <n-dropdown trigger="manual" v-bind="data.menu" placement="bottom-start" @select="handleItemSelect" :on-clickoutside="onClickoutside"/>
+    
+    <n-dropdown trigger="manual" v-bind="data.menu" placement="bottom-start" @select="handleItemSelect" :on-clickoutside="onClickOutside"/>
   </div>
 </template>
 
@@ -43,6 +43,7 @@ import {
   MoreHorizontal16Filled as IconMore,
 } from '@vicons/fluent';
 import { onMounted, reactive, ref } from 'vue';
+import internal from 'stream';
 
 type OptionsListConf = { [k: string]: string; }[]
 
@@ -62,9 +63,15 @@ const itemOptionsList: OptionsListConf = [
   { key: 'other', label: '关闭其他' },
 ];
 
+interface ListItem {
+  icon?: any;
+  name: string;
+  label: string;
+}
+
 interface Props {
   active: string;
-  data: { icon?: any, name: string, label: string }[];
+  list: ListItem[];
 }
 
 interface State {
@@ -82,11 +89,11 @@ const scrollbarRef = ref();
 
 const props = withDefaults(defineProps<Props>(), {
   active: '',
-  data: () => [],
+  list: () => [],
 });
 
 const data = reactive<State>({
-  hasNav: false,
+  hasNav: true,
   menuIndex: '',
   menu: { show: false, x: 0, y: 0, options: itemOptionsList },
 });
@@ -106,18 +113,29 @@ function handleContextMenu(event: MouseEvent) {
   data.menuIndex = obj.getAttribute('key-name') || '';
 }
 
-function onClickoutside() {
+function onClickOutside() {
   data.menuIndex = '';
   data.menu.show = false;
 }
 
+function onBtnClick(event: 'left' | 'right' | ListItem) {
+  console.log('onBtnClick', event);
+  if (event === 'left') {
+    //
+  } else if (event === 'right') {
+    //
+  } else {
+    //
+  }
+}
+
 function handleItemSelect(key: string) {
   console.log('handleItemSelect', data.menuIndex, key);
-  onClickoutside();
+  onClickOutside();
 }
 
 function handleSelect(key: string) {
-  console.log(key);
+  console.log('handleSelect', key);
 }
 
 onMounted(() => {

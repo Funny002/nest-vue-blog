@@ -1,18 +1,21 @@
 <template>
-  <n-config-provider abstract :locale="zhCN" :date-locale="dateZhCN">
+  <n-config-provider v-bind="naiveUi">
     <router-view/>
   </n-config-provider>
 </template>
 
-<script lang="ts">
-import { zhCN, dateZhCN, NConfigProvider } from 'naive-ui';
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { zhCN, dateZhCN, NConfigProvider, darkTheme } from 'naive-ui';
+import { reactive } from 'vue';
 
-export default defineComponent({
-  name: 'App',
-  components: { NConfigProvider },
-  setup() {
-    return { zhCN, dateZhCN };
-  },
+const naiveUi = reactive<{ [k: string]: any }>({
+  // theme:darkTheme
+  locale: zhCN,
+  abstract: true,
+  theme: undefined,
+  dateLocale: dateZhCN,
+  themeOverrides: {},
 });
 </script>
+
+<style lang="scss" src="@scss/baseStyle.scss"/>
