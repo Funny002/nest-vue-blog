@@ -19,11 +19,12 @@
 .var-login_signIn {
   width: 681px;
   padding: 20px;
-  margin: 0 auto;
+  margin: 5% auto 0;
   border-radius: 4px;
 
   &:hover {
-    box-shadow: 0 0 6px #ccc;
+    box-shadow: 0 0 6px #aaa;
+    background-color: rgba(175, 175, 175, .1);
   }
 
   &--title {
@@ -101,5 +102,31 @@
     margin-left: auto;
     padding-top: 20px;
     text-align: center;
+  }
+}
+
+.var-login_signUp {
+  width: 300px;
+  padding: 20px;
+  overflow: hidden;
+  margin: 5% auto 0;
+  border-radius: 4px;
+
+  &:hover {
+    box-shadow: 0 0 6px #aaa;
+    background-color: rgba(175, 175, 175, .1);
+  }
+
+  &--note,
+  &--title {
+    text-align: center;
+  }
+
+  &--header {
+    padding: 20px 0;
+  }
+
+  &--btn {
+    width: 100%;
   }
 }

@@ -1,14 +1,14 @@
 <template>
   <div class="var-login">
-    <div class="var-login__header">
-      header
-    </div>
+    <!--    <div class="var-login__header">-->
+    <!--      header-->
+    <!--    </div>-->
     <div class="var-login__body">
       <router-view key="login"/>
     </div>
-    <div class="var-login__footer">
-      footer
-    </div>
+    <!--    <div class="var-login__footer">-->
+    <!--      footer-->
+    <!--    </div>-->
   </div>
 </template>
 

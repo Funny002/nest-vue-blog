@@ -16,27 +16,27 @@
       <div class="var-login_signIn--form">
         <n-form :model="formValue" :rules="data.rules" label-placement="left" label-width="auto">
           <n-form-item path="user">
-            <n-input autofocus v-model="formValue.user" placeholder="手机号/邮箱/账号名" clearable/>
+            <n-input autofocus v-model:value="formValue.user" placeholder="手机号/邮箱/账号名" clearable/>
           </n-form-item>
           <n-form-item v-if="data.hasCode" path="code">
-            <n-input v-model="formValue.code" placeholder="验证码" clearable>
+            <n-input v-model:value="formValue.code" placeholder="验证码" clearable>
               <template #suffix>
                 <n-button text :disabled="!!data.timeout" @click="getCode">{{ data.timeout ? `(${data.timeout})` : '' }}获取验证码</n-button>
               </template>
             </n-input>
           </n-form-item>
           <n-form-item v-else path="pass">
-            <n-input v-model="formValue.pass" show-password-on="mousedown" type="password" placeholder="密码" clearable/>
+            <n-input v-model:value="formValue.pass" show-password-on="mousedown" type="password" placeholder="密码" clearable/>
           </n-form-item>
           <div class="var-login_signIn__form">
             <n-button text @click="onSwitchLogin">{{ data.hasCode ? '密码' : '验证码' }}登陆</n-button>
           </div>
-          <n-button class="var-login_signIn__form--btn">登陆</n-button>
+          <n-button class="var-login_signIn__form--btn" type="primary">登陆</n-button>
         </n-form>
       </div>
     </div>
     <div class="var-login_signIn--footer">
-      <n-button text>注册</n-button>
+      <n-button text @click="onRegister">去注册</n-button>
       <n-divider vertical/>
       <n-button text>忘记密码</n-button>
       <n-divider vertical/>
@@ -51,13 +51,12 @@
 
 <script lang="ts" setup>
 import { WechatOutlined, GithubOutlined, QqOutlined } from '@vicons/antd';
+import { useRouter } from 'vue-router';
 import { Icon } from '@vicons/utils';
 import { h, reactive } from 'vue';
 
-const conf = reactive({
-  title: '',
-});
-
+const router = useRouter();
+const conf = reactive({ title: '这是一个标题' });
 const formValue = reactive({ user: '', pass: '', code: '' });
 const data = reactive({
   rules: {},
@@ -100,5 +99,9 @@ function handleSelect(keys: string) {
   } else if (keys === 'WeChat') {
     // 微信
   }
+}
+
+function onRegister() {
+  router.push({ path: '/sign/register' });
 }
 </script>

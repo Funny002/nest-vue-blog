@@ -26,7 +26,7 @@ router.beforeEach((to, from, next) => {
   if (skipList.includes(to.path) || useUserStores().userInfo) {
     next();
   } else {
-    next({ path: '/login', replace: true });
+    next({ path: '/sign', replace: true });
   }
 });
 
