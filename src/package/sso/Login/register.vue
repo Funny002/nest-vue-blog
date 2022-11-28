@@ -45,6 +45,8 @@
   </div>
 </template>
 
+<script lang="ts">export default { name: 'Register' };</script>
+
 <script lang="ts" setup>
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';

@@ -2,7 +2,6 @@
   width: 100vw;
   height: 100vh;
   display: flex;
-  position: fixed;
   flex-direction: column;
 
   > * {
@@ -19,8 +18,8 @@
 .var-login_signIn {
   width: 681px;
   padding: 20px;
-  margin: 5% auto 0;
   border-radius: 4px;
+  margin: 5% auto 10px;
 
   &:hover {
     box-shadow: 0 0 6px #aaa;
@@ -109,8 +108,8 @@
   width: 300px;
   padding: 20px;
   overflow: hidden;
-  margin: 5% auto 0;
   border-radius: 4px;
+  margin: 5% auto 10px;
 
   &:hover {
     box-shadow: 0 0 6px #aaa;

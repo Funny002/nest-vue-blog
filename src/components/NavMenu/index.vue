@@ -36,6 +36,8 @@
   </div>
 </template>
 
+<script lang="ts">export default { name: 'NavMenu' };</script>
+
 <script lang="ts" setup>
 import {
   ArrowStepInRight12Filled as IconRight,
@@ -43,7 +45,6 @@ import {
   MoreHorizontal16Filled as IconMore,
 } from '@vicons/fluent';
 import { onMounted, reactive, ref } from 'vue';
-import internal from 'stream';
 
 type OptionsListConf = { [k: string]: string; }[]
 
@@ -144,4 +145,4 @@ onMounted(() => {
 
 </script>
 
-<style lang="scss" src="@scss/components/NavMenu.scss"/>
+<style lang="scss" src="@scss/models/NavMenu.scss"/>

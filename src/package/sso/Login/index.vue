@@ -4,7 +4,7 @@
     <!--      header-->
     <!--    </div>-->
     <div class="var-login__body">
-      <router-view key="login"/>
+      <router-view :key="$route.fullPath"/>
     </div>
     <!--    <div class="var-login__footer">-->
     <!--      footer-->
@@ -12,8 +12,6 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-// import { onMounted, reactive } from 'vue';
-</script>
+<script lang="ts">export default { name: 'Sign' };</script>
 
 <style lang="scss" src="@scss/sso/login.scss"/>

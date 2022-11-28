@@ -49,6 +49,8 @@
   </div>
 </template>
 
+<script lang="ts">export default { name: 'Login' };</script>
+
 <script lang="ts" setup>
 import { WechatOutlined, GithubOutlined, QqOutlined } from '@vicons/antd';
 import { useRouter } from 'vue-router';

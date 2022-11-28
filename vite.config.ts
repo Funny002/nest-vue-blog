@@ -27,6 +27,7 @@ export default defineConfig({
       '@plugin': resolve(__dirname, 'src/plugin'),
       '@scss': resolve(__dirname, 'src/assets/scss'),
       '@models': resolve(__dirname, 'src/components'),
+      // client
       '@sso': resolve(__dirname, 'src/package/sso'),
     },
   },
