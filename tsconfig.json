@@ -19,7 +19,9 @@
       "@plugin/*": ["src/plugin/*"],
       "@scss/*": ["src/assets/scss/*"],
       "@models/*": ["src/components/*"],
-      "@sso/*": ["src/package/sso/*"]
+      "@sso/*": ["src/package/sso/*"],
+      "@directive":["src/directive"],
+      "@directive/*":["src/directive/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],

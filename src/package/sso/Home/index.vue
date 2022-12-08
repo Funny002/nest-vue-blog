@@ -1,5 +1,5 @@
 <template>
-  <div>Home</div>
+  <div>Homea</div>
 </template>
 
 <script lang="ts">export default { name: 'Home' };</script>
