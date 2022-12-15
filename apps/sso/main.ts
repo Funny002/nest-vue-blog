@@ -1,11 +1,11 @@
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { Logger, ValidationPipe } from '@nestjs/common';
+import { UseInterceptor } from '@app/interceptor';
 import { Transport } from '@nestjs/microservices';
 import { UseSwagger } from '@app/common/swagger';
 import { useMiddleware } from '@app/middleware';
 import { NestFactory } from '@nestjs/core';
 import { SsoModule } from './sso.module';
-import { UseInterceptor } from '@app/interceptor';
 
 /** 服务启动引导 */
 async function bootstrap() {

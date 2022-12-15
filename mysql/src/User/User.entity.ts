@@ -3,7 +3,7 @@ import { Column, Entity } from 'typeorm';
 
 export enum UserState {
   enable,
-  disable
+  disable,
 }
 
 @Entity()

@@ -1,5 +1,6 @@
-import { registerAs } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { registerAs } from '@nestjs/config';
+import * as process from 'process';
 
 /** 数据库名称 */
 export const Mysql_NAME = 'app_service';
@@ -7,21 +8,18 @@ export const Mysql_NAME = 'app_service';
 /** 数据库配置 */
 export const Mysql = registerAs(Mysql_NAME, (): TypeOrmModuleOptions => {
   return {
-    // type
     type: 'mysql',
-    // host port
     port: 3306,
     host: '127.0.0.1',
-    // user pass
-    username: 'root',
-    password: '123456',
-    // db charset
-    database: 'nest_blog',
+    username: process.env['MYSQL_USER'],
+    password: process.env['MYSQL_PASS'],
+    database: process.env['MYSQL_DB'],
     charset: 'utf8mb4',
-    // other
-    logger: 'advanced-console',
-    retryDelay: 5000,
+    //
+    debug: true,
+    logger: 'simple-console',
     synchronize: true,
+    retryDelay: 5000,
     retryAttempts: 10,
   };
 });

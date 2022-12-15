@@ -1,6 +1,6 @@
 import { SetMetadata } from '@nestjs/common';
 
-// export * from './src/JwtAuth.guard';
+export * from './src/JwtAuth.guard';
 // export * from './src/JwtAuth.module';
 // export * from './src/JwtAuth.service';
 // export * from './src/JwtAuth.strategy';

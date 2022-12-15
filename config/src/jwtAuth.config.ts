@@ -1,4 +1,5 @@
 import { registerAs } from '@nestjs/config';
+import * as process from 'process';
 
 /** 配置参数声明 */
 export interface JwtAuthOptions {
@@ -21,7 +22,7 @@ export const JwtAuth_Key_Name = 'JwtAuth_Key';
 /** jwt配置 */
 export const JwtAuth = registerAs(JwtAuth_NAME, (): JwtAuthOptions => {
   return {
+    secret: process.env['JWT_SECRET'],
     expiresIn: '12h',
-    secret: 'jwt_secret_key',
   };
 });

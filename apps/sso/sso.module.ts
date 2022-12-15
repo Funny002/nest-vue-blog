@@ -1,5 +1,5 @@
 import { AppSystem, Captcha, ConfigGlobal, JwtAuth, Mysql, Redis, Redis_Name, RedisOptions, Sso, SSO_NAME } from '@app/config';
-import { Power, PowerRole, User } from '@app/mysql';
+import { Power, PowerRole, Setting, User } from '@app/mysql';
 // import { JwtAuthGuard } from '@app/common/jwtAuth';
 import { ConfigService } from '@nestjs/config';
 import { MysqlModel } from '@app/common/mysql';
@@ -12,13 +12,14 @@ import { FileModule } from './File/file.module';
 import { RoleModule } from './Role/role.module';
 import { PowerModule } from './Power/power.module';
 import { RedisModule } from '@svtslv/nestjs-ioredis';
+import { SettingModule } from './Setting/setting.module';
 
 @Module({
   imports: [
     // config
     ConfigGlobal.use(Sso, Mysql, Redis, JwtAuth, Captcha),
     // mysql
-    MysqlModel.use(Power, PowerRole, User),
+    MysqlModel.use(Power, PowerRole, Setting, User),
     // redis
     RedisModule.forRootAsync({
       inject: [ConfigService],
@@ -31,6 +32,7 @@ import { RedisModule } from '@svtslv/nestjs-ioredis';
     FileModule,
     PowerModule,
     RoleModule,
+    SettingModule,
   ],
   providers: [
     // JwtService,
@@ -43,7 +45,7 @@ export class SsoModule {
   static version: string;
   static limit: AppSystem['limit'];
   static verify: AppSystem['verify'];
-  
+
   constructor(private readonly configService: ConfigService) {
     // 获取配置
     const config = this.configService.get<AppSystem>(SSO_NAME);

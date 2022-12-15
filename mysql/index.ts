@@ -12,3 +12,6 @@ export * from './src/Articles/Classify.entity';
 export * from './src/Articles/Articles.entity';
 export * from './src/Articles/ArticlesExtend.entity';
 export * from './src/Articles/Comments.entity';
+
+// Setting
+export * from './src/Setting/Setting.entity';

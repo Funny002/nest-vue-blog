@@ -4,7 +4,7 @@ import { User } from '@app/mysql';
 
 @Entity()
 export class UserOauth extends BaseModel {
-  @ManyToOne(type => User, user => user.id) uid: User;
+  @ManyToOne(() => User, user => user.id) uid: User;
 
   @Column({ comment: '分类' }) type: string;
 
