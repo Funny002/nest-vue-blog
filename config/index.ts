@@ -2,11 +2,13 @@ import { ConfigFactory } from '@nestjs/config/dist/interfaces/config-factory.int
 import { DynamicModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import * as dotenv from 'dotenv';
+
 dotenv.config();
 
 export * from './src/app.config';
 export * from './src/mysql.config';
 export * from './src/redis.config';
+export * from './src/email.config';
 export * from './src/jwtAuth.config';
 export * from './src/captcha.config';
 

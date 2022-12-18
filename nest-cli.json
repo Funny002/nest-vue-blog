@@ -113,6 +113,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/captcha/tsconfig.lib.json"
       }
+    },
+    "email": {
+      "type": "library",
+      "root": "libs/email",
+      "entryFile": "index",
+      "sourceRoot": "libs/email",
+      "compilerOptions": {
+        "tsConfigPath": "libs/email/tsconfig.lib.json"
+      }
     }
   }
 }

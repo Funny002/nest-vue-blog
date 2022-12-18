@@ -33,6 +33,7 @@
     "@nestjs/swagger": "^6.1.2",
     "@nestjs/typeorm": "^9.0.1",
     "@svtslv/nestjs-ioredis": "^1.0.2",
+    "@types/nodemailer": "^6.4.7",
     "axios": "^0.26.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
@@ -42,6 +43,7 @@
     "ioredis": "^5.2.3",
     "mysql": "^2.18.1",
     "nestjs-i18n": "^9.1.10",
+    "nodemailer": "^6.8.0",
     "passport": "^0.6.0",
     "passport-github2": "^0.1.12",
     "passport-google-oidc": "^0.1.0",
@@ -114,7 +116,8 @@
       "^@app/tools(|/.*)$": "<rootDir>/tools/$1",
       "^@app/dto(|/.*)$": "<rootDir>/dto/$1",
       "^@app/pagination(|/.*)$": "<rootDir>/libs/pagination/$1",
-      "^@app/captcha(|/.*)$": "<rootDir>/libs/captcha/$1"
+      "^@app/captcha(|/.*)$": "<rootDir>/libs/captcha/$1",
+      "^@app/email(|/.*)$": "<rootDir>/libs/email/$1"
     }
   }
 }

@@ -1,4 +1,4 @@
-import { AppSystem, Captcha, ConfigGlobal, JwtAuth, Mysql, Redis, Redis_Name, RedisOptions, Sso, SSO_NAME } from '@app/config';
+import { AppSystem, Captcha, ConfigGlobal, Email, JwtAuth, Mysql, Redis, Redis_Name, RedisOptions, Sso, SSO_NAME } from '@app/config';
 import { Power, PowerRole, Setting, User } from '@app/mysql';
 // import { JwtAuthGuard } from '@app/common/jwtAuth';
 import { ConfigService } from '@nestjs/config';
@@ -17,7 +17,7 @@ import { SettingModule } from './Setting/setting.module';
 @Module({
   imports: [
     // config
-    ConfigGlobal.use(Sso, Mysql, Redis, JwtAuth, Captcha),
+    ConfigGlobal.use(Sso, Mysql, Redis, JwtAuth, Email, Captcha),
     // mysql
     MysqlModel.use(Power, PowerRole, Setting, User),
     // redis
