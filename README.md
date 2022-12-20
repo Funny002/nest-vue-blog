@@ -20,10 +20,19 @@ NestJs 独立应用拆分为 `混合应用` ，标准模式改为 `monorepo` 模
 ```
 ↘ Main
   → apps       # 应用服务
+  → command    # 自定义命令
   → common     # 公共模块
   → config     # 配置文件
   → dto        # Dto声明 
   → libs       # 部分驱动
   → middleware # 中间件
   → mysql      # 数据模型文件
+```
+
+### 自定义命令
+
+> 因为种种原因，所以提供一些自定义命令
+
+``` 
+node command help #查看命令
 ```
