@@ -5,7 +5,7 @@ function UseJwtCommand(program) {
     .command('jwt')
     .description('jwt的一些操作')
     .option('-c, --create <long>', '随机生成一个令牌', handleNumber, '16')
-    .action(handleCommand);
+    .action((...args) => handleCommand(...args));
 }
 
 function handleCommand(options) {
@@ -17,7 +17,7 @@ function handleCommand(options) {
 function createCommand(long) {
   if (long < 8) return console.log('error: 长度不能小于8');
   handleEnvFile(/JWT_SECRET=[^\n\r]+/, `JWT_SECRET='${ranStr(long)}'`);
-  console.log('[%s]: 替换成功, 重启后令牌生效', new Date());
+  console.log('[%s]: 替换成功, 重启服务后令牌生效', new Date());
 }
 
 exports.UseJwtCommand = UseJwtCommand;
