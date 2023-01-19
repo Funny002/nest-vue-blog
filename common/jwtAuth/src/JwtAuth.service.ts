@@ -1,23 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { JwtAuth_NAME, JwtAuthOptions } from '@app/config';
 
 /** JWT方法 */
 @Injectable()
 export class JwtAuthService {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+  ) {}
 
-  // async validateUser(username: string, pass: string): Promise<any> {
-  //   const user = await this.usersService.findOne(username);
-  //   if (user && user.password === pass) {
-  //     const { password, ...result } = user;
-  //     return result;
-  //   }
-  //   return null;
-  // }
-  // async login(user: any) {
-  //   const payload = { username: user.username, sub: user.userId };
-  //   return {
-  //     access_token: this.jwtService.sign(payload),
-  //   };
-  // }
+  async createToken(payload: any) {
+    const conf = this.configService.get<JwtAuthOptions>(JwtAuth_NAME);
+    const access = await this.jwtService.signAsync(payload, { expiresIn: conf.expiresIn });
+    const refresh = await this.jwtService.signAsync(payload, { expiresIn: conf.refreshIn });
+    return { access, refresh, };
+  }
 }

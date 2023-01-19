@@ -3,14 +3,13 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class SsoAuthCreateDto {
   @IsString()
-  @IsEmail()
-  @ApiProperty({ description: '邮箱' })
-  email: string;
-  
+  @ApiProperty({ description: '账号/邮箱' })
+  user: string;
+
   @IsString()
   @ApiProperty({ description: '密码' })
   pass: string;
-  
+
   @IsString()
   @IsAlphanumeric()
   @ApiProperty({ description: '验证码' })
@@ -29,7 +28,7 @@ export class SsoAuthSendCodeDto {
   @IsEmail()
   @ApiProperty({ description: '邮箱' })
   email: string;
-  
+
   @IsEnum(AuthSendCodeType)
   @ApiProperty({ description: '状态', enum: AuthSendCodeType })
   state: AuthSendCodeType;

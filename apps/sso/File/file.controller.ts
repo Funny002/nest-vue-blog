@@ -3,7 +3,7 @@ import { Body, Controller, Get, Post, Put, Query, UploadedFile, UseInterceptors 
 import { ApiBody, ApiConsumes, ApiOperation, ApiProduces, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileService } from './file.service';
-import { noAuth } from '@app/common/jwtAuth';
+import { NoAuth } from '@app/common/jwtAuth';
 
 @ApiTags('File 文件管理')
 @Controller('file')
@@ -45,7 +45,7 @@ export class FileController {
     // 操作 - 修改 - 删除 - 移动
   }
 
-  @noAuth()
+  @NoAuth()
   @Get('download')
   @ApiOperation({ summary: '下载文件' })
   async DownloadFile(@Query() query: FileDownloadDto) {

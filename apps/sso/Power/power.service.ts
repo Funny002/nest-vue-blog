@@ -3,7 +3,7 @@ import { SsoPowerCreateDto } from '@app/dto/sso.power.dto';
 import { DataSource, Like, Repository } from 'typeorm';
 import { ManualException } from '@app/common/error';
 import { InjectRepository } from '@nestjs/typeorm';
-import { handleParamsDate } from '@app/tools/date';
+import { handleParamsDate } from '@app/tools';
 import { Injectable } from '@nestjs/common';
 import { Power } from '@app/mysql';
 

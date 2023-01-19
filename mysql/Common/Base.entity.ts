@@ -1,6 +1,7 @@
 import { BaseEntity, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { FindOptionsSelect } from 'typeorm/find-options/FindOptionsSelect';
 import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
+import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 
 export abstract class BaseModel extends BaseEntity {
 
@@ -29,5 +30,21 @@ export abstract class BaseModel extends BaseEntity {
    */
   static async hasKeys<T extends BaseModel>(this: { new(): T } & typeof BaseModel, where: FindOptionsWhere<T> | FindOptionsWhere<T>[]): Promise<boolean> {
     return (await this.getRepository().countBy(where)) > 0;
+  }
+
+  /** 根据 `where` 查询的数据 `prop` 增加数值
+   * 创建一个方法，可能没用
+   * 带有 js 精度 bug
+   */
+  static increment<T extends BaseModel>(this: { new(): T } & typeof BaseModel, where: FindOptionsWhere<T>, prop: string, value: number): Promise<UpdateResult> {
+    return this.getRepository().increment(where, prop, value);
+  }
+
+  /** 根据 `where` 查询的数据 `prop` 减少数值
+   * 创建一个方法，可能没用
+   * 带有 js 精度 bug
+   */
+  static decrement<T extends BaseModel>(this: { new(): T } & typeof BaseModel, where: FindOptionsWhere<T>, prop: string, value: number): Promise<UpdateResult> {
+    return this.getRepository().decrement(where, prop, value);
   }
 }

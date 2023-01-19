@@ -1,10 +1,10 @@
 import { AppSystem, Captcha, ConfigGlobal, Email, JwtAuth, Mysql, Redis, Redis_Name, RedisOptions, Sso, SSO_NAME } from '@app/config';
 import { Power, PowerRole, Setting, User } from '@app/mysql';
-// import { JwtAuthGuard } from '@app/common/jwtAuth';
+import { JwtAuthGuard } from '@app/common/jwtAuth';
 import { ConfigService } from '@nestjs/config';
 import { MysqlModel } from '@app/common/mysql';
-// import { JwtService } from '@nestjs/jwt';
-// import { APP_GUARD } from '@nestjs/core';
+import { JwtService } from '@nestjs/jwt';
+import { APP_GUARD } from '@nestjs/core';
 import { Module } from '@nestjs/common';
 // 应用模块
 import { AuthModule } from './Auth/auth.module';
@@ -35,9 +35,8 @@ import { SettingModule } from './Setting/setting.module';
     SettingModule,
   ],
   providers: [
-    // JwtService,
-    ConfigService,
-    // { provide: APP_GUARD, useClass: JwtAuthGuard },
+    JwtService,
+    { provide: APP_GUARD, useClass: JwtAuthGuard },
   ],
 })
 export class SsoModule {

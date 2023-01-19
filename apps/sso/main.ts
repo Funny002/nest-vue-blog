@@ -12,14 +12,7 @@ async function bootstrap() {
   // 初始化应用
   const app = await NestFactory.create<NestExpressApplication>(SsoModule);
   // 创建混合应用
-  const redisMicroService = app.connectMicroservice({
-    transport: Transport.REDIS,
-    options: {
-      url: 'redis://localhost:6379/1',
-      retryAttempts: 10,
-      retryDelay: 3000,
-    },
-  });
+  app.connectMicroservice({ transport: Transport.REDIS, options: { url: 'redis://localhost:6379/1', retryAttempts: 10, retryDelay: 3000 } });
   // 跨域
   app.enableCors();
   // Api多版本

@@ -1,17 +1,22 @@
-import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { JwtAuthModel, JwtAuthService, JwtAuthStrategy, LocalAuthStrategy } from '@app/common/jwtAuth';
 import { AuthController } from './auth.controller';
 import { MysqlModel } from '@app/common/mysql';
+import { AuthService } from './auth.service';
+import { Module } from '@nestjs/common';
 import { User } from '@app/mysql';
-
-// import { JwtAuthModel } from '@app/common/JwtAuth';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
-  // imports: [JwtAuthModel],
   imports: [
+    JwtAuthModel,
     MysqlModel.feature(User),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [
+    AuthService,
+    JwtAuthService,
+    JwtAuthStrategy,
+    LocalAuthStrategy,
+  ],
 })
 export class AuthModule {}

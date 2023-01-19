@@ -5,6 +5,7 @@ import * as process from 'process';
 export interface JwtAuthOptions {
   secret: string;
   expiresIn: string;
+  refreshIn: string;
 }
 
 /** JWT解析后配置声明 */
@@ -24,5 +25,6 @@ export const JwtAuth = registerAs(JwtAuth_NAME, (): JwtAuthOptions => {
   return {
     secret: process.env['JWT_SECRET'],
     expiresIn: '12h',
+    refreshIn: '24h',
   };
 });

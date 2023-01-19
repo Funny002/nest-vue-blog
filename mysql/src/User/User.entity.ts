@@ -2,12 +2,17 @@ import { BaseModel } from '@app/mysql/common';
 import { Column, Entity } from 'typeorm';
 
 export enum UserState {
-  enable,
-  disable,
+  enable, // 启用
+  disable, // 禁用
+  freeze, // 冻结
+  check, // 审核
+  lock, // 锁定
 }
 
 @Entity()
 export class User extends BaseModel {
+  @Column({ comment: 'uid' }) uid: string;
+
   @Column({ comment: '昵称', length: 50 }) name: string;
 
   @Column({ comment: '密码', length: 64 }) pass: string;
@@ -25,4 +30,8 @@ export class User extends BaseModel {
   @Column({ comment: '权限', type: 'simple-array', default: null }) rower: string[];
 
   @Column({ comment: '状态', type: 'enum', enum: UserState, default: UserState.disable }) state: UserState;
+
+  @Column({ comment: '锁定时间', default: '' }) lock_time: string;
+
+  @Column({ comment: '锁定次数', type: 'tinyint', default: 0 }) lock_count: number;
 }

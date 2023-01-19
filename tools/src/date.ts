@@ -1,10 +1,10 @@
+import { FindOperator } from 'typeorm/find-options/FindOperator';
 import { getType, hasType } from './object';
 import { Between } from 'typeorm';
-import { FindOperator } from 'typeorm/find-options/FindOperator';
 
 export function dateFormat(format = 'y-m-d', value: Date | string | number = new Date()) {
   const date = (getType(value) === 'Date' ? value : new Date(value)) as Date;
-  return format.replace(/\w/g, function (val) {
+  return format.replace(/\w/g, function(val) {
     if (['y', 'Y'].includes(val)) {
       return date.getFullYear().toString().slice(val === 'y' ? 2 : 0);
     } else if (['m', 'M'].includes(val)) {

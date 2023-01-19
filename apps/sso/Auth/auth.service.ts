@@ -9,28 +9,28 @@ import { User } from '@app/mysql';
 @Injectable()
 export class AuthService {
   constructor(@InjectRepository(User) private userRepository: Repository<User>) {}
-  
+
   create_user(data: SsoAuthCreateDto): User {
     const user = new User();
-    
-    user.email = data.email;
+
+    user.email = data.user;
     user.name = Date.now() + '';
-    
+
     return user;
   }
-  
+
   async hasCode(email: string, code: string): Promise<boolean> {
     return false;
   }
-  
+
   async createUser(body: SsoAuthCreateDto): Promise<User> {
-    if (await User.hasKeys({ email: body.email })) {
+    if (await User.hasKeys({ email: body.user })) {
       throw new ManualException('邮箱已存在');
     }
-    
+
     return await this.userRepository.save(this.create_user(body));
   }
-  
+
   /**
    * =====================================================================
    * ========================================================  发送验证码
@@ -39,7 +39,7 @@ export class AuthService {
   async sendCodeEmail(req: Request, email: string) {
     return 'ok';
   }
-  
+
   async sendCodePhone(req: Request, email: string) {
     throw new ManualException('功能正在开发中');
   }

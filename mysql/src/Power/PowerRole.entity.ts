@@ -1,8 +1,8 @@
 import { Column, Entity, In, Index, Tree, TreeChildren, TreeParent } from 'typeorm';
 import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
 import { SsoRoleCreateDto } from '@app/dto/sso.role.dto';
-import { hasOverlap, unique } from '@app/tools/array';
 import { ManualException } from '@app/common/error';
+import { hasOverlap, unique } from '@app/tools';
 import { PowerModel } from '@app/mysql/common';
 import { Power, PowerState } from '@app/mysql';
 

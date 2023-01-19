@@ -2,7 +2,7 @@ import { Column, Entity, Index, Tree, TreeChildren, TreeParent } from 'typeorm';
 import { SsoPowerCreateDto } from '@app/dto/sso.power.dto';
 import { ManualException } from '@app/common/error';
 import { PowerModel } from '@app/mysql/common';
-import { hasOverlap } from '@app/tools/array';
+import { hasOverlap } from '@app/tools';
 
 export enum PowerState {
   disable,
@@ -54,7 +54,7 @@ export class Power extends PowerModel {
     if (power.parent && power.mutex.length) {
       const list = await this.getFindChildren({ id: power.parent.id }, 0);
 
-      const { keys, mutex }: { [key: string]: string[] } = list.reduce(function (value, { keys, mutex }) {
+      const { keys, mutex }: { [key: string]: string[] } = list.reduce(function(value, { keys, mutex }) {
         value.mutex.push(...mutex);
         value.keys.push(keys);
         return value;

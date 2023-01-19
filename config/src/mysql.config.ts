@@ -16,7 +16,7 @@ export const Mysql = registerAs(Mysql_NAME, (): TypeOrmModuleOptions => {
     database: process.env['MYSQL_DB'],
     charset: 'utf8mb4',
     //
-    debug: true,
+    debug: false,
     logger: 'simple-console',
     synchronize: true,
     retryDelay: 5000,

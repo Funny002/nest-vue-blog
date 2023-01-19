@@ -13,7 +13,7 @@ export class MysqlModel {
       },
     });
   }
-  
+
   static feature(...args: EntityClassOrSchema[]) {
     return TypeOrmModule.forFeature(args);
   }
