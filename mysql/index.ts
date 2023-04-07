@@ -2,6 +2,10 @@
 export * from './src/User/User.entity';
 export * from './src/User/UserOauth.entity';
 
+// File
+export * from './src/File/File.entity';
+export * from './src/File/FileCite.entity';
+
 // Permission
 export * from './src/Power/Power.entity';
 export * from './src/Power/PowerRole.entity';

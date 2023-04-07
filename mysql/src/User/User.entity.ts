@@ -10,7 +10,7 @@ export enum UserState {
 }
 
 @Entity()
-export class User extends BaseModel {
+export class Users extends BaseModel {
   @Column({ comment: 'uid' }) uid: string;
 
   @Column({ comment: '昵称', length: 50 }) name: string;

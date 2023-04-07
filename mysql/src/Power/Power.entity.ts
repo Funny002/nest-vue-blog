@@ -54,7 +54,7 @@ export class Power extends PowerModel {
     if (power.parent && power.mutex.length) {
       const list = await this.getFindChildren({ id: power.parent.id }, 0);
 
-      const { keys, mutex }: { [key: string]: string[] } = list.reduce(function(value, { keys, mutex }) {
+      const { keys, mutex }: { [key: string]: string[] } = list.reduce(function (value, { keys, mutex }) {
         value.mutex.push(...mutex);
         value.keys.push(keys);
         return value;

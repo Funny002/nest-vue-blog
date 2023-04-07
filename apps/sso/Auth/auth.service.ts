@@ -4,14 +4,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Request } from 'express';
-import { User } from '@app/mysql';
+import { Users } from '@app/mysql';
 
 @Injectable()
 export class AuthService {
-  constructor(@InjectRepository(User) private userRepository: Repository<User>) {}
+  constructor(@InjectRepository(Users) private userRepository: Repository<Users>) {}
 
-  create_user(data: SsoAuthCreateDto): User {
-    const user = new User();
+  create_user(data: SsoAuthCreateDto): Users {
+    const user = new Users();
 
     user.email = data.user;
     user.name = Date.now() + '';
@@ -23,8 +23,8 @@ export class AuthService {
     return false;
   }
 
-  async createUser(body: SsoAuthCreateDto): Promise<User> {
-    if (await User.hasKeys({ email: body.user })) {
+  async createUser(body: SsoAuthCreateDto): Promise<Users> {
+    if (await Users.hasKeys({ email: body.user })) {
       throw new ManualException('邮箱已存在');
     }
 

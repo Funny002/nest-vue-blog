@@ -6,7 +6,7 @@ import { ManualException } from '@app/common/error';
 import { AuthService } from './auth.service';
 import { randomUUID } from 'crypto';
 import { Request } from 'express';
-import { User } from '@app/mysql';
+import { Users } from '@app/mysql';
 import { reWriteObj } from '@app/tools';
 
 @NoAuth()
@@ -25,7 +25,7 @@ export class AuthController {
       throw new ManualException('验证码错误');
     }
 
-    if (await User.hasKeys({ email: body.user })) {
+    if (await Users.hasKeys({ email: body.user })) {
       throw new ManualException('邮箱已存在');
     }
 
@@ -58,7 +58,7 @@ export class AuthController {
   @Post('code')
   @ApiOperation({ summary: '发送验证码' })
   async SendCode(@Req() req: Request, @Body() body: SsoAuthSendCodeDto) {
-    if (await User.hasKeys({ email: body.email })) {
+    if (await Users.hasKeys({ email: body.email })) {
       throw new ManualException('邮箱已存在');
     }
 

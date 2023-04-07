@@ -3,13 +3,13 @@ import { AuthController } from './auth.controller';
 import { MysqlModel } from '@app/common/mysql';
 import { AuthService } from './auth.service';
 import { Module } from '@nestjs/common';
-import { User } from '@app/mysql';
+import { Users } from '@app/mysql';
 import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     JwtAuthModel,
-    MysqlModel.feature(User),
+    MysqlModel.feature(Users),
   ],
   controllers: [AuthController],
   providers: [
