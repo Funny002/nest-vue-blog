@@ -1,4 +1,4 @@
-import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 import Components from 'unplugin-vue-components/vite';
 import AutoImport from 'unplugin-auto-import/vite';
 import vue from '@vitejs/plugin-vue';
@@ -10,32 +10,41 @@ export default defineConfig({
   plugins: [
     vue(),
     AutoImport({
-      imports: ['vue', 'vue-router'],
-      dts: resolve(__dirname, 'types/index.d.ts'),
-      dirs: [resolve(__dirname, 'src/components')],
+      resolvers: [ElementPlusResolver()],
     }),
     Components({
-      resolvers: [NaiveUiResolver()],
+      resolvers: [ElementPlusResolver()],
     }),
   ],
   base: './',
-  publicDir: resolve(__dirname, 'public'),
+  clearScreen: false,
+  json: { stringify: true },
+  css: { devSourcemap: true },
+  cacheDir: resolve(__dirname, '.cache'),
+  publicDir: resolve(__dirname, './public'),
   resolve: {
     alias: {
-      '@utils': resolve(__dirname, 'src/utils'),
-      '@stores': resolve(__dirname, 'src/stores'),
-      '@plugin': resolve(__dirname, 'src/plugin'),
-      '@scss': resolve(__dirname, 'src/assets/scss'),
-      '@models': resolve(__dirname, 'src/components'),
-      '@directive': resolve(__dirname, 'src/directive'),
+      '@': resolve(__dirname, './src'),
+      '@utils': resolve(__dirname, './src/utils'),
+      '@stores': resolve(__dirname, './src/stores'),
+      '@plugin': resolve(__dirname, './src/plugin'),
+      '@scss': resolve(__dirname, './src/assets/scss'),
+      '@models': resolve(__dirname, './src/components'),
+      '@directive': resolve(__dirname, './src/directive'),
       // client
-      '@sso': resolve(__dirname, 'src/package/sso'),
+      '@sso': resolve(__dirname, './package/sso'),
     },
   },
+  server: { host: 'localhost', port: 6412, open: true },
   build: {
+    target: 'esnext',
+    sourcemap: false,
+    minify: 'esbuild',
+    reportCompressedSize: true,
+    outDir: resolve(__dirname, './dist'),
     rollupOptions: {
       input: {
-        sso: 'src/package/sso/index.html',
+        sso: resolve(__dirname, './package/sso/index.html'),
       },
       output: {
         chunkFileNames: 'js/[name].[hash].js',

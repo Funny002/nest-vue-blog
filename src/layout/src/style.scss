@@ -1,0 +1,39 @@
+.var-layout {
+  width: 100%;
+  height: 100%;
+
+  &.is-flex {
+    display: flex;
+    flex-direction: column;
+
+    > * {
+      width: 100%;
+      flex: 0 0 auto;
+    }
+
+    .var-layout {
+      &__header,
+      &__footer {
+        display: flex;
+        align-items: center;
+      }
+
+      &__container {
+        flex: 1 1 auto;
+        position: relative;
+      }
+    }
+  }
+
+  &__header {
+    height: 50px;
+  }
+
+  &__footer {
+    padding: 20px;
+  }
+
+  &__container {
+    //
+  }
+}
