@@ -12,13 +12,11 @@ export interface EmailOptions {
 
 export const Email_Name = 'email-name';
 
+const EmailHostMap = {
+  aliyun: { port: 465, host: 'smtp.qiye.aliyun.com' },
+};
+
 export const Email = registerAs(Email_Name, (): EmailOptions => {
-  return {
-    port: 465,
-    pool: true,
-    secure: true,
-    host: 'smtp.qiye.aliyun.com',
-    user: process.env['EMAIL_USER'],
-    pass: process.env['EMAIL_PASS'],
-  };
+  const { port, host } = EmailHostMap[process.env['EMAIL_TYPE']];
+  return { port, host, pool: true, secure: true, user: process.env['EMAIL_USER'], pass: process.env['EMAIL_PASS'] };
 });

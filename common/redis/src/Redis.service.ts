@@ -31,15 +31,25 @@ export class RedisServer {
     });
   }
 
+  async hasAuthToken(uid: number, tags: string, token: string) {
+    return !!(await this.redis.get(`authority:${uid}:${tags}:access:${token}`));
+  }
+
+  async delAuthToken(uid: number, tags: string, token: string) {
+    const refresh = await this.redis.get(`authority:${uid}:${tags}:access:${token}`);
+    if (!refresh) return false;
+    return (await this.redis.del(`authority:${uid}:${tags}:access:${token}`, `authority:${uid}:${tags}:refresh:${refresh}`)) > 0;
+  }
+
   async setAuthToken(uid: number, tags: string, token: { access: string, refresh: string }, expires: { access: number, refresh: number }) {
     const conf = JSON.parse((await this.settingRep.findOne({ where: { tags: 'sso', type: 'authority', keys: 'singleSignOn' }, select: { value: true } }))?.value || '{}');
     if (conf[tags]) {
-      const list = await this.scan(`authority:${ uid }:${ tags }:*`, { count: 1000 });
+      const list = await this.scan(`authority:${uid}:${tags}:*`, { count: 1000 });
       const pipe = this.redis.pipeline();
       for (const key of list) {
         const access = key.split('access:')[1];
         if (access) {
-          pipe.set(`othersSign:${ access }`, 'true', 'EX', 60 * 60);
+          pipe.set(`othersSign:${access}`, 'true', 'EX', 60 * 60);
         }
       }
       pipe.del(...list);
@@ -47,8 +57,8 @@ export class RedisServer {
     }
     // redis add token  -  Authority:{uid}:{tags}:{access, refresh}:{token} = {refresh, access}
     const pipe = this.redis.pipeline();
-    pipe.set(`authority:${ uid }:${ tags }:access:${ token.access }`, token.refresh, 'EX', expires.access);
-    pipe.set(`authority:${ uid }:${ tags }:refresh:${ token.refresh }`, token.access, 'EX', expires.refresh);
+    pipe.set(`authority:${uid}:${tags}:access:${token.access}`, token.refresh, 'EX', expires.access);
+    pipe.set(`authority:${uid}:${tags}:refresh:${token.refresh}`, token.access, 'EX', expires.refresh);
     await pipe.exec();
   }
 }

@@ -40,9 +40,10 @@ export class AuthController {
   @ApiOperation({ summary: '登录' })
   async Login(@Req() req: Request, @Body() body: SsoAuthLoginDto) {
     const info = reWriteObj(req['user'], ['uid', 'name', 'email']);
+    info.tags = body.tags || 'web';
     const token = await this.jwtAuthService.createToken(info);
     const [time, accessIn, refreshIn] = [Math.floor(Date.now() / 1000) - 10, 12 * 60 * 60, 24 * 60 * 60];
-    await this.redisServer.setAuthToken(info.uid, body.tags || 'web', token, { access: accessIn, refresh: refreshIn });
+    await this.redisServer.setAuthToken(info.uid, info.tags, token, { access: accessIn, refresh: refreshIn });
     return { info, ...token, expiresIn: { access: time + accessIn, refresh: time + refreshIn } };
   }
 
@@ -51,7 +52,10 @@ export class AuthController {
   async HasToken(@Query('token') token: string) {
     const decode = this.jwtService.decode(token) as { exp: number; iat: number; [k: string]: any };
     const num = (decode || { exp: 0, iat: 0 }).exp - Math.floor(Date.now() / 1000);
-    return num > 0 ? num : false;
+    if (num <= 0) return false;
+    const state = await this.redisServer.hasAuthToken(decode.uid, decode.tags || 'web', token);
+    if (!state) return false;
+    return num;
   }
 
   @Get('code')

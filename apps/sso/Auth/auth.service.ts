@@ -5,10 +5,14 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Request } from 'express';
 import { Users } from '@app/mysql';
+import { EmailService } from '@app/common/email/src/Email.service';
 
 @Injectable()
 export class AuthService {
-  constructor(@InjectRepository(Users) private userRepository: Repository<Users>) {}
+  constructor(
+    private readonly emailService: EmailService,
+    @InjectRepository(Users) private userRepository: Repository<Users>,
+  ) {}
 
   create_user(data: SsoAuthCreateDto): Users {
     const user = new Users();
@@ -37,7 +41,9 @@ export class AuthService {
    * =====================================================================
    */
   async sendCodeEmail(req: Request, email: string) {
-    return 'ok';
+    const body = `
+    `;
+    return this.emailService.subject('用户注册').form('sso').setTo(email).setBody(body).send();
   }
 
   async sendCodePhone(req: Request, email: string) {
