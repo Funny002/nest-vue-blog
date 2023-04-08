@@ -1,20 +1,23 @@
 import { AuthSendCodeType, SsoAuthCreateDto, SsoAuthLoginDto, SsoAuthSendCodeDto } from '@app/dto/sso.auth.dto';
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthService, LocalAuth, NoAuth } from '@app/common/jwtAuth';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ManualException } from '@app/common/error';
+import { RedisServer } from '@app/common/redis';
 import { AuthService } from './auth.service';
-import { randomUUID } from 'crypto';
-import { Request } from 'express';
-import { Users } from '@app/mysql';
+import { JwtService } from '@nestjs/jwt';
 import { reWriteObj } from '@app/tools';
+import { Users } from '@app/mysql';
+import { Request } from 'express';
 
 @NoAuth()
 @ApiTags('Auth 登录/注册')
 @Controller('auth')
 export class AuthController {
   constructor(
+    private readonly jwtService: JwtService,
     private readonly authService: AuthService,
+    private readonly redisServer: RedisServer,
     private readonly jwtAuthService: JwtAuthService,
   ) {}
 
@@ -39,14 +42,16 @@ export class AuthController {
     const info = reWriteObj(req['user'], ['uid', 'name', 'email']);
     const token = await this.jwtAuthService.createToken(info);
     const [time, accessIn, refreshIn] = [Math.floor(Date.now() / 1000) - 10, 12 * 60 * 60, 24 * 60 * 60];
-    //
+    await this.redisServer.setAuthToken(info.uid, body.tags || 'web', token, { access: accessIn, refresh: refreshIn });
     return { info, ...token, expiresIn: { access: time + accessIn, refresh: time + refreshIn } };
   }
 
   @Get('hasToken')
   @ApiOperation({ summary: '验证令牌' })
-  async HasToken() {
-    // 验证令牌
+  async HasToken(@Query('token') token: string) {
+    const decode = this.jwtService.decode(token) as { exp: number; iat: number; [k: string]: any };
+    const num = (decode || { exp: 0, iat: 0 }).exp - Math.floor(Date.now() / 1000);
+    return num > 0 ? num : false;
   }
 
   @Get('code')

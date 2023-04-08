@@ -8,9 +8,11 @@ export enum SettingState {
 
 @Entity()
 export class Setting extends BaseModel {
-  @Column({ comment: '标识', length: 100 }) keys: string;
+  @Column({ comment: '标签', length: 50 }) tags: string;
 
-  @Column({ comment: '分类', length: 100 }) type: string;
+  @Column({ comment: '分类', length: 50 }) type: string;
+
+  @Column({ comment: '标识', length: 100 }) keys: string;
 
   @Column({ comment: '标题', length: 100 }) title: string;
 

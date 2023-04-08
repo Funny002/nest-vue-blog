@@ -1,4 +1,4 @@
-import { IsAlphanumeric, IsEmail, IsEnum, IsString } from 'class-validator';
+import { IsAlphanumeric, IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class SsoAuthCreateDto {
@@ -14,9 +14,15 @@ export class SsoAuthCreateDto {
   @IsAlphanumeric()
   @ApiProperty({ description: '验证码' })
   code: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ description: '标签' })
+  tags: string;
 }
 
-export class SsoAuthLoginDto extends SsoAuthCreateDto {}
+export class SsoAuthLoginDto extends SsoAuthCreateDto {
+}
 
 export enum AuthSendCodeType {
   email, // 邮箱

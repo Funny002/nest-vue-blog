@@ -1,5 +1,6 @@
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { Logger, ValidationPipe } from '@nestjs/common';
+import { LoggerService } from '@app/common/logger';
 import { UseInterceptor } from '@app/interceptor';
 import { Transport } from '@nestjs/microservices';
 import { UseSwagger } from '@app/common/swagger';
@@ -13,6 +14,8 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(SsoModule);
   // 创建混合应用
   app.connectMicroservice({ transport: Transport.REDIS, options: { url: 'redis://localhost:6379/1', retryAttempts: 10, retryDelay: 3000 } });
+  // logger
+  app.useLogger(new LoggerService());
   // 跨域
   app.enableCors();
   // Api多版本
@@ -34,6 +37,6 @@ async function bootstrap() {
 }
 
 bootstrap().then(({ port, version }) => {
-  Logger.log(`http://127.0.0.1:${port}`, 'Main');
-  Logger.log(`http://127.0.0.1:${port}/${version}`, 'Main');
+  Logger.log(`http://127.0.0.1:${ port }`, 'Main');
+  Logger.log(`http://127.0.0.1:${ port }/${ version }`, 'Main');
 });

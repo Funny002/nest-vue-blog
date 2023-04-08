@@ -15,6 +15,6 @@ export class JwtAuthService {
     const conf = this.configService.get<JwtAuthOptions>(JwtAuth_NAME);
     const access = await this.jwtService.signAsync(payload, { expiresIn: conf.expiresIn });
     const refresh = await this.jwtService.signAsync(payload, { expiresIn: conf.refreshIn });
-    return { access, refresh, };
+    return { access, refresh };
   }
 }

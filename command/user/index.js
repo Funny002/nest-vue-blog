@@ -1,5 +1,5 @@
 const { dateFormat, getUUID, md5 } = require('../tools');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
 function createPassword (pass, user) {
   return md5(md5(user) + pass);
@@ -63,7 +63,7 @@ function handleQuery (conn, sql, val) {
 }
 
 function hasUserInfo (conn) {
-  return handleQuery(conn, `SELECT * FROM user WHERE rower LIKE ?`, 'all');
+  return handleQuery(conn, `SELECT * FROM users WHERE rower LIKE ?`, 'all');
 }
 
 async function createCommand (conn, user, pass) {
@@ -75,7 +75,7 @@ async function createCommand (conn, user, pass) {
   // =================================================================
   const time = dateFormat('Y-M-D H:I:S.00000');
   const value = [time, time, getUUID(true), user, createPassword(pass, `${user}@email.com`), `${user}@email.com`];
-  await handleQuery(conn, 'INSERT INTO user (`id`, `create_time`, `update_time`, `uid`, `name`, `pass`, `email`, `avatar`, `href`, `explain`, `login_time`, `rower`, `state`) VALUES(null, ?, ?, ?, ?, ?, ?, null, null, null, null, \'all\', \'0\')', value);
+  await handleQuery(conn, 'INSERT INTO users (`id`, `create_time`, `update_time`, `uid`, `name`, `pass`, `email`, `avatar`, `href`, `explain`, `login_time`, `rower`, `state`) VALUES(null, ?, ?, ?, ?, ?, ?, null, null, null, null, \'all\', \'0\')', value);
   console.log('用户创建成功');
 }
 
@@ -86,12 +86,12 @@ async function saveCommand (query, pass) {
   if (!info.length) return console.error('未查询到数据');
   const time = dateFormat('Y-M-D H:I:S.00000', info[0].create_time);
   const value = [createPassword(pass, info[0].email), dateFormat('Y-M-D H:I:S.00000')];
-  await handleQuery(query, 'UPDATE user SET pass = ?, update_time = ? WHERE rower LIKE \'all\'', value);
+  await handleQuery(query, 'UPDATE users SET pass = ?, update_time = ? WHERE rower LIKE \'all\'', value);
   console.log('密码修改成功');
 }
 
 async function deleteCommand (query) {
-  await handleQuery(query, 'DELETE FROM user WHERE rower LIKE \'all\'');
+  await handleQuery(query, 'DELETE FROM users WHERE rower LIKE \'all\'');
   console.log('删除成功');
 }
 

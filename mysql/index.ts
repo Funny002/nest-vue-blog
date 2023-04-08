@@ -18,4 +18,4 @@ export * from './src/Articles/ArticlesExtend.entity';
 export * from './src/Articles/Comments.entity';
 
 // Setting
-export * from './src/Setting/Setting.entity';
+export * from './src/Setting.entity';
