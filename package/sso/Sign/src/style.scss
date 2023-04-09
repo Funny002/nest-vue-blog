@@ -1,4 +1,13 @@
 .var-sign {
+  &--title {
+    width: 100%;
+    color: #3a3a3a;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 40px;
+    text-align: center;
+  }
+
   &__login,
   &__register {
     top: 30%;
@@ -18,15 +27,6 @@
   }
 
   &__login {
-    &--title {
-      width: 100%;
-      color: #3a3a3a;
-      font-size: 16px;
-      font-weight: bold;
-      line-height: 40px;
-      text-align: center;
-    }
-
     &--body {
       display: flex;
       padding: 10px;
@@ -78,5 +78,22 @@
   }
 
   &__register {
+    .el-button {
+      padding-left: 0;
+      padding-right: 0;
+
+      &.is-text:not(.is-disabled) {
+        &:focus-visible {
+          outline: none;
+          background: none;
+        }
+
+        &:focus,
+        &:hover {
+          background: none;
+          color: var(--el-color-primary);
+        }
+      }
+    }
   }
 }

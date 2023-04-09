@@ -1,12 +1,13 @@
-export type  FieldType = 'input' | 'select';
+export type  FieldType = 'text' | 'password' | 'code';
 
 export interface Field {
   prop: string;
-  label: string;
   show?: bigint;
-  labelWidth: string;
+  label?: string;
+  labelWidth?: string;
   // ----------------------------------------------------------------
   type: FieldType;
+  placeholder?: string;
   options?: Array<{ value: string, label: string }>;
 }
 

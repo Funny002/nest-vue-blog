@@ -33,6 +33,8 @@ function onClick() {
 <style lang="scss" scoped>
 .var-dynamic__code .el-button {
   padding: 0;
+  color: #999;
   height: 22px;
+  font-size: 11px;
 }
 </style>

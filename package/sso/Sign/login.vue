@@ -1,6 +1,6 @@
 <template>
   <div class="var-sign__login">
-    <div class="var-sign__login--title">登录</div>
+    <div class="var-sign--title">登录</div>
     <div class="var-sign__login--body">
       <div class="var-sign__login--left">
         <qr-code value="使用App扫码进行登录" :expires="1" description="使用App扫码进行登录" @click="onQrCode"/>
@@ -42,7 +42,7 @@ const route = useRoute();
 const routes = useRouter();
 const data = reactive<any>({
   fields: [
-    { prop: 'user', type: 'text', placeholder: '账号/邮箱' },
+    { prop: 'user', type: 'text', placeholder: '邮箱/账号名' },
     { show: true, prop: 'pass', type: 'password', placeholder: '密码' },
     { show: false, prop: 'pass', type: 'code', placeholder: '验证码', codePlaceholder: '获取验证码', click: 'code' },
   ],
