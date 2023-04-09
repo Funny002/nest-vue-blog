@@ -13,3 +13,10 @@ export const hasType = (value: any, ...args: string[]): boolean => {
   const type = getType(value, true);
   return args.map(v => v.toLocaleLowerCase()).includes(type);
 };
+
+export function rewriteObj(target: { [k: string]: any }, array: string[]) {
+  return array.reduce(function (value: { [k: string]: any }, keys: string) {
+    if (keys in target) value[keys] = target[keys];
+    return value;
+  }, {});
+}

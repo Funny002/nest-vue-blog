@@ -1,6 +1,6 @@
 <template>
   <el-form :model="props.modelValue" :rules="props.rules">
-    <dynamic-form-field v-for="fields in props.fields" :fields="fields"/>
+    <dynamic-form-field v-for="(fields, key) in props.fields" :fields="fields" :key="`${key}-${fields.type}`"/>
   </el-form>
 </template>
 

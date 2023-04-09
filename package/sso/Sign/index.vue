@@ -1,11 +1,5 @@
 <template>
   <layout class="var-sign" type="flex">
-    <template #header>
-      header 还没想好放什么
-    </template>
-    <template #footer>
-      footer 还没想好放什么
-    </template>
     <router-view/>
   </layout>
 </template>

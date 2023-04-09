@@ -1,8 +1,11 @@
 export type  FieldType = 'input' | 'select';
 
 export interface Field {
-  label: string;
   prop: string;
+  label: string;
+  show?: bigint;
+  labelWidth: string;
+  // ----------------------------------------------------------------
   type: FieldType;
   options?: Array<{ value: string, label: string }>;
 }
