@@ -11,6 +11,7 @@
     "build:sso": "vue-tsc --noEmit && vite build package/sso/ --config ./vite.config.ts"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.1.0",
     "axios": "^1.3.3",
     "crypto-js": "^4.1.1",
     "element-plus": "^2.2.32",

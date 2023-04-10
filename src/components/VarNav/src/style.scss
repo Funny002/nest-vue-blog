@@ -1,0 +1,54 @@
+.var-nav {
+  display: flex;
+  padding: 8px 10px;
+  align-items: center;
+
+  > .el-button,
+  > .el-dropdown > .el-button {
+    padding: 0;
+    width: 24px;
+    height: 24px;
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
+  > * {
+    flex: 0 0 auto;
+
+    + * {
+      margin-left: 10px;
+    }
+  }
+
+  &__container {
+    height: 24px;
+    flex: 1 1 auto;
+    overflow: auto hidden;
+  }
+
+  &__boyd {
+    height: 24px;
+    display: flex;
+    align-items: center;
+
+    > * + * {
+      margin-left: 10px;
+    }
+  }
+
+  &__item {
+    &:hover .var-nav__icon {
+      width: 12px;
+      margin-left: 5px;
+    }
+  }
+
+  &__icon {
+    width: 0;
+    margin-left: 0;
+    transition-duration: 0.1s;
+    transition-property: width, margin-left;
+  }
+}
