@@ -26,7 +26,7 @@ const getLocale = computed(() => locale.value === 'zh' ? zh_locale : en_locale);
 
 body {
   color: #999;
-  background-color: #f6f8fa;
+  background-color: #eef2f8;
 }
 
 #app {

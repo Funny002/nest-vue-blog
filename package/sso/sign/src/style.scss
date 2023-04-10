@@ -12,12 +12,13 @@
   &__register {
     top: 30%;
     left: 50%;
-    padding: 10px;
     display: flex;
+    padding: 10px;
     user-select: none;
     position: absolute;
     border-radius: 10px;
     flex-direction: column;
+    border: 1px solid #ddd;
     background-color: #fff;
     transform: translate(-50%, -25%);
 

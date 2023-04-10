@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { routes } from './routes';
 import { useUsers } from '@stores/user';
+import { routes } from './routes';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -8,10 +8,10 @@ const router = createRouter({
 });
 
 router.beforeEach(async function (to, from, next) {
-  if (to.path.indexOf('/sign') !== 0) {
-    const user = useUsers();
-    if (!user.token) return next({ path: '/sign' });
-  }
+  // if (to.path.indexOf('/sign') !== 0) {
+  //   const user = useUsers();
+  //   if (!user.token) return next({ path: '/sign' });
+  // }
   next();
 });
 
