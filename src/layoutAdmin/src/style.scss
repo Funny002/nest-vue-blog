@@ -4,7 +4,7 @@
   display: flex;
 
   &__side {
-    width: 40px;
+    width: 50px;
     color: #fff;
     height: 100vh;
     background-color: #5e91f8;
@@ -15,7 +15,7 @@
     align-items: stretch;
 
     &, > * {
-      width: calc(100vw - 40px);
+      width: calc(100vw - 50px);
     }
   }
 
@@ -30,14 +30,34 @@
 
   &__menu,
   &__container {
-    transition: width .3s;
+    transition: width .56s;
     height: calc(100vh - 50px);
   }
 
   &__menu {
-    width: 200px;
+    width: 190px;
     background-color: #fff;
     border-right: 1px solid #ddd;
+
+    .el-menu {
+      border: none;
+
+      &--inline {
+        background-color: #fafafa;
+      }
+    }
+
+    &, &--sub {
+      --el-menu-icon-width: 25px;
+      --el-menu-level-padding: 12px;
+      --el-menu-base-level-padding: 12px;
+
+      .el-menu-item,
+      .el-sub-menu__title {
+        height: 40px;
+        line-height: 40px;
+      }
+    }
   }
 
   &__container {
@@ -51,6 +71,45 @@
 
     &__container {
       width: calc(100vw - 90px);
+    }
+  }
+}
+
+.var-layoutAdmin__side {
+  position: relative;
+
+  &--logo {
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+  }
+
+  &--active {
+    top: 0;
+    right: 0;
+    height: 50px;
+    margin-top: 50px;
+    position: absolute;
+    pointer-events: none;
+
+    > div {
+      margin-top: 15px;
+      border-width: 10px;
+      border-style: solid;
+      border-color: transparent;
+      border-right-color: #fff;
+    }
+  }
+
+  &--item {
+    height: 50px;
+    cursor: pointer;
+    line-height: 50px;
+    text-align: center;
+
+    &:hover {
+      background-color: #739cef;
     }
   }
 }

@@ -1,3 +1,28 @@
 .var-admin {
-  //
+  .var-layoutAdmin__header {
+    //padding: 0 16px;
+    padding-left: 5px;
+    padding-right: 10px;
+  }
+
+  &__header-icon {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    cursor: pointer;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    transition: border-radius .4s;
+    transform: rotateY(180deg);
+
+    &:hover {
+      border-radius: 4px;
+      background-color: #eee;
+    }
+  }
+
+  &.is-mini .var-admin__header-icon {
+    transform: rotateY(0);
+  }
 }
