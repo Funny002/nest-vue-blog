@@ -7,9 +7,15 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    ElAutocomplete: typeof import('element-plus/es')['ElAutocomplete']
+    ElAvatar: typeof import('element-plus/es')['ElAvatar']
+    ElBadge: typeof import('element-plus/es')['ElBadge']
+    ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
+    ElBreadcrumbItem: typeof import('element-plus/es')['ElBreadcrumbItem']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
     ElDescriptionsItem: typeof import('element-plus/es')['ElDescriptionsItem']
+    ElDivider: typeof import('element-plus/es')['ElDivider']
     ElDropdown: typeof import('element-plus/es')['ElDropdown']
     ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
     ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
@@ -20,6 +26,7 @@ declare module '@vue/runtime-core' {
     ElMenu: typeof import('element-plus/es')['ElMenu']
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
     ElMenuItemGroup: typeof import('element-plus/es')['ElMenuItemGroup']
+    ElPopover: typeof import('element-plus/es')['ElPopover']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
