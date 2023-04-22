@@ -8,11 +8,13 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     ElAutocomplete: typeof import('element-plus/es')['ElAutocomplete']
+    ElAutoResize: typeof import('element-plus/es')['ElAutoResize']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElBadge: typeof import('element-plus/es')['ElBadge']
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
     ElBreadcrumbItem: typeof import('element-plus/es')['ElBreadcrumbItem']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElButtonGroup: typeof import('element-plus/es')['ElButtonGroup']
     ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
     ElDescriptionsItem: typeof import('element-plus/es')['ElDescriptionsItem']
     ElDivider: typeof import('element-plus/es')['ElDivider']
@@ -29,6 +31,9 @@ declare module '@vue/runtime-core' {
     ElPopover: typeof import('element-plus/es')['ElPopover']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
+    ElTable: typeof import('element-plus/es')['ElTable']
+    ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
+    ElTableV2: typeof import('element-plus/es')['ElTableV2']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

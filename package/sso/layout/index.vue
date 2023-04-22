@@ -68,7 +68,7 @@
 import { Bell, ChatDotSquare, Expand, Files, Guide, House, Postcard, Search, Setting, SwitchButton, User } from '@element-plus/icons-vue';
 import LayoutAdmin from '@/layoutAdmin/index.vue';
 import VarNav from '@models/VarNav/index.vue';
-import { reactive } from 'vue';
+import { reactive, shallowRef } from 'vue';
 
 const data = reactive<any>({
   isMini: false,
@@ -80,12 +80,12 @@ const data = reactive<any>({
     ],
   },
   menu: [
-    { icon: House, name: 'Home', label: '首页' },
-    { icon: User, name: 'User', label: '用户' },
-    { icon: Files, name: 'Files', label: '文件' },
-    { icon: Guide, name: 'Router', label: '路由' },
-    { icon: Postcard, name: 'Setting', label: '权限' },
-    { icon: Setting, name: 'Setting', label: '设置' },
+    { icon: shallowRef(House), name: 'Home', label: '首页' },
+    { icon: shallowRef(User), name: 'User', label: '用户' },
+    { icon: shallowRef(Files), name: 'Files', label: '文件' },
+    { icon: shallowRef(Guide), name: 'Router', label: '路由' },
+    { icon: shallowRef(Postcard), name: 'Setting', label: '权限' },
+    { icon: shallowRef(Setting), name: 'Setting', label: '设置' },
   ],
 });
 

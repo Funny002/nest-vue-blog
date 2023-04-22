@@ -1,0 +1,17 @@
+.var-table-button {
+  width: 100%;
+
+  > * + * {
+    margin-left: 5px !important;
+  }
+
+  &.el-button-group {
+    > * + * {
+      margin-left: 0 !important;
+    }
+
+    .el-dropdown {
+      margin-left: 1px !important;
+    }
+  }
+}
