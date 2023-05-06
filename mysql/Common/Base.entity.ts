@@ -1,6 +1,8 @@
 import { BaseEntity, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { FindOptionsSelect } from 'typeorm/find-options/FindOptionsSelect';
 import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
+import { EntityManager } from 'typeorm/entity-manager/EntityManager';
+import { Repository } from 'typeorm/repository/Repository';
 import Decimal from 'decimal.js';
 
 export abstract class BaseModel extends BaseEntity {
@@ -58,5 +60,24 @@ export abstract class BaseModel extends BaseEntity {
    */
   static decrement<T extends BaseModel>(this: { new(): T } & typeof BaseModel, where: FindOptionsWhere<T>, prop: string, value: number): Promise<number> {
     return this.saveAmount(where, prop, value, false);
+  }
+
+  /** 事务聚合 */
+  static async transaction<T extends BaseModel, V extends any>(this: { new(): T } & typeof BaseModel, handler: (query: EntityManager, repository: Repository<T>) => Promise<V>): Promise<V> {
+    const queryRunner = this.getRepository().metadata.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const manager = queryRunner.manager;
+      const repository = manager.getRepository(this) as Repository<T>;
+      const result = await handler(manager, repository);
+      await queryRunner.commitTransaction();
+      return result;
+    } catch (e) {
+      await queryRunner.rollbackTransaction();
+      throw new Error('Transaction failed');
+    } finally {
+      await queryRunner.release();
+    }
   }
 }
