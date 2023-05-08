@@ -1,15 +1,8 @@
-import { BaseModel } from '@app/mysql/common';
-import { Column, Entity } from 'typeorm';
-
-export enum UserState {
-  enable, // 启用
-  disable, // 禁用
-  freeze, // 冻结
-  check, // 审核
-  lock, // 锁定
-}
+import { BaseModel, BaseState } from '@app/mysql/common';
+import { Column, Entity, Index } from 'typeorm';
 
 @Entity()
+@Index('unique', ['uid', 'name', 'email'])
 export class Users extends BaseModel {
   @Column({ comment: 'uid' }) uid: string;
 
@@ -19,17 +12,17 @@ export class Users extends BaseModel {
 
   @Column({ comment: '邮箱', length: 100 }) email: string;
 
-  @Column({ comment: '头像', default: null }) avatar: string;
+  @Column({ comment: '头像', nullable: true }) avatar: string;
 
-  @Column({ comment: '用户链接', length: 200, default: null }) href: string;
+  @Column({ comment: '用户链接', length: 200, nullable: true }) href: string;
 
-  @Column({ comment: '个性说明', length: 250, default: null }) explain: string;
+  @Column({ comment: '个性说明', length: 250, nullable: true }) explain: string;
 
-  @Column({ comment: '登录时间', type: 'datetime', default: null }) login_time: Date;
+  @Column({ comment: '登录时间', type: 'datetime', nullable: true }) login_time: Date;
 
-  @Column({ comment: '权限', type: 'simple-array', default: null }) rower: string[];
+  @Column({ comment: '权限', type: 'simple-array', nullable: true }) rower: string[];
 
-  @Column({ comment: '状态', type: 'enum', enum: UserState, default: UserState.disable }) state: UserState;
+  @Column({ comment: '状态', type: 'enum', enum: BaseState, default: BaseState.Disable }) state: BaseState;
 
   @Column({ comment: '锁定时间', default: '' }) lock_time: string;
 

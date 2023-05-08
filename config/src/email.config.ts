@@ -17,6 +17,6 @@ const EmailHostMap = {
 };
 
 export const Email = registerAs(Email_Name, (): EmailOptions => {
-  const { port, host } = EmailHostMap[process.env['EMAIL_TYPE']];
+  const { port, host } = EmailHostMap[process.env['EMAIL_TYPE']] || {};
   return { port, host, pool: true, secure: true, user: process.env['EMAIL_USER'], pass: process.env['EMAIL_PASS'] };
 });

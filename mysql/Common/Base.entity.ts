@@ -81,3 +81,11 @@ export abstract class BaseModel extends BaseEntity {
     }
   }
 }
+
+export enum BaseState {
+  Freeze = -1, // 冻结
+  Disable = 0, // 禁用
+  Enable = 1, // 启用
+  Delete = 2, // 删除
+  Lock = 4, // 锁定
+}
