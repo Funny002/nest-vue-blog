@@ -17,7 +17,6 @@
     align-items: center;
     justify-content: center;
     transition: border-radius .4s;
-    transform: rotateY(180deg);
 
     &:hover {
       border-radius: 4px;
@@ -25,7 +24,11 @@
     }
   }
 
-  &.is-mini .var-admin__headerNav {
+  .var-admin__headerNav.sideBtn {
+    transform: rotateY(180deg);
+  }
+
+  &.is-mini .var-admin__headerNav.sideBtn {
     transform: rotateY(0);
   }
 
