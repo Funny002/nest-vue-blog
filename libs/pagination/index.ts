@@ -2,6 +2,7 @@ import { PaginationRequest } from './src/decorators';
 
 /** 分页响应声明 */
 export interface PaginationResponse<T = any> extends PaginationRequest {
+  maxPage?: number;
   hasNext: boolean;
   total: number;
   list: T[];
@@ -19,14 +20,14 @@ export class Pagination {
 
     const { pageSize, pageCount, order, params } = page;
 
-    const maxPage = Math.floor(total / pageSize) + (total % pageCount ? 1 : 0);
+    const maxPage = pageSize ? Math.floor(total / pageSize) + (total % pageCount ? 1 : 0) : undefined;
 
     if (order) {
       const orderBy = Object.keys(order)[0];
       pageOrder = { orderBy, orderKey: order[orderBy] };
     }
 
-    return { ...pageOrder, params, pageSize, pageCount, hasNext: pageCount < maxPage, total, list };
+    return { ...pageOrder, params, pageSize, pageCount, hasNext: pageCount < maxPage, maxPage, total, list };
   }
 }
 

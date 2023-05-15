@@ -1,11 +1,11 @@
 import { SsoAuthCreateDto } from '@app/dto/sso.auth.dto';
 import { ManualException } from '@app/common/error';
 import { InjectRepository } from '@nestjs/typeorm';
+import { EmailService } from '@app/common/email';
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Request } from 'express';
 import { Users } from '@app/mysql';
-import { EmailService } from '@app/common/email/src/Email.service';
+import { Request } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -28,9 +28,7 @@ export class AuthService {
   }
 
   async createUser(body: SsoAuthCreateDto): Promise<Users> {
-    if (await Users.hasKeys({ email: body.user })) {
-      throw new ManualException('邮箱已存在');
-    }
+    if (await Users.hasKeys({ email: body.user })) ManualException('邮箱已存在');
 
     return await this.userRepository.save(this.create_user(body));
   }
@@ -47,6 +45,6 @@ export class AuthService {
   }
 
   async sendCodePhone(req: Request, email: string) {
-    throw new ManualException('功能正在开发中');
+    ManualException('功能正在开发中');
   }
 }

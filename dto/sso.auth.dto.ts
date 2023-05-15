@@ -17,7 +17,7 @@ export class SsoAuthCreateDto {
 
   @IsString()
   @IsOptional()
-  @ApiProperty({ description: '标签' })
+  @ApiProperty({ description: '标签', required: false })
   tags: string;
 }
 

@@ -30,7 +30,8 @@ export abstract class BaseModel extends BaseEntity {
    * 创建一个方法，可能没用
    */
   static async hasKeys<T extends BaseModel>(this: { new(): T } & typeof BaseModel, where: FindOptionsWhere<T> | FindOptionsWhere<T>[]): Promise<boolean> {
-    return (await this.getRepository().countBy(where)) > 0;
+    return Boolean(await this.getRepository().findOneBy(where));
+    // return (await this.getRepository().countBy(where)) > 0;
   }
 
   /** 引入 `Decimal` 修复 js 精度问题
@@ -83,6 +84,7 @@ export abstract class BaseModel extends BaseEntity {
 }
 
 export enum BaseState {
+  Check = -2, // 审核/检查
   Freeze = -1, // 冻结
   Disable = 0, // 禁用
   Enable = 1, // 启用

@@ -1,7 +1,7 @@
 import { ManualException, UserException } from '@app/common/error';
 import { AuthGuard, PassportStrategy } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Users, UserState } from '@app/mysql';
+import { Users, BaseState } from '@app/mysql';
 import { Injectable } from '@nestjs/common';
 import { HasEmail, md5 } from '@app/tools';
 import { Strategy } from 'passport-local';
@@ -20,9 +20,7 @@ export class LocalAuthStrategy extends PassportStrategy(Strategy, LocalAuthName)
   async validate(user: string, pass: string) {
     const where = HasEmail(user) ? { email: user } : { name: user };
     // 验证
-    if (!(await Users.hasKeys(where))) {
-      throw new ManualException('账号/邮箱不存在');
-    }
+    if (!(await Users.hasKeys(where))) ManualException('账号/邮箱不存在');
     // 获取信息
     const userInfo = await Users.getInfoKeys(where);
     // 验证状态
@@ -34,14 +32,10 @@ export class LocalAuthStrategy extends PassportStrategy(Strategy, LocalAuthName)
   }
 
   async handleUserState(userInfo: Users) {
-    if (userInfo.state !== UserState.enable) {
-      throw new UserException(userInfo.state);
-    }
+    if (userInfo.state !== BaseState.Enable) UserException(userInfo.state);
     if (userInfo.lock_count && userInfo.lock_time) {
       const time = parseInt(userInfo.lock_time) - Date.now();
-      if (time > 0) {
-        throw new ManualException(`请在${ Math.ceil(time / 1000) }秒后重新尝试`);
-      }
+      if (time > 0) ManualException(`请在${ Math.ceil(time / 1000) }秒后重新尝试`);
     }
   }
 
@@ -58,7 +52,7 @@ export class LocalAuthStrategy extends PassportStrategy(Strategy, LocalAuthName)
     }
     // 累计 + 1
     await Users.increment({ id: userInfo.id }, 'lock_count', 1);
-    throw  new ManualException('密码验证失败');
+    ManualException('密码验证失败');
   }
 }
 

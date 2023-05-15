@@ -1,7 +1,7 @@
 import { ArrayUnique, IsAlphanumeric, IsArray, IsDivisibleBy, IsEnum, IsNotEmpty, IsNumber, IsOptional, isString, IsString, Min } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
-import { PowerState } from '@app/mysql';
 import { SsoPowerTreeDto } from '@app/dto/sso.power.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { BaseState } from '@app/mysql';
 
 /** 角色创建声明 */
 export class SsoRoleCreateDto {
@@ -37,9 +37,9 @@ export class SsoRoleCreateDto {
   @ApiProperty({ description: '角色互斥', required: false })
   mutex: string[];
   
-  @IsEnum(PowerState)
-  @ApiProperty({ enum: PowerState, description: '状态' })
-  state: PowerState;
+  @IsEnum(BaseState)
+  @ApiProperty({ enum: BaseState, description: '状态' })
+  state: BaseState;
   
   @IsOptional()
   @Min(1)

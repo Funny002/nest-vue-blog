@@ -13,28 +13,26 @@ export class PowerService {
     private readonly dataSource: DataSource,
     @InjectRepository(Power) private powerRepository: Repository<Power>,
   ) {}
-  
+
   handleWhere(params: { [key: string]: any }): FindOptionsWhere<Power> {
     const where: FindOptionsWhere<Power> = {};
-    
-    if (params.type) where.type = +params.type;
-    
-    if (params.state) where.state = +params.state;
-    
-    if (params.name) where.name = Like(`%${params.name}%`);
-    
-    if (params.create_time) {
-      where.create_time = handleParamsDate(params.create_time, 'Y-M-D');
-    }
-    
+
+    // if (params.type) where.types = +params.type;
+    //
+    // if (params.state) where.state = +params.state;
+    //
+    // if (params.name) where.name = Like(`%${params.name}%`);
+    //
+    // if (params.create_time) {
+    //   where.create_time = handleParamsDate(params.create_time, 'Y-M-D');
+    // }
+
     return where;
   }
-  
+
   async addList(body: SsoPowerCreateDto): Promise<Power> {
-    if (await Power.hasKeys({ keys: body.keys })) {
-      throw new ManualException('标识已存在');
-    }
-    
+    if (await Power.hasKeys({ keys: body.keys })) ManualException('标识已存在');
+
     return this.powerRepository.save(await Power.of_create(body));
   }
 }

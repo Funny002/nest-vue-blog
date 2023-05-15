@@ -4,7 +4,6 @@ import { EmailModule } from '@app/common/email';
 import { RedisModule } from '@app/common/redis';
 import { MysqlModel } from '@app/common/mysql';
 import { AuthService } from './auth.service';
-import { JwtService } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { Users } from '@app/mysql';
 
@@ -20,7 +19,6 @@ import { Users } from '@app/mysql';
   ],
   controllers: [AuthController],
   providers: [
-    JwtService,
     AuthService,
     JwtAuthService,
     JwtAuthStrategy,

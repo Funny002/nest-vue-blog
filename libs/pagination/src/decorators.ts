@@ -10,8 +10,8 @@ export interface DefaultPagination {
 /** 分页 声明 */
 export interface PaginationRequest<T = any> {
   order?: { [key: string]: 'DESC' | 'ASC' };
-  pageCount: number;
-  pageSize: number;
+  pageCount?: number;
+  pageSize?: number;
   params: T;
 }
 
@@ -26,9 +26,9 @@ export const PaginationParams = createParamDecorator((data: Partial<DefaultPagin
 
   const order = orderBy ? { [orderBy]: ['DESC', 'ASC'].includes(orderKey) ? orderKey : defaultOrderKey } : undefined;
 
-  pageSize = Math.min(Math.max(minLimit, +pageSize), maxLimit);
+  pageSize = pageSize ? Math.min(Math.max(minLimit, +pageSize), maxLimit) : undefined;
 
-  pageCount = +pageCount < 1 ? 1 : +pageCount;
+  pageCount = pageCount ? +pageCount < 1 ? 1 : +pageCount : undefined;
 
   return Object.assign({ pageCount, pageSize, order, params });
 });

@@ -1,26 +1,26 @@
 import { AppSystem, Captcha, ConfigGlobal, Email, JwtAuth, Mysql, Redis, Redis_Name, RedisOptions, Sso, SSO_NAME } from '@app/config';
-import { Power, PowerRole, Setting, Users } from '@app/mysql';
+import { Menu, Power, Role, Setting, UserOauth, Users } from '@app/mysql';
+import { RedisModule } from '@svtslv/nestjs-ioredis';
 import { JwtAuthGuard } from '@app/common/jwtAuth';
-import { ConfigService } from '@nestjs/config';
 import { MysqlModel } from '@app/common/mysql';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { APP_GUARD } from '@nestjs/core';
 import { Module } from '@nestjs/common';
 // 应用模块
 import { AuthModule } from './Auth/auth.module';
-import { FileModule } from './File/file.module';
-import { RoleModule } from './Role/role.module';
+// import { FileModule } from './File/file.module';
+// import { RoleModule } from './Role/role.module';
 import { MenuModule } from './Menu/menu.module';
-import { PowerModule } from './Power/power.module';
-import { RedisModule } from '@svtslv/nestjs-ioredis';
-import { SettingModule } from './Setting/setting.module';
+// import { PowerModule } from './Power/power.module';
+// import { SettingModule } from './Setting/setting.module';
 
 @Module({
   imports: [
     // config
     ConfigGlobal.use(Sso, Mysql, Redis, JwtAuth, Email, Captcha),
     // mysql
-    MysqlModel.use(Power, PowerRole, Setting, Users),
+    MysqlModel.use(Users, UserOauth, Menu, Role, Power, Setting),
     // redis
     RedisModule.forRootAsync({
       inject: [ConfigService],
@@ -30,11 +30,11 @@ import { SettingModule } from './Setting/setting.module';
     }),
     // module
     AuthModule,
-    FileModule,
-    RoleModule,
+    // FileModule,
+    // RoleModule,
     MenuModule,
-    PowerModule,
-    SettingModule,
+    // PowerModule,
+    // SettingModule,
   ],
   providers: [
     JwtService,

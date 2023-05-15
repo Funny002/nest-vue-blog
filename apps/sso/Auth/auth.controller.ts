@@ -24,13 +24,9 @@ export class AuthController {
   @Post('register')
   @ApiOperation({ summary: '注册' })
   async Register(@Req() req: Request, @Body() body: SsoAuthCreateDto) {
-    if (!(await this.authService.hasCode(body.user, body.code))) {
-      throw new ManualException('验证码错误');
-    }
+    if (!(await this.authService.hasCode(body.user, body.code))) ManualException('验证码错误');
 
-    if (await Users.hasKeys({ email: body.user })) {
-      throw new ManualException('邮箱已存在');
-    }
+    if (await Users.hasKeys({ email: body.user })) ManualException('邮箱已存在');
 
     return (await this.authService.createUser(body)).id;
   }
@@ -67,9 +63,7 @@ export class AuthController {
   @Post('code')
   @ApiOperation({ summary: '发送验证码' })
   async SendCode(@Req() req: Request, @Body() body: SsoAuthSendCodeDto) {
-    if (await Users.hasKeys({ email: body.email })) {
-      throw new ManualException('邮箱已存在');
-    }
+    if (await Users.hasKeys({ email: body.email })) ManualException('邮箱已存在');
 
     switch (body.state) {
       case AuthSendCodeType.email:
@@ -79,7 +73,7 @@ export class AuthController {
         return await this.authService.sendCodePhone(req, body.email);
 
       default:
-        throw new ManualException('未知异常');
+        ManualException('未知异常');
     }
   }
 }

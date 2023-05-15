@@ -1,12 +1,13 @@
-import { Column, Entity, Tree, TreeParent } from 'typeorm';
+import { Column, Entity, Tree, TreeChildren, TreeParent } from 'typeorm';
 import { BaseState, PowerModel } from '@app/mysql/common';
+import { SsoRoleCreateDto } from '@app/dto/sso.role.dto';
 
 @Entity()
 @Tree('closure-table')
-export class Power extends PowerModel {
-  @TreeParent() pid: Power;
+export class Role extends PowerModel {
+  @TreeParent() pid: Role;
 
-  @TreeParent() children: Power[];
+  @TreeChildren() children: Role[];
 
   @Column({ comment: '名称' }) name: string;
 
@@ -18,8 +19,8 @@ export class Power extends PowerModel {
 
   @Column({ type: 'enum', enum: BaseState, default: BaseState.Disable, comment: '状态' }) state: BaseState;
 
-  static async of_create(body) {
-    const target = new Power();
+  static async of_create(body: SsoRoleCreateDto) {
+    const target = new Role();
     //
     return target;
   }

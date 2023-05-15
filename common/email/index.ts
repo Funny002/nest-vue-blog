@@ -6,3 +6,5 @@ import { Module } from '@nestjs/common';
   exports: [EmailService],
 })
 export class EmailModule {}
+
+export { EmailService } from './src/Email.service';
