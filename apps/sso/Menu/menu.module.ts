@@ -15,5 +15,4 @@ import { RedisModule } from '@app/common/redis';
   controllers: [MenuController],
   providers: [MenuService],
 })
-export class MenuModule {
-}
+export class MenuModule {}

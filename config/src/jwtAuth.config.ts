@@ -8,10 +8,16 @@ export interface JwtAuthOptions {
   refreshIn: string;
 }
 
-/** JWT解析后配置声明 */
-export interface JwtPayLoad {
-  [key: string]: any;
+/** JWT详情声明 */
+export interface JwtInfo {
+  uid: number;
+  name: string;
+  tags: string;
+  email: string;
+}
 
+/** JWT解析后配置声明 */
+export interface JwtPayLoad extends JwtInfo {
   exp: number;
   iat: number;
 }

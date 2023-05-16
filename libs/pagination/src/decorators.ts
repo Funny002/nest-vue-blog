@@ -4,6 +4,7 @@ import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 export interface DefaultPagination {
   minLimit: number;
   maxLimit: number;
+  defaultValue: boolean;
   defaultOrderKey: 'DESC' | 'ASC';
 }
 
@@ -12,7 +13,8 @@ export interface PaginationRequest<T = any> {
   order?: { [key: string]: 'DESC' | 'ASC' };
   pageCount?: number;
   pageSize?: number;
-  params: T;
+  pageSkip?: number;
+  params?: T;
 }
 
 /** 管道 ~ 获取分页参数 */
@@ -22,7 +24,13 @@ export const PaginationParams = createParamDecorator((data: Partial<DefaultPagin
     query: { pageCount, pageSize, orderBy, orderKey, ...params },
   } = input.switchToHttp().getRequest();
 
-  const { minLimit, maxLimit, defaultOrderKey } = Object.assign({ minLimit: 10, maxLimit: 100, defaultOrderKey: 'DESC' }, data);
+  const { minLimit, maxLimit, defaultValue, defaultOrderKey } = Object.assign({ minLimit: 10, maxLimit: 100, defaultValue: true, defaultOrderKey: 'DESC' }, data);
+
+  if (defaultValue) {
+    pageCount = pageCount || 1;
+    pageSize = pageSize || minLimit;
+    orderBy = orderBy || 'create_time';
+  }
 
   const order = orderBy ? { [orderBy]: ['DESC', 'ASC'].includes(orderKey) ? orderKey : defaultOrderKey } : undefined;
 
@@ -30,5 +38,7 @@ export const PaginationParams = createParamDecorator((data: Partial<DefaultPagin
 
   pageCount = pageCount ? +pageCount < 1 ? 1 : +pageCount : undefined;
 
-  return Object.assign({ pageCount, pageSize, order, params });
+  const pageSkip = pageCount ? (pageCount - 1) * (pageSize || 0) : undefined;
+
+  return { pageCount, pageSize, order, params, pageSkip };
 });

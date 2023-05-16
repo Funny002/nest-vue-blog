@@ -35,7 +35,7 @@ export class AuthController {
   @UseGuards(LocalAuth)
   @ApiOperation({ summary: '登录' })
   async Login(@Req() req: Request, @Body() body: SsoAuthLoginDto) {
-    const info = reWriteObj(req['user'], ['uid', 'name', 'email']);
+    const info = reWriteObj(req['user'], ['uid', 'name', 'email']) as { uid: number, name: string, email: string, tags: string };
     info.tags = body.tags || 'web';
     const token = await this.jwtAuthService.createToken(info);
     const [time, accessIn, refreshIn] = [Math.floor(Date.now() / 1000) - 10, 12 * 60 * 60, 24 * 60 * 60];

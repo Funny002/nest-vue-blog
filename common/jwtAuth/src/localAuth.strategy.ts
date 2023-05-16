@@ -12,7 +12,6 @@ const LocalAuthName = 'localAuth';
 /** 账号登录策略 */
 @Injectable()
 export class LocalAuthStrategy extends PassportStrategy(Strategy, LocalAuthName) {
-
   constructor(@InjectRepository(Users) private userRepository: Repository<Users>) {
     super({ usernameField: 'user', passwordField: 'pass' });
   }
