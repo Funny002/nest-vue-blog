@@ -1,6 +1,7 @@
 import { AuthSendCodeType, SsoAuthCreateDto, SsoAuthLoginDto, SsoAuthSendCodeDto } from '@app/dto/sso.auth.dto';
 import { Body, Controller, Get, Post, Query, Req, UseGuards } from '@nestjs/common';
-import { JwtAuthService, LocalAuth, NoAuth } from '@app/common/jwtAuth';
+import { JwtAuthService, NoAuth } from '@app/common/jwtAuth';
+import { LocalAuth } from './strategy/localAuth.strategy';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ManualException } from '@app/common/error';
 import { RedisServer } from '@app/common/redis';

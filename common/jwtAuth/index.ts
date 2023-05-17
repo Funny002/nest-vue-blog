@@ -7,7 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 export * from './src/JwtAuth.guard';
 export * from './src/JwtAuth.service';
 export * from './src/JwtAuth.strategy';
-export * from './src/localAuth.strategy';
+// export * from '../../apps/sso/Auth/strategy/localAuth.strategy';
 
 /** noAuth */
 export const IS_PUBLIC = 'is_public';

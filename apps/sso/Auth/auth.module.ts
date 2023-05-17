@@ -1,4 +1,5 @@
-import { JwtAuthModel, JwtAuthService, JwtAuthStrategy, LocalAuthStrategy } from '@app/common/jwtAuth';
+import { JwtAuthModel, JwtAuthService, JwtAuthStrategy } from '@app/common/jwtAuth';
+import { LocalAuthStrategy } from './strategy/localAuth.strategy';
 import { AuthController } from './auth.controller';
 import { EmailModule } from '@app/common/email';
 import { RedisModule } from '@app/common/redis';

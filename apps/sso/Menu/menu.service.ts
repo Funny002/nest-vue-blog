@@ -1,7 +1,7 @@
 import { SsoMenuCreateDto, SsoMenuPageDto } from '@app/dto/sso.menu.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
-import { Not, Repository } from 'typeorm';
+import { Like, Not, Repository } from 'typeorm';
 import { Menu } from '@app/mysql';
 import { PaginationRequest } from '@app/pagination';
 
@@ -31,8 +31,9 @@ export class MenuService {
     return await this.menuRepository.update({ id }, await Menu.of_create(body));
   }
 
-  async pagination(page: PaginationRequest, where: SsoMenuPageDto) {
+  async pagination(page: PaginationRequest, where: any) {
     const { order, pageSize: take, pageSkip: skip } = page;
+    if (('name' in where) && where.name) where.name = Like(`%${ where.name }%`);
     return {
       count: await this.menuRepository.countBy(where),
       list: await this.menuRepository.find({ where, order, skip, take }),

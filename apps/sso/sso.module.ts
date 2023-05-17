@@ -13,7 +13,7 @@ import { AuthModule } from './Auth/auth.module';
 // import { RoleModule } from './Role/role.module';
 import { MenuModule } from './Menu/menu.module';
 // import { PowerModule } from './Power/power.module';
-// import { SettingModule } from './Setting/setting.module';
+import { SettingModule } from './Setting/setting.module';
 
 @Module({
   imports: [
@@ -34,7 +34,7 @@ import { MenuModule } from './Menu/menu.module';
     // RoleModule,
     MenuModule,
     // PowerModule,
-    // SettingModule,
+    SettingModule,
   ],
   providers: [
     JwtService,
