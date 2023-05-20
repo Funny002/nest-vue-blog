@@ -15,13 +15,24 @@ export class Role extends PowerModel {
 
   @Column({ /* 名称 */ length: 100 }) tags: string;
 
-  @Column({ /* 内容 */ length: 255, nullable: true }) values: string;
+  @Column({ /* 备注 */ length: 100 }) note: string;
+
+  @Column({ /* 数量 */ type: 'tinyint' }) count: number;
+
+  @Column({ /* 内容 */ type: 'simple-array', nullable: true }) values: string[];
 
   @Column({ /* 状态 */ type: 'enum', enum: BaseState, default: BaseState.Disable }) state: BaseState;
 
   static async of_create(body: SsoRoleCreateDto) {
     const target = new Role();
-    //
+    target.name = body.name;
+    target.keys = body.keys;
+    target.tags = body.tags;
+    target.note = body.note;
+    target.state = body.state;
+    target.count = body.count;
+    target.values = body.values;
+    if ('parent' in body) target.pid = body.parent ? await Role.getInfoKeys({ id: body.parent }) : null;
     return target;
   }
 

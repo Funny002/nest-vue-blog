@@ -27,9 +27,7 @@ export class Power extends PowerModel {
     target.state = body.state;
     target.mutex = body.mutex;
     target.values = body.values;
-
-    if (body.parent) target.pid = await Power.getInfoKeys({ id: body.parent });
-
+    if ('parent' in body) target.pid = body.parent ? await Power.getInfoKeys({ id: body.parent }) : null;
     return target;
   }
 

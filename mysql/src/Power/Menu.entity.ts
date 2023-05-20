@@ -38,7 +38,7 @@ export class Menu extends PowerModel {
     target.types = body.types;
     target.state = body.state;
     target.values = body.values;
-    if (body.parent) target.pid = await Menu.getInfoKeys({ id: body.parent });
+    if ('parent' in body) target.pid = body.parent ? await Menu.getInfoKeys({ id: body.parent }) : null;
     return target;
   }
 

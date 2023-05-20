@@ -28,14 +28,14 @@ export class RoleController {
   @ApiOperation({ summary: '修改' })
   async save(@Param('id') id: number, @Body() body: SsoRoleCreateDto) {
     const { status, message, data } = await Role.saveData(id, await Role.of_create(body));
-    return status ? data.raw : ManualException(message);
+    return status ? data.affected : ManualException(message);
   }
 
   @Delete()
   @ApiOperation({ summary: '删除' })
   async remove(@Body('ids') ids: number[]) {
     const { status, message, data } = await Role.removeData(ids);
-    return status ? data.raw : ManualException(message);
+    return status ? data.affected : ManualException(message);
   }
 
   @Get('list')

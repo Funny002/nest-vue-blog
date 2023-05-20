@@ -24,14 +24,14 @@ export class MenuController {
   @ApiOperation({ summary: '修改' })
   async save(@Param('id') id: number, @Body() body: SsoMenuCreateDto) {
     const { status, message, data } = await Menu.saveData(id, await Menu.of_create(body));
-    return status ? data.raw : ManualException(message);
+    return status ? data.affected : ManualException(message);
   }
 
   @Delete()
   @ApiOperation({ summary: '删除' })
   async remove(@Body('ids') ids: number[]) {
     const { status, message, data } = await Menu.removeData(ids);
-    return status ? data.raw : ManualException(message);
+    return status ? data.affected : ManualException(message);
   }
 
   @Get('list')

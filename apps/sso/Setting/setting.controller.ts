@@ -21,13 +21,13 @@ export class SettingController {
   @Put(':id')
   async save(@Param('id') id: number, @Body() body: SsoSettingCreateDto) {
     const { status, message, data } = await Setting.saveData(id, Setting.of_create(body));
-    return status ? data.raw : ManualException(message);
+    return status ? data.affected : ManualException(message);
   }
 
   @Delete()
   async remove(@Body('ids') ids: number[]) {
     const { status, message, data } = await Setting.removeData(ids);
-    return status ? data.raw : ManualException(message);
+    return status ? data.affected : ManualException(message);
   }
 
   @Get('list')

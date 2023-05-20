@@ -4,6 +4,7 @@ import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
 import { Column, In, Not, ObjectLiteral } from 'typeorm';
 import { ManualException } from '@app/common/error';
 import { BaseModel } from './Base.entity';
+import { mergeOptions } from '@app/tools';
 
 export abstract class PowerModel extends BaseModel {
   @Column({ /* 标识 */ }) keys: string;
@@ -19,7 +20,7 @@ export abstract class PowerModel extends BaseModel {
 
     if (types === 'root') return await target.findRoots({ depth });
 
-    const parent = await this.prototype.getInfoKeys(where);
+    const parent = await this.getInfoKeys(where);
 
     if (!parent) return null;
 
@@ -58,7 +59,7 @@ export abstract class PowerModel extends BaseModel {
   }
 
   /** 修改数据 */
-  static async saveData<T extends BaseModel>(this: { new(): T } & typeof BaseModel, id: number, data: T): Promise<{ status: boolean; message: string; data?: UpdateResult }> {
+  static async saveData<T extends BaseModel>(this: { new(): T } & typeof BaseModel, id: number, data: T): Promise<{ status: boolean; message: string; data?: any }> {
     const { status, message } = await this.hasVerify(data, id);
     if (!status) return { status: false, message };
 
@@ -69,7 +70,7 @@ export abstract class PowerModel extends BaseModel {
       if ((new Set(maxCount)).size !== maxCount.length) return { status: false, message: '有相互排斥数据' };
     }
 
-    return { status: true, data: await this.getRepository().update({ id }, data), message: '' };
+    return { status: true, data: await this.getRepository().save((data.id = id, data)), message: '' };
   }
 
   /** 删除数据 */

@@ -5,42 +5,46 @@ import { BaseState } from '@app/mysql';
 
 /** 角色创建声明 */
 export class SsoRoleCreateDto {
-  
+  @IsNotEmpty()
+  @IsAlphanumeric()
+  @ApiProperty({ description: '标识' })
+  tags: string;
+
   @IsNotEmpty()
   @IsAlphanumeric()
   @ApiProperty({ description: '标识' })
   keys: string;
-  
+
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ description: '昵称' })
   name: string;
-  
-  @IsArray()
-  @ArrayUnique()
-  @ApiProperty({ description: '添加' })
-  undock: string[];
-  
+
   @IsString()
   @IsOptional()
   @ApiProperty({ description: '说明', required: false })
   note: string;
-  
+
   @IsNumber()
   @Min(1)
   @IsDivisibleBy(1)
   @ApiProperty({ description: '数量', required: false })
   count: number;
-  
+
   @IsArray()
   @ArrayUnique()
   @ApiProperty({ description: '角色互斥', required: false })
   mutex: string[];
-  
+
+  @IsArray()
+  @ArrayUnique()
+  @ApiProperty({ description: '角色互斥', required: false })
+  values: string[];
+
   @IsEnum(BaseState)
   @ApiProperty({ enum: BaseState, description: '状态' })
   state: BaseState;
-  
+
   @IsOptional()
   @Min(1)
   @IsDivisibleBy(1)

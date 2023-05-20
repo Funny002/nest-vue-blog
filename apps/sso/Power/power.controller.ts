@@ -23,14 +23,14 @@ export class PowerController {
   @ApiOperation({ summary: '修改' })
   async save(@Param('id') id: number, @Body() body: SsoPowerCreateDto) {
     const { status, message, data } = await Power.saveData(id, await Power.of_create(body));
-    return status ? data.raw : ManualException(message);
+    return status ? data.affected : ManualException(message);
   }
 
   @Delete()
   @ApiOperation({ summary: '删除' })
   async remove(@Body('ids') ids: number[]) {
     const { status, message, data } = await Power.removeData(ids);
-    return status ? data.raw : ManualException(message);
+    return status ? data.affected : ManualException(message);
   }
 
   @Get('list')
