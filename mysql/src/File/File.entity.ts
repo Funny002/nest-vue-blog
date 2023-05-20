@@ -21,19 +21,25 @@ export enum FileFormat {
 export class Files extends BaseModel {
   @ManyToOne(() => Users, user => user.id) uid: Users;
 
-  @Column({ comment: '分类' }) tags: string;
+  @Column({ /* 分类 */ }) tags: string;
 
-  @Column({ comment: '上级id' }) parent_id: number;
+  @Column({ /* 上级id */ }) parent_id: number;
 
-  @Column({ comment: '文件名', length: 200 }) name: string;
+  @Column({ /* 文件名 */ length: 200 }) name: string;
 
-  @Column({ comment: '内容', length: 200 }) content: string;
+  @Column({ /* 内容 */ length: 200 }) content: string;
 
-  @Column({ type: 'enum', enum: FileTypes, comment: '类型' }) types: FileTypes;
+  @Column({ /* 临时文件 */ type: 'tinyint', default: 0 }) is_temp: number;
 
-  @Column({ type: 'enum', enum: FileFormat, comment: '格式', default: FileFormat.Other }) format: FileFormat;
+  @Column({ /* 文件夹 */ type: 'tinyint', default: 0 }) is_folder: number;
 
-  @Column({ type: 'tinyint', comment: '临时文件', default: 0 }) is_temp: number;
+  @Column({  /* 类型 */ type: 'enum', enum: FileTypes }) types: FileTypes;
 
-  @Column({ type: 'tinyint', comment: '文件夹', default: 0 }) is_folder: number;
+  @Column({ /* 格式 */ type: 'enum', enum: FileFormat, default: FileFormat.Other }) format: FileFormat;
+
+  protected handleWhere(): { [p: string]: { name?: string; handle?: any } } {
+    return {
+      name: { name: 'name' },
+    };
+  }
 }

@@ -10,9 +10,9 @@ import { Module } from '@nestjs/common';
 // 应用模块
 import { AuthModule } from './Auth/auth.module';
 // import { FileModule } from './File/file.module';
-// import { RoleModule } from './Role/role.module';
+import { RoleModule } from './Role/role.module';
 import { MenuModule } from './Menu/menu.module';
-// import { PowerModule } from './Power/power.module';
+import { PowerModule } from './Power/power.module';
 import { SettingModule } from './Setting/setting.module';
 
 @Module({
@@ -20,7 +20,7 @@ import { SettingModule } from './Setting/setting.module';
     // config
     ConfigGlobal.use(Sso, Mysql, Redis, JwtAuth, Email, Captcha),
     // mysql
-    MysqlModel.use(Users, UserOauth, Menu, Role, Power, Setting),
+    MysqlModel.use(Users, UserOauth, Setting, Menu, Role, Power),
     // redis
     RedisModule.forRootAsync({
       inject: [ConfigService],
@@ -31,9 +31,9 @@ import { SettingModule } from './Setting/setting.module';
     // module
     AuthModule,
     // FileModule,
-    // RoleModule,
+    RoleModule,
     MenuModule,
-    // PowerModule,
+    PowerModule,
     SettingModule,
   ],
   providers: [

@@ -1,6 +1,7 @@
 import { IsAlphanumeric, IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
+/* 注册 */
 export class SsoAuthCreateDto {
   @IsString()
   @ApiProperty({ description: '账号/邮箱' })
@@ -21,14 +22,17 @@ export class SsoAuthCreateDto {
   tags: string;
 }
 
+/* 登录 */
 export class SsoAuthLoginDto extends SsoAuthCreateDto {
 }
 
+/* 分类 */
 export enum AuthSendCodeType {
   email, // 邮箱
   phone, // 手机
 }
 
+/* 发送验证码 */
 export class SsoAuthSendCodeDto {
   @IsString()
   @IsEmail()

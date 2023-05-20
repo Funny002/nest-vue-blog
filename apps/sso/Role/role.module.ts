@@ -1,7 +1,7 @@
 import { RoleController } from './role.controller';
 import { MysqlModel } from '@app/common/mysql';
-import { Power, Role } from '@app/mysql';
 import { RoleService } from './role.service';
+import { Power, Role } from '@app/mysql';
 import { Module } from '@nestjs/common';
 
 @Module({

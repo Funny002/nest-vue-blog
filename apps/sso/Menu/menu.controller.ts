@@ -4,8 +4,8 @@ import { Pagination, PaginationParams, PaginationRequest } from '@app/pagination
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ManualException } from '@app/common/error';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Not, Repository } from 'typeorm';
 import { MenuService } from './menu.service';
+import { Repository } from 'typeorm';
 import { Menu } from '@app/mysql';
 
 @ApiTags('Menu 菜单')
@@ -16,40 +16,30 @@ export class MenuController {
   @Post()
   @ApiOperation({ summary: '添加' })
   async add(@Body() body: SsoMenuCreateDto) {
-    const verify_res = await this.menuService.verify(body);
-    if (!verify_res.status) ManualException(verify_res.message);
-    return (await this.menuService.createMenu(body)).id;
+    const { status, message, data } = await Menu.addData(await Menu.of_create(body));
+    return status ? data.id : ManualException(message);
   }
 
   @Put(':id')
   @ApiOperation({ summary: '修改' })
   async save(@Param('id') id: number, @Body() body: SsoMenuCreateDto) {
-    if (!(await Menu.hasKeys({ id }))) ManualException('未找到数据');
-
-    // const status = await Menu.hasKeys([{ id: Not(id), name: body.name }, { id: Not(id), keys: body.keys }]);
-    // if (status) ManualException('名称或标识重复');
-
-    return (await this.menuService.saveMenu(id, body)).raw;
+    const { status, message, data } = await Menu.saveData(id, await Menu.of_create(body));
+    return status ? data.raw : ManualException(message);
   }
 
   @Delete()
   @ApiOperation({ summary: '删除' })
   async remove(@Body('ids') ids: number[]) {
-    const val = In([...new Set(ids)]);
-
-    // has data
-    if (!(await Menu.hasKeys({ id: val }))) ManualException('数据不存在');
-
-    // has children where pid in(ids) and id not(in(ids))
-    if (await Menu.hasKeys({ pid: val, id: Not(val) })) ManualException('请先删除子节点');
-
-    return (await this.menuRepository.delete({ id: val })).affected;
+    const { status, message, data } = await Menu.removeData(ids);
+    return status ? data.raw : ManualException(message);
   }
 
   @Get('list')
   @ApiOperation({ summary: '列表' })
   async getList(@PaginationParams() page: PaginationRequest<SsoMenuPageDto>) {
-    const data = await this.menuService.pagination(page, page.params);
+    const params = page.params;
+    if ('name' in params) params.name = `%${ params.name }%`;
+    const data = await Menu.getList(page, Menu.handleWhere(params));
     return Pagination.of(page, data.count, data.list);
   }
 

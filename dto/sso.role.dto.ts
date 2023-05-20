@@ -48,8 +48,5 @@ export class SsoRoleCreateDto {
   parent: number;
 }
 
-/** 修改 */
-export class SsoRoleSaveDto extends SsoRoleCreateDto {}
-
 /** 获取树 */
 export class SsoRoleTreeDto extends SsoPowerTreeDto {}

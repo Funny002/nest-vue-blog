@@ -1,12 +1,14 @@
 import { ArrayUnique, IsAlphanumeric, IsArray, IsDivisibleBy, IsEnum, IsNotEmpty, IsNumber, IsNumberString, IsOptional, IsString, Min } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { BaseState } from '@app/mysql';
+import { SsoMenuTreeDto } from '@app/dto/sso.menu.dto';
 
-/** 权限创建声明 */
+/** 创建 */
 export class SsoPowerCreateDto {
-  // @IsEnum(PowerType)
-  // @ApiProperty({ description: '分类' })
-  // type: PowerType;
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ description: '标签' })
+  tags: string;
 
   @IsString()
   @IsNotEmpty()
@@ -20,8 +22,10 @@ export class SsoPowerCreateDto {
   name: string;
 
   @IsArray()
+  @IsOptional()
   @ArrayUnique()
-  @ApiProperty({ description: '互斥', required: false }) mutex: string[];
+  @ApiProperty({ description: '互斥', required: false })
+  mutex: string[];
 
   @IsEnum(BaseState)
   @ApiProperty({ type: 'enum', description: '状态' })
@@ -33,21 +37,13 @@ export class SsoPowerCreateDto {
   @IsDivisibleBy(1)
   @ApiProperty({ description: '父级', required: false })
   parent: number;
+
+  @IsArray()
+  @IsOptional()
+  @ArrayUnique()
+  @ApiProperty({ description: '内容', required: false })
+  values: string[];
 }
 
-/** 权限修改声明 */
-export class SsoPowerSaveDto extends SsoPowerCreateDto {
-}
-
-/** 获取树 */
-export class SsoPowerTreeDto {
-  @IsString()
-  @IsNotEmpty()
-  @IsAlphanumeric()
-  @ApiProperty({ description: '标识' })
-  keys: string;
-
-  @IsNumberString()
-  @ApiProperty({ description: '深度', required: false })
-  depth: string;
-}
+/** 树 */
+export class SsoPowerTreeDto extends SsoMenuTreeDto {}

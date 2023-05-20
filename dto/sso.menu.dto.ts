@@ -2,6 +2,7 @@ import { IsEnum, IsNumber, IsNumberString, IsOptional, IsString } from 'class-va
 import { BaseState, MenuTypes } from '@app/mysql';
 import { ApiProperty } from '@nestjs/swagger';
 
+/* 创建 */
 export class SsoMenuCreateDto {
   @IsNumber()
   @IsOptional()
@@ -65,11 +66,7 @@ export class SsoMenuPageDto {
   state: BaseState;
 }
 
-enum MenuTreeEnum {
-  false,
-  true,
-}
-
+/* 树 */
 export class SsoMenuTreeDto {
   @IsOptional()
   @IsNumberString()

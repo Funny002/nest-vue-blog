@@ -1,5 +1,5 @@
+import { Column, Entity, Index, Like, Tree, TreeChildren, TreeParent } from 'typeorm';
 import { PowerModel, BaseState } from '@app/mysql/common';
-import { Column, Entity, Index, Tree, TreeChildren, TreeParent } from 'typeorm';
 import { SsoMenuCreateDto } from '@app/dto/sso.menu.dto';
 
 export enum MenuTypes {
@@ -18,17 +18,17 @@ export class Menu extends PowerModel {
 
   @TreeChildren() children: Menu[];
 
-  @Column({ length: 100, comment: '标签' }) tags: string;
+  @Column({ /* 标签 */ length: 100 }) tags: string;
 
-  @Column({ length: 100, comment: '名称' }) name: string;
+  @Column({ /* 名称 */ length: 100 }) name: string;
 
-  @Column({ length: 100, comment: '标识' }) keys: string;
+  @Column({ /* 标识 */ length: 100 }) keys: string;
 
-  @Column({ type: 'enum', enum: MenuTypes, default: MenuTypes.Router, comment: '分类' }) types: MenuTypes;
+  @Column({ /* 内容 */ length: 255, nullable: true }) values: string;
 
-  @Column({ length: 255, comment: '内容', nullable: true }) values: string;
+  @Column({ /* 分类 */ type: 'enum', enum: MenuTypes, default: MenuTypes.Router }) types: MenuTypes;
 
-  @Column({ type: 'enum', enum: BaseState, default: BaseState.Disable, comment: '状态' }) state: BaseState;
+  @Column({ /* 状态 */ type: 'enum', enum: BaseState, default: BaseState.Disable }) state: BaseState;
 
   static async of_create(body: SsoMenuCreateDto) {
     const target = new Menu();
@@ -40,5 +40,14 @@ export class Menu extends PowerModel {
     target.values = body.values;
     if (body.parent) target.pid = await Menu.getInfoKeys({ id: body.parent });
     return target;
+  }
+
+  protected handleWhere(): { [p: string]: { name?: string; handle?: any } } {
+    return {
+      tags: { name: 'tags' },
+      keys: { name: 'keys' },
+      types: { name: 'types' },
+      name: { name: 'name', handle: Like },
+    };
   }
 }

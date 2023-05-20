@@ -1,72 +1,62 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req } from '@nestjs/common';
-import { SsoPowerCreateDto, SsoPowerSaveDto, SsoPowerTreeDto } from '@app/dto/sso.power.dto';
 import { Pagination, PaginationParams, PaginationRequest } from '@app/pagination';
-import { FindOptionsSelect } from 'typeorm/find-options/FindOptionsSelect';
+import { SsoPowerCreateDto, SsoPowerTreeDto } from '@app/dto/sso.power.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ManualException } from '@app/common/error';
-import { InjectRepository } from '@nestjs/typeorm';
 import { PowerService } from './power.service';
-import { In, Repository } from 'typeorm';
 import { Power } from '@app/mysql';
 import { Request } from 'express';
 
 @ApiTags('Power 权限')
 @Controller('power')
 export class PowerController {
-  constructor(
-    private readonly powerService: PowerService,
-    @InjectRepository(Power) private powerRepository: Repository<Power>,
-  ) {}
+  constructor(private readonly powerService: PowerService) {}
 
-  @Post('create')
-  @ApiOperation({ summary: '添加权限' })
-  async create(@Req() req: Request, @Body() body: SsoPowerCreateDto) {
-    return (await this.powerService.addList(body)).id;
+  @Post()
+  @ApiOperation({ summary: '添加' })
+  async create(@Body() body: SsoPowerCreateDto) {
+    const { status, message, data } = await Power.addData(await Power.of_create(body));
+    return status ? data.id : ManualException(message);
+  }
+
+  @Put(':id')
+  @ApiOperation({ summary: '修改' })
+  async save(@Param('id') id: number, @Body() body: SsoPowerCreateDto) {
+    const { status, message, data } = await Power.saveData(id, await Power.of_create(body));
+    return status ? data.raw : ManualException(message);
+  }
+
+  @Delete()
+  @ApiOperation({ summary: '删除' })
+  async remove(@Body('ids') ids: number[]) {
+    const { status, message, data } = await Power.removeData(ids);
+    return status ? data.raw : ManualException(message);
   }
 
   @Get('list')
   @ApiOperation({ summary: '获取权限 ~ 分页列表' })
-  async list(@Req() req: Request, @PaginationParams() page: PaginationRequest) {
-    const select: FindOptionsSelect<Power> = {};
+  async list(@PaginationParams() page: PaginationRequest) {
 
-    const where = this.powerService.handleWhere(page.params);
-
-    const list = await this.powerRepository.find({ select, where, skip: (page.pageCount - 1) * page.pageSize, take: page.pageSize });
-
-    const total = await this.powerRepository.countBy(where);
-
-    return Pagination.of(page, total, list);
-  }
-
-  @Get('tree')
-  @ApiOperation({ summary: '获取权限 ~ 树' })
-  async tree(@Req() req: Request, @Query() query: SsoPowerTreeDto) {
-    return await Power.getTreeChildren({ keys: query.keys }, Math.max(0, +(query.depth || '0')));
+    const params = page.params;
+    if ('name' in params) params.name = `%${ params.name }%`;
+    const data = await Power.getList(page, Power.handleWhere(params));
+    return Pagination.of(page, data.count, data.list);
   }
 
   @Get('info/:id')
-  @ApiOperation({ summary: '获取权限详情' })
+  @ApiOperation({ summary: '详情' })
   async info(@Req() req: Request, @Param('id') id: number) {
     return await Power.getInfoKeys({ id });
   }
 
-  @Put('save/:id')
-  @ApiOperation({ summary: '修改权限' })
-  async save(@Req() req: Request, @Param('id') id: number, @Body() body: SsoPowerSaveDto) {
+  @Get('tree/:id?')
+  @ApiOperation({ summary: '列表树' })
+  async getTreeChildren(@Param('id') id: number, @Query() query: SsoPowerTreeDto) {
+    id = isNaN(id) ? 0 : id;
+    if (!id) return await Power.of_Tree('root');
+
     if (!(await Power.hasKeys({ id }))) ManualException('未找到数据');
 
-    return (await this.powerRepository.update({ id }, await Power.of_create(body))).raw;
-  }
-
-  @Delete('remove/:id')
-  @ApiOperation({ summary: '删除权限' })
-  async remove(@Req() req: Request, @Param('id') id: number, @Query('state') state: boolean) {
-    const list = await Power.getFindChildren({ id: id }, 0);
-
-    if (!list) ManualException('未找到数据');
-
-    if (list.length > 1 && !state) ManualException('当前组有子权限');
-
-    return (await this.powerRepository.delete({ id: In(list.map(v => v.id)) })).raw;
+    return await Power[`get${ Boolean(query.tree) ? 'Tree' : 'Find' }Children`]({ id }, +(query.deep || 0));
   }
 }

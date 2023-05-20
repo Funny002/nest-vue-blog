@@ -1,7 +1,8 @@
-import { IsEnum, IsNumber, IsNumberString, IsOptional, IsString } from 'class-validator';
-import { BaseState, MenuTypes, SettingPower } from '@app/mysql';
+import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
+import { BaseState, SettingPower } from '@app/mysql';
 import { ApiProperty } from '@nestjs/swagger';
 
+/* 创建 */
 export class SsoSettingCreateDto {
   @IsString()
   @ApiProperty({ description: '标签' })
@@ -45,6 +46,7 @@ export class SsoSettingCreateDto {
   power: SettingPower;
 }
 
+/* 分页 */
 export class SsoSettingPageDto {
   @IsString()
   @ApiProperty({ description: '标签' })

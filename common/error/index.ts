@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { BaseState } from '@app/mysql';
+import { BaseState } from '@app/mysql/common';
 
 /** 手动抛出一个前端可响应异常 {code, message}  */
 export function ManualException(message: string, code = 1) {

@@ -1,16 +1,19 @@
-import { BaseEntity, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { BaseEntity, CreateDateColumn, In, Not, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { FindOptionsSelect } from 'typeorm/find-options/FindOptionsSelect';
+import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
+import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
 import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
 import { EntityManager } from 'typeorm/entity-manager/EntityManager';
 import { Repository } from 'typeorm/repository/Repository';
+import { PaginationRequest } from '@app/pagination';
 import Decimal from 'decimal.js';
 
 export abstract class BaseModel extends BaseEntity {
-  @PrimaryGeneratedColumn({ comment: '主键' }) id: number;
+  @PrimaryGeneratedColumn({ /* 主键 */ }) id: number;
 
-  @CreateDateColumn({ type: 'datetime', comment: '创建时间', default: null }) create_time: Date;
+  @CreateDateColumn({ /* 创建时间 */ type: 'datetime', default: null }) create_time: Date;
 
-  @UpdateDateColumn({ type: 'datetime', comment: '更新时间', default: null }) update_time: Date;
+  @UpdateDateColumn({ /* 更新时间 */ type: 'datetime', default: null }) update_time: Date;
 
   /** 根据 `where` 获取多条数据
    * 创建一个方法，可能没用
@@ -80,6 +83,71 @@ export abstract class BaseModel extends BaseEntity {
     } finally {
       await queryRunner.release();
     }
+  }
+
+  /** 一些基础方法 */
+  protected abstract handleWhere(): { [Label: string]: { name?: string, handle?: any } }
+
+  static handleWhere<T extends BaseModel>(this: { new(): T } & typeof BaseModel, data: any): { [Name: string]: any } {
+    if ('handleWhere' in this.prototype) {
+      const whereObj = this.prototype.handleWhere();
+      return Object.entries<{ name?: string; handle?: any }>(whereObj).reduce(function (value, obj) {
+        const [keys, { name, handle }] = obj;
+        if (keys in data) value[name || keys] = handle ? handle(data[keys]) : data[keys];
+        return value;
+      }, {});
+    }
+    //
+    return {};
+  }
+
+  /** 验证一些东西 */
+  static async hasVerify<T extends BaseModel>(this: { new(): T } & typeof BaseModel, data: any, id?: number): Promise<{ status: boolean, message: string }> {
+    const where = this.handleWhere(data);
+
+    if (id) {
+      if (id < 1) return { status: false, message: '参数错误' };
+      if (!(await this.hasKeys({ id }))) return { status: false, message: '数据不存在' };
+      //
+      where.id = Not(id);
+    }
+
+    if (await this.hasKeys(where)) return { status: false, message: '重复的参数' };
+
+    return { status: true, message: '' };
+  }
+
+  /** 添加数据 */
+  static async addData<T extends BaseModel>(this: { new(): T } & typeof BaseModel, data: T): Promise<{ status: boolean; message: string; data?: T }> {
+    const verify = await this.hasVerify(data);
+    if (!verify.status) return verify as { status: false, message: string };
+    //
+    return { status: true, data: await this.getRepository().save(data), message: '' };
+  }
+
+  /** 修改数据 */
+  static async saveData<T extends BaseModel>(this: { new(): T } & typeof BaseModel, id: number, data: any): Promise<{ status: boolean; message: string; data?: UpdateResult }> {
+    const verify = await this.hasVerify(data, id);
+    if (!verify.status) return verify as { status: false, message: string };
+    //
+    return { status: true, data: await this.getRepository().update({ id }, data), message: '' };
+  }
+
+  /** 删除数据 */
+  static async removeData<T extends BaseModel>(this: { new(): T } & typeof BaseModel, ids: number[]): Promise<{ status: boolean; message: string; data?: DeleteResult }> {
+    const id = In([...new Set(ids)]);
+    if (!(await this.hasKeys({ id }))) return { status: false, message: '数据不存在' };
+    return { status: true, data: await this.getRepository().delete({ id }), message: '' };
+  }
+
+  /** 列表数据 */
+  static async getList<T extends BaseModel>(this: { new(): T } & typeof BaseModel, page: PaginationRequest, where: FindOptionsWhere<T>[] | FindOptionsWhere<T>) {
+    const { order, pageSize: take, pageSkip: skip, params } = page;
+    // const where = this.handleWhere(page.params);
+    return {
+      count: await this.getRepository().countBy(where),
+      list: await this.getRepository().find({ where, order, skip, take }),
+    };
   }
 }
 
