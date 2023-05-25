@@ -4,8 +4,7 @@
   </el-form-item>
 </template>
 
-<script lang="ts">export default { name: 'DynamicFormField' };</script>
-
+<script lang="ts">export default { name: 'DynamicFormField', inheritAttrs: false };</script>
 <script lang="ts" setup>
 import { computed, onMounted, reactive, shallowRef, watch } from 'vue';
 import { rewriteObj } from '@utils/object';

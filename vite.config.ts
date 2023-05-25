@@ -25,6 +25,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname, './src'),
+      '@api': resolve(__dirname, './src/Api'),
       '@utils': resolve(__dirname, './src/utils'),
       '@stores': resolve(__dirname, './src/stores'),
       '@plugin': resolve(__dirname, './src/plugin'),
@@ -35,7 +36,20 @@ export default defineConfig({
       '@sso': resolve(__dirname, './package/sso'),
     },
   },
-  server: { host: 'localhost', port: 6412, open: true },
+  server: {
+    port: 6412,
+    open: true,
+    // proxy: {
+    //   '/baiduApi': {
+    //     changeOrigin: true,
+    //     target: 'http://openapi.baidu.com',
+    //     rewrite: path => {
+    //       console.log('baiduApi ->>', path.replace(/^\/baiduApi/, ''));
+    //       return path.replace(/^\/baiduApi/, '');
+    //     },
+    //   },
+    // },
+  },
   build: {
     target: 'esnext',
     sourcemap: false,

@@ -92,3 +92,11 @@ export class Axios {
     this.manage.clear();
   }
 }
+
+let http: Axios;
+
+export function useAxios(request?: (conf: AxiosRequest) => Promise<AxiosRequest>) {
+  return http || (http = new Axios(request));
+}
+
+export default useAxios().axios;
