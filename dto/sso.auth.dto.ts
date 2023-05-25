@@ -1,8 +1,8 @@
 import { IsAlphanumeric, IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-/* 注册 */
-export class SsoAuthCreateDto {
+/* 登录 */
+export class SsoAuthLoginDto {
   @IsString()
   @ApiProperty({ description: '账号/邮箱' })
   user: string;
@@ -12,18 +12,17 @@ export class SsoAuthCreateDto {
   pass: string;
 
   @IsString()
-  @IsAlphanumeric()
-  @ApiProperty({ description: '验证码' })
-  code: string;
-
-  @IsString()
   @IsOptional()
   @ApiProperty({ description: '标签', required: false })
   tags: string;
 }
 
-/* 登录 */
-export class SsoAuthLoginDto extends SsoAuthCreateDto {
+/* 注册 */
+export class SsoAuthCreateDto extends SsoAuthLoginDto {
+  @IsString()
+  @IsAlphanumeric()
+  @ApiProperty({ description: '验证码' })
+  code: string;
 }
 
 /* 分类 */
