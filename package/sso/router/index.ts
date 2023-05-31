@@ -8,10 +8,10 @@ const router = createRouter({
 });
 
 router.beforeEach(async function (to, from, next) {
-  // if (to.path.indexOf('/sign') !== 0) {
-  //   const user = useUsers();
-  //   if (!user.token) return next({ path: '/sign' });
-  // }
+  if (to.path.indexOf('/sign') !== 0) {
+    const user = useUsers();
+    if (!user.token) return next({ path: '/sign' });
+  }
   next();
 });
 

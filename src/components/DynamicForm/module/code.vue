@@ -1,5 +1,5 @@
 <template>
-  <el-input class="var-dynamic__code" v-model="formData[props.prop]" v-bind="bindProps">
+  <el-input class="var-dynamic__code" v-model="formData[props.prop]" v-bind="bindProps" @keyup.enter="props.keyEnter">
     <template #suffix>
       <el-button text @click.stop="props.click">{{ props.codePlaceholder || '获取验证码' }}</el-button>
     </template>
@@ -15,6 +15,7 @@ interface Props {
   click?: any;
   prop: string;
   name?: string;
+  keyEnter?: any;
   clearable?: boolean;
   placeholder?: string;
   codePlaceholder?: string;

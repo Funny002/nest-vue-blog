@@ -53,7 +53,7 @@ export class Axios {
     // handle reject
     const rejectFunc = () => {
       this.manage.delete(config.cancelKeys);
-      console.log('hasCancelKeys: ', this.isCancel(error));
+      // console.log('hasCancelKeys: ', this.isCancel(error));
       return Promise.reject(error);
     };
     // retry

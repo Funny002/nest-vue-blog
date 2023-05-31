@@ -1,5 +1,5 @@
 <template>
-  <el-input class="var-dynamic__password" type="password" show-password v-model="formData[props.prop]" v-bind="bindProps"/>
+  <el-input class="var-dynamic__password" type="password" show-password v-model="formData[props.prop]" v-bind="bindProps" @keyup.enter="props.keyEnter"/>
 </template>
 
 <script lang="ts">export default { name: 'DynamicPassWord', inheritAttrs: false };</script>
@@ -9,6 +9,7 @@ import { computed, inject } from 'vue';
 
 interface Props {
   prop: string;
+  keyEnter?: any;
   clearable?: boolean;
   placeholder?: string;
 }

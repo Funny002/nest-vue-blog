@@ -1,7 +1,7 @@
 <template>
   <div class="var-qrcode">
-    <div class="var-qrcode__container">
-      <img class="var-qrcode__img" :src="data.src" alt="qrcode" @click="onCanvasClick"/>
+    <div class="var-qrcode__container" :style="imgStyle">
+      <img class="var-qrcode__img" :style="imgStyle" :src="data.src" alt="qrcode" @click="onCanvasClick"/>
       <div class="var-qrcode__btn" v-if="hasExpires">
         <el-button type="primary" @click="onBtnClick">{{ props.btnText }}</el-button>
       </div>
@@ -28,14 +28,19 @@ interface Props {
   options?: {
     dark?: string;
     light?: string;
+    width?: number;
     scale?: number;
     margin?: number;
     level?: 'L' | 'M' | 'Q' | 'H';
   };
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  btnText: '点击刷新',
+const props = withDefaults(defineProps<Props>(), { btnText: '点击刷新' });
+
+const imgStyle = computed(() => {
+  const width = (props.options || {}).width || 0;
+  if (!width) return undefined;
+  return { width: width + 'px', height: width + 'px' };
 });
 
 function getOptions() {
@@ -87,8 +92,9 @@ watch(() => props, (props) => {
   }
 
   // 监听 options 改变, 重新生成二维码
-  if (data.backup.options !== JSON.stringify(getOptions())) {
-    data.backup.options = JSON.stringify(getOptions());
+  const newOptions = JSON.stringify(getOptions());
+  if (data.backup.options !== newOptions) {
+    data.backup.options = newOptions;
     setQrCode();
   }
 

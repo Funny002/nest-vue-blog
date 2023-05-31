@@ -1,5 +1,5 @@
 <template>
-  <el-form :model="props.modelValue" :rules="props.rules">
+  <el-form ref="formRef" :model="props.modelValue" :rules="props.rules">
     <el-row v-bind="getLayout">
       <template v-for="(fields, key) in props.fields">
         <el-col v-show="('show' in fields) ? fields.show : true" v-bind="rewriteObj(fields,['span', 'offset', 'push', 'pull'])">
@@ -14,7 +14,7 @@
 <script lang="ts" setup>
 import DynamicFormField from './src/field.vue';
 import { rewriteObj } from '@utils/object';
-import { computed, provide } from 'vue';
+import { computed, provide, ref } from 'vue';
 import { Fields } from './types';
 
 interface Props {
@@ -33,9 +33,12 @@ const props = withDefaults(defineProps<Props>(), {
   modelValue: () => ({}),
 });
 
+const formRef = ref<any>(null);
 const getLayout = computed(() => rewriteObj(props, ['gutter', 'justify', 'align']));
 
 // 向下传递内容
 provide('rules', computed(() => props.rules));
 provide('formData', computed(() => props.modelValue));
+
+defineExpose({ ref: computed(() => formRef.value) });
 </script>

@@ -3,11 +3,11 @@
     <div class="var-sign--title">登录</div>
     <div class="var-sign__login--body">
       <div class="var-sign__login--left">
-        <qr-code value="使用App扫码进行登录" :expires="1" description="使用App扫码进行登录" @click="onQrCode"/>
+        <qr-code value="使用App扫码进行登录使用App扫码进行登录" :options="{width: 120}" :expires="1" description="使用App扫码进行登录" @click="onQrCode"/>
       </div>
       <div class="var-sign__login--line"></div>
       <div class="var-sign__login--right">
-        <dynamic-form :fields="data.fields" v-model="data.formData" @code="onDevelop" a="x"/>
+        <dynamic-form ref="formRef" :fields="data.fields" :rules="data.rules" v-model="data.formData" @code="onDevelop" a="x"/>
         <div style="padding-bottom: 10px">
           <el-button v-if="data.hasCode" text @click="onSwitchCode">验证码登录</el-button>
           <el-button v-else text @click="onSwitchCode">密码登录</el-button>
@@ -37,20 +37,26 @@ import QrCode from '@models/QrCode/index.vue';
 import DynamicForm from '@models/DynamicForm/index.vue';
 //
 import { useRoute, useRouter } from 'vue-router';
-import { onMounted, reactive } from 'vue';
+import verify from '@models/DynamicForm/utils';
 import { ElMessage } from 'element-plus';
 import { ApiLogin } from '@api/sign';
+import { reactive, ref } from 'vue';
 
 const route = useRoute();
 const routes = useRouter();
+const formRef = ref<any>(null);
 const data = reactive<any>({
-  fields: [
-    { prop: 'user', type: 'text', placeholder: '邮箱/账号名' },
-    { show: true, prop: 'pass', type: 'password', placeholder: '密码' },
-    { show: false, prop: 'pass', type: 'code', placeholder: '验证码', codePlaceholder: '获取验证码', click: onDevelop },
-  ],
   formData: {},
   hasCode: true,
+  fields: [
+    { prop: 'user', type: 'text', placeholder: '邮箱/账号名', clearable: true },
+    { show: true, prop: 'pass', type: 'password', placeholder: '密码', clearable: true, keyEnter: onSubmit },
+    { show: false, prop: 'pass', type: 'code', placeholder: '验证码', clearable: true, keyEnter: onSubmit, codePlaceholder: '获取验证码', click: onDevelop },
+  ],
+  rules: {
+    user: [{ required: true, validator: verify(), trigger: 'change' }],
+    pass: [{ required: true, validator: verify(), trigger: 'change' }],
+  },
 });
 
 const tags = (route.query.tags as undefined | string) || window.__CONFIG__.tags || 'sso';
@@ -74,9 +80,13 @@ function onDevelop() {
 }
 
 function onSubmit() {
-  const { user, pass } = data.formData;
-  ApiLogin(tags, user, pass).then(({ data: res }) => {
-    console.log(res);
+  formRef.value?.ref.validate((state: boolean) => {
+    if (!state) return false;
+    const { user, pass } = data.formData;
+    // =================================================================
+    ApiLogin(tags, user, pass).then(({ data: res }) => {
+      console.log(res);
+    });
   });
 }
 </script>

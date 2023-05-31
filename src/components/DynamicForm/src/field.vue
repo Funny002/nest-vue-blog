@@ -1,6 +1,6 @@
 <template>
   <el-form-item v-if="data.component" v-bind="bindProps" :style="hasShow">
-    <component :is="data.component" v-bind="props.fields" @click="onClick"/>
+    <component :is="data.component" v-bind="props.fields"/>
   </el-form-item>
 </template>
 
@@ -42,10 +42,4 @@ watch(() => props, props => {
 }, { deep: true });
 
 onMounted(() => setComponent());
-
-const emits = defineEmits(['click']);
-
-function onClick(...args: any[]) {
-  emits('click', ...args);
-}
 </script>
