@@ -89,3 +89,5 @@ export class Storage {
     window.dispatchEvent(new CustomEvent('varStorage', { detail: { prefix: this.prefix, type: 'clear', keys } }));
   }
 }
+
+export default new Storage(window.location.origin);

@@ -6,7 +6,7 @@
         <qr-code value="使用App扫码进行登录使用App扫码进行登录" :options="{width: 120}" :expires="1" description="使用App扫码进行登录" @click="onQrCode"/>
       </div>
       <div class="var-sign__login--line"></div>
-      <div class="var-sign__login--right">
+      <div class="var-sign__login--right" v-loading="data.load">
         <dynamic-form ref="formRef" :fields="data.fields" :rules="data.rules" v-model="data.formData" @code="onDevelop" a="x"/>
         <div style="padding-bottom: 10px">
           <el-button v-if="data.hasCode" text @click="onSwitchCode">验证码登录</el-button>
@@ -39,13 +39,17 @@ import DynamicForm from '@models/DynamicForm/index.vue';
 import { useRoute, useRouter } from 'vue-router';
 import verify from '@models/DynamicForm/utils';
 import { ElMessage } from 'element-plus';
+import { useUsers } from '@stores/user';
 import { ApiLogin } from '@api/sign';
 import { reactive, ref } from 'vue';
 
 const route = useRoute();
 const routes = useRouter();
+const userStore = useUsers();
+
 const formRef = ref<any>(null);
 const data = reactive<any>({
+  load: false,
   formData: {},
   hasCode: true,
   fields: [
@@ -59,6 +63,7 @@ const data = reactive<any>({
   },
 });
 
+const redirect = (route.query.redirect as undefined | string) || window.location.origin;
 const tags = (route.query.tags as undefined | string) || window.__CONFIG__.tags || 'sso';
 
 function onSwitchCode() {
@@ -83,10 +88,21 @@ function onSubmit() {
   formRef.value?.ref.validate((state: boolean) => {
     if (!state) return false;
     const { user, pass } = data.formData;
-    // =================================================================
+    data.load = true;
     ApiLogin(tags, user, pass).then(({ data: res }) => {
-      console.log(res);
-    });
+      if (res.code === 0) {
+        const { token, ...info } = res.data;
+        userStore.setUserData(info, token);
+        if (redirect !== window.location.origin) {
+          const url = new URL(redirect);
+          url.searchParams.append('token', token);
+          window.location.href = url.toString();
+        }
+        routes.push({ path: '/' });
+      } else {
+        ElMessage.error(res.msg);
+      }
+    }).finally(() => setTimeout(() => data.load = false, 300));
   });
 }
 </script>

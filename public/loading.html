@@ -1,0 +1,41 @@
+<style>
+  .loading {
+    top: 50%;
+    left: 50%;
+    position: absolute;
+  }
+
+  .loading-box {
+    width: 60px;
+  }
+
+  .loading-item {
+    width: 14px;
+    height: 14px;
+    border-radius: 100%;
+    box-sizing: border-box;
+    border: 1px solid #000;
+    animation: loading 2s infinite;
+  }
+
+  @keyframes loading {
+    50% {
+      transform: translate(23px);
+    }
+    100% {
+      transform: translate(46px);
+    }
+  }
+</style>
+
+<div class="loading">
+  <div class="loading-box" style="transform: rotate(-59.5deg)">
+    <div class="loading-item"></div>
+  </div>
+  <div class="loading-box" style="transform: rotate(59.5deg) translate(0, -26.5px)">
+    <div class="loading-item"></div>
+  </div>
+  <div class="loading-box" style="transform: rotate(-180deg) translate(-12px, 7px)">
+    <div class="loading-item"></div>
+  </div>
+</div>

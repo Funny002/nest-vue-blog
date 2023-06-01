@@ -1,3 +1,7 @@
 import Axios from './utils/Axios';
 
-export const ApiLogin = (tags: string, user: string, pass: string) => Axios.post(window.__CONFIG__.baseApi + '/auth/login', { user, pass, tags });
+const baseUrl = window.__CONFIG__.baseApi + '/auth/';
+
+export const ApiLogin = (tags: string, user: string, pass: string) => Axios.post(baseUrl + 'login', { user, pass, tags });
+
+export const ApiHasToken = (tags: string, token: string) => Axios.get(baseUrl + 'hasToken', { params: { token, tags } });
