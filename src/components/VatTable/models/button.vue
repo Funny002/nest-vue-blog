@@ -50,10 +50,10 @@ const options = computed(() => {
 });
 
 const defaultButton: { [Key: string]: ButtonFieldItem } = {
-  add: { label: '添加', name: 'add' },
-  view: { label: '查看', name: 'view' },
-  save: { label: '修改', name: 'save' },
-  remove: { label: '删除', name: 'remove' },
+  add: { label: '添加', type: 'success', name: 'add' },
+  view: { label: '查看', type: 'primary', name: 'view' },
+  save: { label: '修改', type: 'warning', name: 'save' },
+  remove: { label: '删除', type: 'danger', name: 'remove' },
 };
 
 function reRender() {

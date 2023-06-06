@@ -1,8 +1,10 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelTokenSource } from 'axios';
 import { AxiosTools, AxiosToolsConfig } from '@plugin/axios/tools';
+import { useUsers } from '@stores/user';
 
 export interface AxiosConfig extends AxiosToolsConfig {
   cancelKeys: string;
+  headers: any;
 }
 
 export type AxiosRequest = AxiosRequestConfig & AxiosConfig
@@ -33,6 +35,8 @@ export class Axios {
     config.__retry_time = config.__retry_time || 500;
     config.__retry_count = config.__retry_count || 1;
     //
+    config.headers['Authorization'] = 'token ' + useUsers().accessToken;
+    //
     return (this.handleRequest && await this.handleRequest(config)) || config;
   }
 
@@ -44,6 +48,12 @@ export class Axios {
 
   private responseFulfilled(response: AxiosResponse & { config: AxiosConfig }) {
     this.manage.delete(response.config.cancelKeys);
+    //
+    if (window.__CONFIG__.baseApi + '/auth/hasToken' === response.config.url) {
+      if (useUsers().refreshExpires > 0) {
+
+      }
+    }
     //
     return response;
   }

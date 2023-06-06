@@ -63,4 +63,28 @@ export interface StatusField {
   change?: handleCallback;
 }
 
-export type FieldsItem = Fields & (ButtonField | DateField | StatusField | {})
+// =================================================================================
+export interface IndexField {
+  type: 'index',
+  page: { pageCount: number; pageSize: number };
+}
+
+export interface TagsField {
+  type: 'tags';
+  name: string;
+  hit: boolean;
+  color: string;
+  round: boolean;
+  closable: boolean;
+  effect: 'dark' | 'light' | 'plain';
+  size: 'large' | 'default' | 'small' | '';
+  types: 'primary' | 'success' | 'info' | 'warning' | 'danger'; // options[Name].type 优先级高
+  options: { [Name: string]: string | { value: string, type: 'primary' | 'success' | 'info' | 'warning' | 'danger' } };
+
+  click($index: number, value: string, event: MouseEvent): void;
+
+  close($index: number, value: string, event: MouseEvent): void;
+}
+
+// =================================================================================
+export type FieldsItem = Fields & (ButtonField | DateField | StatusField | IndexField | TagsField | {})

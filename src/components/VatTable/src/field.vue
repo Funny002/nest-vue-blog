@@ -1,5 +1,5 @@
 <template>
-  <el-table-column :show-overflow-tooltip="true" v-bind="bindProps" :style="hasShow">
+  <el-table-column :show-overflow-tooltip="true" v-bind="bindProps" v-show="'show' in props.fields ? props.fields.show : true">
     <template v-slot:default="{row, $index, column}" v-if="data.component">
       <component :is="data.component" :row="row" :index="$index" :column="column" :value="row[column['property']]" :fields="props.fields"/>
     </template>
@@ -14,11 +14,6 @@ import * as Module from './models';
 import { Fields } from '../types';
 
 const props = withDefaults(defineProps<{ fields: Fields; }>(), {});
-
-const hasShow = computed(() => {
-  const state = 'show' in props.fields ? props.fields.show : true;
-  return { display: state ? 'block' : 'none' };
-});
 
 const bindProps = computed(() => {
   if (!('showOverflowTooltip' in props.fields)) props.fields.showOverflowTooltip = true;

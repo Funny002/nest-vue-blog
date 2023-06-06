@@ -10,7 +10,7 @@
   </el-form>
 </template>
 
-<script lang="ts">export default { name: 'DynamicForm', inheritAttrs: false };</script>
+<script lang="ts">export default { name: 'DynamicForm', inheritAttrs: true };</script>
 <script lang="ts" setup>
 import DynamicFormField from './src/field.vue';
 import { rewriteObj } from '@utils/object';

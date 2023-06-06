@@ -10,7 +10,7 @@ let hasLogin = false;
 
 router.beforeEach(async function (to, from, next) {
   const tags = (to.query.tags as string | undefined) || 'sso';
-  const token = useUsers().token;
+  const token = useUsers().accessToken;
   const path = to.path;
   let res;
 

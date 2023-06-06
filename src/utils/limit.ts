@@ -9,10 +9,11 @@ export function document(func: any, timeout = 300) {
   };
 }
 
-export function throttle(func: any, timeout = 300) {
+export function throttle(func: any, timeout = 300, before?: (...args: any[]) => any) {
   let state: NodeJS.Timeout;
   return function (...args: any[]) {
     if (state) clearTimeout(state);
-    state = setTimeout(() => func(...args), timeout);
+    args = before && (before(...args) || args); // 特殊调用方法
+    state = setTimeout(() => func(args), timeout);
   };
 }

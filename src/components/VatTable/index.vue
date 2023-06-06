@@ -1,7 +1,15 @@
 <template>
   <el-table :data="props.value">
     <template v-for="item of props.data">
-      <slot v-if="item.slot" :name="item.slot"/>
+      <el-table-column
+          v-if="item.slot"
+          v-bind="onBindProps(item)"
+          :show-overflow-tooltip="true"
+          v-show="'show' in item ? item.show : true">
+        <template v-slot="{$index, row, column}">
+          <slot :name="item.slot" :$index="$index" :row="row" :column="column"/>
+        </template>
+      </el-table-column>
       <var-table-field v-else :fields="item"/>
     </template>
     <template v-if="$slots.append" v-slot:append>
@@ -18,6 +26,7 @@
 import VarTableField from './src/field.vue';
 import { Fields } from './types';
 import { reactive } from 'vue';
+import { rewriteObj } from '@utils/object';
 
 interface Props {
   value?: any[];
@@ -37,6 +46,10 @@ const props = withDefaults(defineProps<Props>(), {
 
 const data = reactive({});
 
+function onBindProps(item: Fields) {
+  if (!('showOverflowTooltip' in item)) item.showOverflowTooltip = true;
+  return rewriteObj(item, ['prop', 'label', 'width', 'minWidth', 'align', 'headerAlign', 'showOverflowTooltip', 'sortable']);
+}
 </script>
 
 <style lang="scss" src="./src/style.scss"/>

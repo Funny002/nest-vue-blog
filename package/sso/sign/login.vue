@@ -91,11 +91,11 @@ function onSubmit() {
     data.load = true;
     ApiLogin(tags, user, pass).then(({ data: res }) => {
       if (res.code === 0) {
-        const { token, ...info } = res.data;
-        userStore.setUserData(info, token);
+        const { info, expires, ...token } = res.data;
+        userStore.setUserData(info, token, expires);
         if (redirect !== window.location.origin) {
           const url = new URL(redirect);
-          url.searchParams.append('token', token);
+          url.searchParams.append('token', token.access);
           window.location.href = url.toString();
         }
         routes.push({ path: '/' });
