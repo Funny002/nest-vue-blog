@@ -1,4 +1,4 @@
-import { ExecutionContext, Injectable } from '@nestjs/common';
+import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtAuth_Key_Name, JwtPayLoad } from '@app/config';
 import { IS_PUBLIC, jwtFromRequest } from '../index';
 import { AuthGuard } from '@nestjs/passport';
@@ -8,7 +8,9 @@ import { Reflector } from '@nestjs/core';
 /** Jwt网关 */
 @Injectable()
 export class JwtAuthGuard extends AuthGuard(JwtAuth_Key_Name) {
-  constructor(private readonly reflector: Reflector, private readonly jwtService: JwtService) {super();}
+  constructor(private readonly reflector: Reflector, private readonly jwtService: JwtService) {
+    super();
+  }
 
   handleAuthToken(context: ExecutionContext): JwtPayLoad {
     const request = context.switchToHttp().getRequest();
@@ -22,6 +24,7 @@ export class JwtAuthGuard extends AuthGuard(JwtAuth_Key_Name) {
 
   async canActivate(context: ExecutionContext): Promise<any> {
     const info = this.handleAuthToken(context);
+
     if (this.reflector.getAllAndOverride<boolean>(IS_PUBLIC, [context.getHandler(), context.getClass()])) return true;
 
     // 添加其他验证

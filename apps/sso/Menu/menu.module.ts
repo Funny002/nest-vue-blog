@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
-import { MenuService } from './menu.service';
+import { RedisModule } from '@app/common/redis';
 import { MenuController } from './menu.controller';
 import { MysqlModel } from '@app/common/mysql';
+import { MenuService } from './menu.service';
+import { Module } from '@nestjs/common';
 import { Menu } from '@app/mysql';
-import { RedisModule } from '@app/common/redis';
 
 @Module({
   imports: [

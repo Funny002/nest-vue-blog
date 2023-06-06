@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { JwtAuth_NAME, JwtAuthOptions, JwtInfo, JwtPayLoad } from '@app/config';
+import { JwtAuth_NAME, JwtAuthOptions, JwtInfo } from '@app/config';
 
 /** JWT方法 */
 @Injectable()

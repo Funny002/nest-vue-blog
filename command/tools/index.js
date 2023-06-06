@@ -2,7 +2,7 @@ const { existsSync, readFileSync, writeFileSync } = require('fs');
 const { createHash, randomUUID } = require('crypto');
 const { resolve } = require('path');
 
-function ranStr (long, radix = 26) {
+function ranStr(long, radix = 26) {
   if (long < 1) throw new Error('long lat 1');
   const getStr = () => Math.random().toString(radix).slice(2);
   let target = getStr();
@@ -14,14 +14,14 @@ function ranStr (long, radix = 26) {
 
 exports.ranStr = ranStr;
 
-function handleNumber (str) {
+function handleNumber(str) {
   const val = parseInt(str);
   return isNaN(val) ? undefined : val;
 }
 
 exports.handleNumber = handleNumber;
 
-function handleEnvFile (reg, value) {
+function handleEnvFile(reg, value) {
   const path = resolve(__dirname, '../../.env');
   if (!existsSync(path)) return console.log('error: .env 文件不存在。');
   const fileStr = readFileSync(path, 'utf-8');
@@ -30,14 +30,14 @@ function handleEnvFile (reg, value) {
 
 exports.handleEnvFile = handleEnvFile;
 
-function getType (target) {
+function getType(target) {
   return Object.prototype.toString.call(target).slice(8, -1).toLocaleLowerCase();
 }
 
-function dateFormat (format = 'y-m-d', value = new Date()) {
+function dateFormat(format = 'y-m-d', value = new Date()) {
   const date = getType(value) === 'Date' ? value : new Date(value);
   const hasPad = (state, value) => value.toString().padStart(state ? 2 : 1, '0');
-  return format.replace(/\w/g, function(val) {
+  return format.replace(/\w/g, function (val) {
     if (['y', 'Y'].includes(val)) {
       return date.getFullYear().toString().slice(val === 'y' ? 2 : 0);
     } else if (['m', 'M'].includes(val)) {
@@ -59,7 +59,7 @@ function dateFormat (format = 'y-m-d', value = new Date()) {
 
 exports.dateFormat = dateFormat;
 
-function md5 (value) {
+function md5(value) {
   const md5 = createHash('md5');
   md5.update(value);
   return md5.digest('hex');
@@ -67,7 +67,7 @@ function md5 (value) {
 
 exports.md5 = md5;
 
-function ranString (c = 'x') {
+function ranString(c = 'x') {
   const time = Date.now() || performance.now();
   const random = (time + Math.random() * 16) % 16 | 0;
   return (c === 'x' ? random : (random & 0x3) | 0x8).toString(16);
@@ -75,7 +75,7 @@ function ranString (c = 'x') {
 
 exports.ranString = ranString;
 
-function hashCode (str) {
+function hashCode(str) {
   if (str.length === 0) return 0;
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
@@ -86,7 +86,7 @@ function hashCode (str) {
 
 exports.hashCode = hashCode;
 
-function getUUID (parseInt) {
+function getUUID(parseInt) {
   const uuid = randomUUID ? randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, ranString);
   if (parseInt) {
     const code = hashCode(uuid);

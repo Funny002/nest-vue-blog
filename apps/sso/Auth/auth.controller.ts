@@ -41,7 +41,7 @@ export class AuthController {
     const token = await this.jwtAuthService.createToken(info);
     const [time, accessIn, refreshIn] = [Math.floor(Date.now() / 1000) - 10, 12 * 60 * 60, 24 * 60 * 60];
     await this.redisServer.setAuthToken(info.uid, info.tags, token, { access: accessIn, refresh: refreshIn });
-    return { info, ...token, expiresIn: { access: time + accessIn, refresh: time + refreshIn } };
+    return { info, ...token, expires: { access: time + accessIn, refresh: time + refreshIn } };
   }
 
   @Get('hasToken')

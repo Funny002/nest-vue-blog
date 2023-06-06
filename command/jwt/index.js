@@ -16,7 +16,7 @@ function handleCommand(options) {
 
 function createCommand(long) {
   if (long < 8) return console.log('error: 长度不能小于8');
-  handleEnvFile(/JWT_SECRET=[^\n\r]+/, `JWT_SECRET='${ranStr(long)}'`);
+  handleEnvFile(/JWT_SECRET=[^\n\r]+/, `JWT_SECRET='${ ranStr(long) }'`);
   console.log('[%s]: 替换成功, 重启服务后令牌生效', new Date());
 }
 
