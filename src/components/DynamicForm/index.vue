@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="formRef" :model="props.modelValue" :rules="props.rules">
+  <el-form ref="formRef" :model="props.modelValue" v-bind="bindAttrs">
     <el-row v-bind="getLayout">
       <template v-for="(fields, key) in props.fields">
         <el-col v-show="('show' in fields) ? fields.show : true" v-bind="rewriteObj(fields,['span', 'offset', 'push', 'pull'])">
@@ -13,13 +13,20 @@
 <script lang="ts">export default { name: 'DynamicForm', inheritAttrs: true };</script>
 <script lang="ts" setup>
 import DynamicFormField from './src/field.vue';
-import { rewriteObj } from '@utils/object';
 import { computed, provide, ref } from 'vue';
+import { rewriteObj } from '@utils/object';
 import { Fields } from './types';
 
 interface Props {
-  fields: Fields[],
-  rules?: { [key: string]: any[] },
+  fields: Fields[];
+  inline?: boolean;
+  disabled?: boolean;
+  labelWidth?: string;
+  showMessage?: boolean;
+  scrollToError?: boolean;
+  inlineMessage?: boolean;
+  labelPosition?: 'left' | 'right';
+  rules?: { [key: string]: any[] };
   modelValue: { [k: string]: any };
   //
   gutter?: number,
@@ -28,11 +35,18 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  disabled: false,
   rules: () => ({}),
   fields: () => ([]),
+  showMessage: true,
+  scrollToError: true,
+  labelPosition: 'right',
   modelValue: () => ({}),
 });
-
+const bindAttrs = computed(() => {
+  const bindList = ['rules', 'disabled', 'labelWidth', 'labelPosition', 'scrollToError', 'showMessage', 'inner'];
+  return rewriteObj(props, bindList);
+});
 const formRef = ref<any>(null);
 const getLayout = computed(() => rewriteObj(props, ['gutter', 'justify', 'align']));
 

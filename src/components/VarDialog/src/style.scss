@@ -1,0 +1,54 @@
+.var-dialog {
+  margin: 50px auto;
+
+  .el-dialog {
+    &__header {
+      margin: 0;
+      height: 55px;
+      display: flex;
+      padding: 16px;
+      color: #4C4D4F;
+      align-items: center;
+      border-bottom: 1px solid var(--el-border-color);
+
+      &btn {
+        top: 0;
+      }
+    }
+
+    &__body {
+      padding: 20px;
+    }
+
+    &__footer {
+      display: flex;
+      padding: 15px 20px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+  }
+
+  &.is-align-center {
+    .el-dialog__header {
+      justify-content: center;
+    }
+  }
+
+  &.is-max-height > .el-dialog {
+    &__body {
+      overflow-y: auto;
+      overflow-x: hidden;
+      max-height: calc(100vh - 209px);
+      border-bottom: 1px solid var(--el-border-color);
+    }
+  }
+
+  &__header {
+    user-select: none;
+    letter-spacing: 2px;
+
+    &-icon {
+      margin-right: 10px;
+    }
+  }
+}

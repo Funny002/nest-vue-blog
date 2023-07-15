@@ -17,7 +17,7 @@ const props = withDefaults(defineProps<Props>(), {});
 
 const hasShow = computed(() => {
   const state = 'show' in props.fields ? props.fields.show : true;
-  return { display: state ? 'block' : 'none' };
+  return { display: state ? 'flex' : 'none' };
 });
 
 const bindProps = computed(() => rewriteObj(props.fields, ['label', 'prop', 'labelWidth']));

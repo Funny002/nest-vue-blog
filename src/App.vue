@@ -18,6 +18,21 @@ const getLocale = computed(() => locale.value === 'zh' ? zh_locale : en_locale);
 </script>
 <style lang="scss">
 * {
+  scrollbar-width: thin;
+  scrollbar-color: #ddd #fff;
+
+  &::-webkit-scrollbar {
+    width: 9px;
+    border-left: 0.5px solid #ddd;
+
+    &-thumb {
+      border-radius: 6px;
+      background-color: #ddd;
+    }
+  }
+}
+
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
