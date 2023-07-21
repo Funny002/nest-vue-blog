@@ -38,19 +38,19 @@
           </div>
         </div>
         <el-divider style="margin: 10px 0 5px;"/>
-        <div class="var-admin__user--item">
+        <div class="var-admin__user--item" @click.stop="onUserInfo">
           <el-icon>
             <User/>
           </el-icon>
           <span>个人资料</span>
         </div>
-        <div class="var-admin__user--item">
+        <div class="var-admin__user--item" @click.stop="onMyMeg">
           <el-icon>
             <ChatDotSquare/>
           </el-icon>
           <span>我的消息</span>
         </div>
-        <div class="var-admin__user--item">
+        <div class="var-admin__user--item" @click.stop="onLogout">
           <el-icon>
             <SwitchButton/>
           </el-icon>
@@ -66,10 +66,14 @@
 <script lang="ts">export default { name: 'Admin' };</script>
 <script lang="ts" setup>
 import { Bell, ChatDotSquare, Expand, Files, Guide, House, Postcard, Search, Setting, SwitchButton, User } from '@element-plus/icons-vue';
+import { nextTick, onMounted, reactive, shallowRef } from 'vue';
 import LayoutAdmin from '@/layoutAdmin/index.vue';
 import VarNav from '@models/VarNav/index.vue';
-import { onMounted, reactive, shallowRef } from 'vue';
+import { ElMessage } from 'element-plus';
+import { useUsers } from '@stores/user';
+import { ApiLogout } from '@api/sign';
 
+const user = useUsers();
 const data = reactive<any>({
   isMini: false,
   nav: {
@@ -103,6 +107,23 @@ const data = reactive<any>({
   ],
 });
 
+function onUserInfo() {
+
+}
+
+function onMyMeg() {}
+
+function onLogout() {
+  ApiLogout().then(({ data: res }) => {
+    if (res.code === 0) {
+      user.logout();
+      window.location.pathname = '/sign';
+      window.location.href = window.location.toString();
+    } else {
+      ElMessage.error(res.message);
+    }
+  });
+}
 </script>
 
 <style lang="scss" src="./src/style.scss"/>

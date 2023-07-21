@@ -22,7 +22,7 @@ router.beforeEach(async function (to, from, next) {
   if (path.indexOf('/sign') !== 0) {
     if (!token) return next({ path: '/sign' });
     if (!res.data) {
-      ElMessage.error(res.msg);
+      ElMessage.error(res.message);
       return next({ path: '/sign' });
     }
   } else if (token) {

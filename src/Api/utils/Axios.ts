@@ -35,6 +35,8 @@ export class Axios {
     config.__retry_time = config.__retry_time || 500;
     config.__retry_count = config.__retry_count || 1;
     //
+    if (!config.params) config.params = {};
+    config.params['tags'] = window.__CONFIG__.tags || 'web';
     config.headers['Authorization'] = 'token ' + useUsers().accessToken;
     //
     return (this.handleRequest && await this.handleRequest(config)) || config;
@@ -60,7 +62,7 @@ export class Axios {
 
   private responseRejected(error: AxiosError & { config: AxiosConfig }) {
     const { config, response } = error;
-    // handle reject
+    if (!config) return Promise.reject(error);
     const rejectFunc = () => {
       this.manage.delete(config.cancelKeys);
       // console.log('hasCancelKeys: ', this.isCancel(error));

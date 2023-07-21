@@ -24,8 +24,8 @@ interface BaseTree {
 }
 
 interface AxiosResponse<T> {
+  message: string;
   code: number;
-  mes: string;
   data: T;
 }
 

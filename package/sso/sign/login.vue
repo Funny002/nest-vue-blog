@@ -100,7 +100,7 @@ function onSubmit() {
         }
         routes.push({ path: '/' });
       } else {
-        ElMessage.error(res.msg);
+        ElMessage.error(res.message);
       }
     }).finally(() => setTimeout(() => data.load = false, 300));
   });

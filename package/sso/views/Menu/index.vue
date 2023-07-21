@@ -96,7 +96,7 @@ function getList() {
       data.list = list;
       data.page = page;
     } else {
-      ElMessage.error(res.mes);
+      ElMessage.error(res.message);
     }
   }).finally(() => data.load = false);
 }
