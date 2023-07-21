@@ -1,15 +1,16 @@
 import { RedisModule as NestRedisModule } from '@svtslv/nestjs-ioredis';
 import { Redis_Name, RedisOptions } from '@app/config';
-import { RedisServer } from './src/Redis.service';
+import { Setting, UserConf } from '@app/mysql';
 import { MysqlModel } from '@app/common/mysql';
 import { ConfigService } from '@nestjs/config';
 import { Module } from '@nestjs/common';
-import { Setting } from '@app/mysql';
+//
+import { AuthRedisServer } from './src/AuthRedis.service';
 
 @Module({
   imports: [
     // mysql
-    MysqlModel.feature(Setting),
+    MysqlModel.feature(Setting, UserConf),
     // redis
     NestRedisModule.forRootAsync({
       inject: [ConfigService],
@@ -18,9 +19,9 @@ import { Setting } from '@app/mysql';
       },
     }),
   ],
-  providers: [RedisServer],
-  exports: [RedisServer],
+  providers: [AuthRedisServer],
+  exports: [AuthRedisServer],
 })
 export class RedisModule {}
 
-export { RedisServer } from './src/Redis.service';
+export { AuthRedisServer } from './src/AuthRedis.service';

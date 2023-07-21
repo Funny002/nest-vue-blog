@@ -18,8 +18,8 @@ export class UserOauth extends BaseModel {
 
   protected handleWhere(): { [p: string]: { name?: string; handle?: any } } {
     return {
-      'provider': { name: 'provider' },
-      'providerId': { name: 'provider_id' },
+      provider: { name: 'provider' },
+      providerId: { name: 'provider_id' },
     };
   }
 }

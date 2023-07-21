@@ -1,10 +1,10 @@
 import { AuthSendCodeType, SsoAuthCreateDto, SsoAuthLoginDto, SsoAuthSendCodeDto } from '@app/dto/sso.auth.dto';
 import { Body, Controller, Get, Post, Query, Req, UseGuards } from '@nestjs/common';
-import { JwtAuthService, jwtFromRequest, NoAuth } from '@app/common/jwtAuth';
+import { JwtAuthGuard, JwtAuthService, jwtFromRequest, NoAuth } from '@app/common/jwtAuth';
 import { LocalAuth } from './strategy/localAuth.strategy';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ManualException } from '@app/common/error';
-import { RedisServer } from '@app/common/redis';
+import { AuthRedisServer } from '@app/common/redis';
 import { AuthService } from './auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { reWriteObj } from '@app/tools';
@@ -18,7 +18,7 @@ export class AuthController {
   constructor(
     private readonly jwtService: JwtService,
     private readonly authService: AuthService,
-    private readonly redisServer: RedisServer,
+    private readonly redisServer: AuthRedisServer,
     private readonly jwtAuthService: JwtAuthService,
   ) {}
 
@@ -36,24 +36,25 @@ export class AuthController {
   @UseGuards(LocalAuth)
   @ApiOperation({ summary: '登录' })
   async Login(@Req() req: Request, @Body() body: SsoAuthLoginDto) {
-    return await this.redisServer.getDefaultConf();
-    // const info = reWriteObj(req['user'], ['uid', 'name', 'email']) as { uid: number; name: string; email: string; tags: string };
-    // info.tags = body.tags || 'web';
-    // const token = await this.jwtAuthService.createToken(info);
-    // const [time, accessIn, refreshIn] = [Math.floor(Date.now() / 1000) - 10, 12 * 60 * 60, 24 * 60 * 60];
-    // await this.redisServer.setAuthToken(info.uid, info.tags, token, { access: accessIn, refresh: refreshIn });
-    // return { info, ...token, expires: { access: time + accessIn, refresh: time + refreshIn } };
+    const info = reWriteObj(req['user'], ['uid', 'name', 'email']) as { uid: number; name: string; email: string; tags: string };
+    info.tags = body.tags || 'web';
+    const token = await this.jwtAuthService.createToken(info);
+    const [time, accessIn, refreshIn] = [Math.floor(Date.now() / 1000) - 10, 12 * 60 * 60, 24 * 60 * 60];
+    const expires = { access: time + accessIn, refresh: time + refreshIn };
+    await this.redisServer.setToken(info.uid, info.tags, token, expires);
+    return { info, ...token, expires };
+  }
+
+  @Post('logout')
+  @UseGuards(JwtAuthGuard)
+  async Logout(@Req() req: Request, @Query('tags') tags?: string) {
+    await this.redisServer.delToken(req['user']['uid'], tags || 'web', jwtFromRequest(req));
   }
 
   @Get('hasToken')
   @ApiOperation({ summary: '验证令牌' })
-  async HasToken(@Query('token') token: string) {
-    // const decode = this.jwtService.decode(token) as { exp: number; iat: number; [k: string]: any };
-    // const num = (decode || { exp: 0, iat: 0 }).exp - Math.floor(Date.now() / 1000);
-    // if (num <= 0) return false;
-    // const state = await this.redisServer.hasAuthToken(decode.uid, decode.tags || 'web', token);
-    // if (!state) return false;
-    // return num;
+  async HasToken(@Req() req: Request, @Query() query: { tags?: string; token: string }) {
+    return await this.redisServer.hasToken(req['user']['uid'], query.tags || 'web', jwtFromRequest(req));
   }
 
   @Get('code')
@@ -77,12 +78,5 @@ export class AuthController {
       default:
         ManualException('未知异常');
     }
-  }
-
-  @Post('logout')
-  async Logout(@Req() req: Request, @Query('tags') tags?: string) {
-    // tags = tags || 'web';
-    // const token = jwtFromRequest(req);
-    // await this.redisServer.delAuthToken(req['user']?.uid, tags, token);
   }
 }

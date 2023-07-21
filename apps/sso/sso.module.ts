@@ -1,5 +1,5 @@
 import { AppSystem, Captcha, ConfigGlobal, Email, JwtAuth, Mysql, Redis, Redis_Name, RedisOptions, Sso, SSO_NAME } from '@app/config';
-import { Menu, Power, Role, Setting, UserOauth, Users } from '@app/mysql';
+import { Menu, Power, Role, Setting, UserOauth, Users, UserConf } from '@app/mysql';
 import { RedisModule } from '@svtslv/nestjs-ioredis';
 import { JwtAuthGuard } from '@app/common/jwtAuth';
 import { MysqlModel } from '@app/common/mysql';
@@ -20,7 +20,7 @@ import { SettingModule } from './Setting/setting.module';
     // config
     ConfigGlobal.use(Sso, Mysql, Redis, JwtAuth, Email, Captcha),
     // mysql
-    MysqlModel.use(Users, UserOauth, Setting, Menu, Role, Power),
+    MysqlModel.use(Users, UserConf, UserOauth, Setting, Menu, Role, Power),
     // redis
     RedisModule.forRootAsync({
       inject: [ConfigService],

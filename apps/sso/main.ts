@@ -37,6 +37,6 @@ async function bootstrap() {
 }
 
 bootstrap().then(({ port, version }) => {
-  Logger.log(`http://127.0.0.1:${ port }`, 'Main');
-  Logger.log(`http://127.0.0.1:${ port }/${ version }`, 'Main');
+  Logger.log(`http://127.0.0.1:${port}`, 'Main');
+  Logger.log(`http://127.0.0.1:${port}/${version}`, 'Main');
 });

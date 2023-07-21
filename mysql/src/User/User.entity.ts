@@ -4,7 +4,7 @@ import { Column, Entity, ILike, Index, Like } from 'typeorm';
 @Entity()
 @Index('unique', ['uid', 'name', 'email'], { unique: true })
 export class Users extends BaseModel {
-  @Column({ /* uid */ }) uid: string;
+  @Column({ /* uid */ }) uid: number;
 
   @Column({ /* 昵称 */ length: 50 }) name: string;
 

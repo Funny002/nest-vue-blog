@@ -18,6 +18,10 @@ export function UserException(state: BaseState) {
   ManualException(BaseStateMap[state] || '账号被系统锁定');
 }
 
+export const Errors = {
+  noAuthority: '没有权限',
+};
+
 // export class ManualException extends HttpException {
 //   constructor(message: string, code = 1) {
 //     super({ message, code }, HttpStatus.OK);

@@ -3,6 +3,7 @@ export * from './common';
 
 // User
 export * from './src/User/User.entity';
+export * from './src/User/UserConf.entity';
 export * from './src/User/UserOauth.entity';
 
 // Power
