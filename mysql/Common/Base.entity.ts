@@ -91,7 +91,7 @@ export abstract class BaseModel extends BaseEntity {
   static handleWhere<T extends BaseModel>(this: { new(): T } & typeof BaseModel, data: any): { [Name: string]: any } {
     if ('handleWhere' in this.prototype) {
       const whereObj = this.prototype.handleWhere();
-      return Object.entries<{ name?: string; handle?: any }>(whereObj).reduce(function (value, obj) {
+      return Object.entries<{ name?: string; handle?: any }>(whereObj).reduce(function(value, obj) {
         const [keys, { name, handle }] = obj;
         if (keys in data) value[name || keys] = handle ? handle(data[keys]) : data[keys];
         return value;
@@ -142,7 +142,7 @@ export abstract class BaseModel extends BaseEntity {
 
   /** 列表数据 */
   static async getList<T extends BaseModel>(this: { new(): T } & typeof BaseModel, page: PaginationRequest, where: FindOptionsWhere<T>[] | FindOptionsWhere<T>) {
-    const { order, pageSize: take, pageSkip: skip, params } = page;
+    const { order, pageSize: take, pageSkip: skip } = page;
     // const where = this.handleWhere(page.params);
     return {
       count: await this.getRepository().countBy(where),

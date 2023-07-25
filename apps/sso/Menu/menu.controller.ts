@@ -11,7 +11,10 @@ import { Menu } from '@app/mysql';
 @ApiTags('Menu 菜单')
 @Controller('menu')
 export class MenuController {
-  constructor(private readonly menuService: MenuService, @InjectRepository(Menu) private menuRepository: Repository<Menu>) {}
+  constructor(
+    private readonly menuService: MenuService,
+    @InjectRepository(Menu) private menuRepository: Repository<Menu>,
+  ) {}
 
   @Post()
   @ApiOperation({ summary: '添加' })
@@ -27,6 +30,12 @@ export class MenuController {
     return status ? data.affected : ManualException(message);
   }
 
+  @Put('state/:id')
+  @ApiOperation({ summary: '状态修改' })
+  async saveState(@Param('id') id: number, @Body('state') state: number) {
+    return (await this.menuRepository.update({ id }, { state })).raw;
+  }
+
   @Delete()
   @ApiOperation({ summary: '删除' })
   async remove(@Body('ids') ids: number[]) {
@@ -38,7 +47,7 @@ export class MenuController {
   @ApiOperation({ summary: '列表' })
   async getList(@PaginationParams() page: PaginationRequest<SsoMenuPageDto>) {
     const params = page.params;
-    if ('name' in params) params.name = `%${ params.name }%`;
+    if ('name' in params) params.name = `%${params.name}%`;
     const data = await Menu.getList(page, Menu.handleWhere(params));
     return Pagination.of(page, data.count, data.list);
   }
@@ -57,6 +66,6 @@ export class MenuController {
 
     if (!(await Menu.hasKeys({ id }))) ManualException('未找到数据');
 
-    return await Menu[`get${ Boolean(query.tree) ? 'Tree' : 'Find' }Children`]({ id }, +(query.deep || 0));
+    return await Menu[`get${Boolean(query.tree) ? 'Tree' : 'Find'}Children`]({ id }, +(query.deep || 0));
   }
 }

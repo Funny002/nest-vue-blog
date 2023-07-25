@@ -1,10 +1,8 @@
 import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
-import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
 import { Column, In, Not, ObjectLiteral } from 'typeorm';
 import { ManualException } from '@app/common/error';
 import { BaseModel } from './Base.entity';
-import { mergeOptions } from '@app/tools';
 
 export abstract class PowerModel extends BaseModel {
   @Column({ /* 标识 */ }) keys: string;
@@ -74,7 +72,7 @@ export abstract class PowerModel extends BaseModel {
   }
 
   /** 删除数据 */
-  static async removeData<T extends BaseModel>(this: { new(): T } & typeof BaseModel, ids: number[]): Promise<{ status: boolean; message: string; data?: DeleteResult }> {
+  static async removeData<T extends BaseModel>(this: { new (): T } & typeof BaseModel, ids: number[]): Promise<{ status: boolean; message: string; data?: DeleteResult }> {
     const id = In([...new Set(ids)]);
     if (!(await this.hasKeys({ id }))) return { status: false, message: '数据不存在' };
 

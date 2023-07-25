@@ -34,7 +34,7 @@ export class LocalAuthStrategy extends PassportStrategy(Strategy, LocalAuthName)
     if (userInfo.state !== BaseState.Enable) UserException(userInfo.state);
     if (userInfo.lock_count && userInfo.lock_time) {
       const time = parseInt(userInfo.lock_time) - Date.now();
-      if (time > 0) ManualException(`请在${ Math.ceil(time / 1000) }秒后重新尝试`);
+      if (time > 0) ManualException(`请在${Math.ceil(time / 1000)}秒后重新尝试`);
     }
   }
 
@@ -46,8 +46,8 @@ export class LocalAuthStrategy extends PassportStrategy(Strategy, LocalAuthName)
       return true;
     }
     // 大于2次 累计n次锁n分钟
-    if (userInfo.lock_count === 2) {
-      await this.userRepository.update({ id: userInfo.id }, { lock_time: (Date.now() + (userInfo.lock_count * 60000)).toString() });
+    if (userInfo.lock_count >= 2) {
+      await this.userRepository.update({ id: userInfo.id }, { lock_time: (Date.now() + userInfo.lock_count * 60000).toString() });
     }
     // 累计 + 1
     await Users.increment({ id: userInfo.id }, 'lock_count', 1);
