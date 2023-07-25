@@ -14,9 +14,11 @@ interface Props {
   placeholder?: string;
 }
 
-const formData = inject('formData');
+const formData = inject<{ [name: string]: any }>('formData', {});
 
-const props = withDefaults(defineProps<Props>(), {});
+const props = withDefaults(defineProps<Props>(), {
+  placeholder: '请输入',
+});
 
 const bindProps = computed(() => rewriteObj(props, ['placeholder', 'clearable']));
 </script>

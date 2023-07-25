@@ -1,3 +1,4 @@
+import Utf8 from 'crypto-js/enc-utf8';
 import { AES } from 'crypto-js';
 
 export class Aes {
@@ -7,6 +8,6 @@ export class Aes {
   }
 
   static decrypt(key: string, value: any) {
-    return (AES.decrypt(value, key).toString(CryptoJS.enc.Utf8) as { value?: any }).value;
+    return JSON.parse(AES.decrypt(value, key).toString(Utf8)).value;
   }
 }

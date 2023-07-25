@@ -1,4 +1,5 @@
-import { Component, h } from 'vue';
+export default {};
+// import { Component, h } from 'vue';
 // import { NIcon } from 'naive-ui';
 
 // export function handleIcon(icon: Component) {

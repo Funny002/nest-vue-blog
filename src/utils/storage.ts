@@ -3,6 +3,7 @@ import { Aes } from '@utils/crypto';
 interface StorageConf {
   value: any;
   aes?: boolean;
+  temp: boolean;
   exceed?: number;
 }
 
@@ -56,13 +57,11 @@ export class Storage {
     return value;
   }
 
-  set(key: string, value: any, exceed?: number, aes?: boolean) {
+  set(key: string, value: any, exceed?: number, aes?: boolean, temp = true) {
     const keys = this.handleKey(key);
-    const data: StorageConf = { value };
+    const data: StorageConf = { value, temp };
     // 开启超时
-    if (exceed) {
-      data.exceed = Date.now() + exceed;
-    }
+    if (exceed) data.exceed = Date.now() + exceed;
     // 开启加密
     if (aes) {
       data.aes = true;

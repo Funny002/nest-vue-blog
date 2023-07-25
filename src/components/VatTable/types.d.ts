@@ -87,4 +87,4 @@ export interface TagsField {
 }
 
 // =================================================================================
-export type FieldsItem = Fields & (ButtonField | DateField | StatusField | IndexField | TagsField | {})
+export type TableFieldsItem = Fields & (ButtonField | DateField | StatusField | IndexField | TagsField | {})

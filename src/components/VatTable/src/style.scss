@@ -6,6 +6,8 @@
   }
 
   &.el-button-group {
+    width: auto !important;
+
     > * + * {
       margin-left: 0 !important;
     }

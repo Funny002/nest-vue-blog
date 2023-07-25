@@ -35,6 +35,10 @@ export const ApiMenuInfo = (id: number) => Axios.get<AxiosResponse<MenuItem>>(ba
 
 export const ApiMenuSave = (id: number, data: MenuData) => Axios.put<PageParams<MenuItem[]>>(baseUrl + id, data);
 
+export const ApiMenuSaveState = (id: number, state: number) => Axios.put<PageParams<MenuItem[]>>(baseUrl + 'state/' + id, { state });
+
 export const ApiMenuList = (params?: Partial<MenuParams>) => Axios.get<PageParams<MenuItem[]>>(baseUrl + 'list', { params });
 
 export const ApiMenuTree = (params: BaseTree, id?: number) => Axios.get<PageParams<MenuItem[]>>(baseUrl + 'tree/' + id, { params });
+
+export const ApiMenuRemove = (...ids: number[]) => Axios.delete<AxiosResponse<number>>(baseUrl, { data: { ids } });

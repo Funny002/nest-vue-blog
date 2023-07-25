@@ -8,11 +8,13 @@
         <slot name="header">{{ props.title }}</slot>
       </div>
     </template>
-    <slot></slot>
+    <div v-loading="props.loading" v-if="$slots">
+      <slot></slot>
+    </div>
     <template #footer v-if="props.footer">
       <slot name="footer-box">
         <slot name="footer"></slot>
-        <el-button @click="onBeforeClose" :icon="Close">关闭</el-button>
+        <el-button :loading="props.loading" :icon="Close" @click="onBeforeClose">关闭</el-button>
       </slot>
     </template>
   </el-dialog>
@@ -30,6 +32,7 @@ interface Props {
   width?: string;
   modal?: boolean;
   footer?: boolean;
+  loading?: boolean;
   draggable?: boolean;
   showClose?: boolean;
   maxHeight?: boolean;
@@ -45,6 +48,7 @@ const props = withDefaults(defineProps<Props>(), {
   modal: true,
   footer: true,
   width: '600px',
+  loading: false,
   showClose: true,
   maxHeight: false,
   draggable: false,

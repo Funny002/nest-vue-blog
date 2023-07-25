@@ -27,19 +27,20 @@ export const useUsers = defineStore('users', {
     refreshExpires: ({ data: { expires } }) => (expires?.refresh || 0) - ~~(Date.now() / 1000),
   },
   actions: {
+    updateStorage() {
+      storage.set('users.info', this.data.info, 0, false, false);
+      storage.set('users.token', this.data.token, 0, false, false);
+      storage.set('users.expires', this.data.expires, 0, false, false);
+    },
     setUserData(info: UserInfo, token: { access: string; refresh: string; }, expires: { access: number; refresh: number; }) {
-      this.data.info = info;
-      this.data.token = token;
       this.data.expires = expires;
-      storage.set('users.info', this.data.info);
-      storage.set('users.token', this.data.token);
-      storage.set('users.expires', this.data.expires);
+      this.data.token = token;
+      this.data.info = info;
+      this.updateStorage();
     },
     logout() {
       this.data = {};
-      storage.set('users.info', this.data.info);
-      storage.set('users.token', this.data.token);
-      storage.set('users.expires', this.data.expires);
+      this.updateStorage();
     },
   },
 });

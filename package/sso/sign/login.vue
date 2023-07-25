@@ -8,7 +8,8 @@
       <div class="var-sign__login--line"></div>
       <div class="var-sign__login--right" v-loading="data.load">
         <dynamic-form ref="formRef" :fields="data.fields" :rules="data.rules" v-model="data.formData" @code="onDevelop" a="x"/>
-        <div style="padding-bottom: 10px">
+        <div style="padding-bottom: 14px; display: flex; align-items: center; justify-content: space-between;">
+          <el-checkbox v-model="data.memorize">记住密码</el-checkbox>
           <el-button v-if="data.hasCode" text @click="onSwitchCode">验证码登录</el-button>
           <el-button v-else text @click="onSwitchCode">密码登录</el-button>
         </div>
@@ -36,12 +37,14 @@
 import QrCode from '@models/QrCode/index.vue';
 import DynamicForm from '@models/DynamicForm/index.vue';
 //
+import { onBeforeMount, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import verify from '@models/DynamicForm/utils';
 import { ElMessage } from 'element-plus';
 import { useUsers } from '@stores/user';
 import { ApiLogin } from '@api/sign';
-import { reactive, ref } from 'vue';
+import storage from '@utils/storage';
+import { MessageError } from '@utils/message';
 
 const route = useRoute();
 const routes = useRouter();
@@ -52,6 +55,7 @@ const data = reactive<any>({
   load: false,
   formData: {},
   hasCode: true,
+  memorize: false,
   fields: [
     { prop: 'user', type: 'text', placeholder: '邮箱/账号名', clearable: true },
     { show: true, prop: 'pass', type: 'password', placeholder: '密码', clearable: true, keyEnter: onSubmit },
@@ -84,6 +88,14 @@ function onDevelop() {
   ElMessage.warning({ grouping: true, message: '功能正在开发中...' });
 }
 
+onBeforeMount(() => {
+  const memorize = storage.get('sign.memorize');
+  if (memorize) {
+    data.memorize = true;
+    data.formData = { ...memorize };
+  }
+});
+
 function onSubmit() {
   formRef.value?.ref.validate((state: boolean) => {
     if (!state) return false;
@@ -93,6 +105,7 @@ function onSubmit() {
       if (res.code === 0) {
         const { info, expires, ...token } = res.data;
         userStore.setUserData(info, token, expires);
+        if (data.memorize) storage.set('sign.memorize', { user, pass }, 0, true, false);
         if (redirect !== window.location.origin) {
           const url = new URL(redirect);
           url.searchParams.append('token', token.access);
