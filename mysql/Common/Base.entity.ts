@@ -6,7 +6,7 @@ import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
 import { EntityManager } from 'typeorm/entity-manager/EntityManager';
 import { Repository } from 'typeorm/repository/Repository';
 import { PaginationRequest } from '@app/pagination';
-import Decimal from 'decimal.js';
+import * as Decimal from 'decimal.js';
 
 export abstract class BaseModel extends BaseEntity {
   @PrimaryGeneratedColumn({ /* 主键 */ }) id: number;
