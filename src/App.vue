@@ -5,8 +5,10 @@
 </template>
 
 <script lang="ts" setup>
-import zh_locale from 'element-plus/dist/locale/zh-cn.min.mjs';
-import en_locale from 'element-plus/dist/locale/en.min.mjs';
+// @ts-ignore
+import zh_locale from 'element-plus/dist/locale/zh-cn.min.js';
+// @ts-ignore
+import en_locale from 'element-plus/dist/locale/en.min.js';
 import { useTheme } from '@stores/theme';
 import 'element-plus/dist/index.css';
 import { storeToRefs } from 'pinia';

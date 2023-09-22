@@ -22,7 +22,7 @@ router.beforeEach(async function (to, from, next) {
   if (path.indexOf('/sign') !== 0) {
     if (!token) return next({ path: '/sign' });
     if (!res.data) {
-      ElMessage.error(res.message);
+      ElMessage.warning('请重新登录。');
       return next({ path: '/sign' });
     }
   } else if (token) {

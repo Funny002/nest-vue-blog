@@ -4,13 +4,13 @@
 
 <script lang="ts">export default { name: 'Home' };</script>
 <script lang="ts" setup>
+import { ButtonFieldItem, TableFieldsItem } from '@models/VatTable/types';
 import VarTable from '@models/VatTable/index.vue';
 import { reactive } from 'vue';
-import { FieldsItem, ButtonFieldItem } from '@models/VatTable/types';
 
 const ButtonOptions: ButtonFieldItem[] = [{ label: '添加下级', type: 'primary' }, { label: '修改' }, { label: '删除' }];
 
-const data = reactive<{ list: any[], columns: FieldsItem[] }>({
+const data = reactive<{ list: any[], columns: TableFieldsItem[] }>({
   list: [
     { create_time: Date.now(), state: true },
     { create_time: Date.now(), state: false },

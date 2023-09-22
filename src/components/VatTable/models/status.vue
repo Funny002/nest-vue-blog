@@ -16,7 +16,7 @@ const bindStyle = computed(() => {
   return rewriteObj(props.fields, ['activeIcon', 'activeValue', 'activeText', 'inactiveIcon', 'inactiveValue', 'inactiveText', 'loading', 'disabled', 'inlinePrompt']);
 });
 
-function onChange(value: boolean) {
+function onChange(value: any) {
   const { fields: { change }, index } = props;
   change && change(index, value);
 }
