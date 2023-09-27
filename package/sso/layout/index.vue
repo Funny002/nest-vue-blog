@@ -1,5 +1,5 @@
 <template>
-  <layout-admin class="var-admin" :is-mini="data.isMini" :menu="data.menu" :menu-children="data.menuChildren">
+  <layout-admin class="var-admin" :menu="data.menu">
     <template v-slot:header="{hasSideMenu}">
       <div class="var-admin__headerNav sideBtn" @click="() => (data.isMini = !data.isMini)" v-show="hasSideMenu">
         <el-icon>
@@ -65,15 +65,21 @@
 
 <script lang="ts">export default { name: 'Admin' };</script>
 <script lang="ts" setup>
-import { Bell, ChatDotSquare, Expand, Files, Guide, House, Postcard, Search, Setting, SwitchButton, User } from '@element-plus/icons-vue';
-import { nextTick, onMounted, reactive, shallowRef } from 'vue';
+import { Bell, ChatDotSquare, Expand, Search, SwitchButton } from '@element-plus/icons-vue';
 import LayoutAdmin from '@/layoutAdmin/index.vue';
+import { useMenuRouter } from '@stores/router';
 import VarNav from '@models/VarNav/index.vue';
 import { ElMessage } from 'element-plus';
 import { useUsers } from '@stores/user';
 import { ApiLogout } from '@api/sign';
+import { MenuItem } from '@api/menu';
+import { reactive } from 'vue';
+import { storeToRefs } from 'pinia';
 
 const user = useUsers();
+
+const menuRouter = useMenuRouter();
+
 const data = reactive<any>({
   isMini: false,
   nav: {
@@ -83,28 +89,7 @@ const data = reactive<any>({
       { label: '首页', name: 'huasji' },
     ],
   },
-  menu: [
-    { icon: shallowRef(House), name: 'Home', label: '首页' },
-    { icon: shallowRef(User), name: 'User', label: '用户' },
-    { icon: shallowRef(Files), name: 'Files', label: '文件' },
-    { icon: shallowRef(Guide), name: 'Router', label: '路由' },
-    { icon: shallowRef(Postcard), name: 'Power', label: '权限' },
-    { icon: shallowRef(Setting), name: 'Setting', label: '设置' },
-  ],
-  menuChildren: [
-    { icon: shallowRef(House), name: 'Home', label: '首页' },
-    {
-      icon: shallowRef(User),
-      name: 'User',
-      label: '用户',
-      childList: [
-        { icon: shallowRef(Files), name: 'Files', label: '文件' },
-        { icon: shallowRef(Guide), name: 'Router', label: '路由' },
-        { icon: shallowRef(Postcard), name: 'Power', label: '权限' },
-        { icon: shallowRef(Setting), name: 'Setting', label: '设置' },
-      ],
-    },
-  ],
+  menu: storeToRefs(menuRouter).tree,
 });
 
 function onUserInfo() {

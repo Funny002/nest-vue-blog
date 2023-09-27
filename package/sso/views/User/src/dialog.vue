@@ -12,12 +12,13 @@
 import DynamicForm from '@models/DynamicForm/index.vue';
 import VarDialog from '@models/VarDialog/index.vue';
 //
-import { ApiMenuOptions, ApiMenuPost, ApiMenuSave, MenuItem } from '@api/menu';
-import { nextTick, onMounted, reactive, ref } from 'vue';
+import { ApiMenuPost, ApiMenuSave, MenuItem } from '@api/menu';
 import { Check } from '@element-plus/icons-vue';
 import verify from '@models/DynamicForm/utils';
 import { MessageError } from '@utils/message';
 import { rewriteObj } from '@utils/object';
+import { nextTick, reactive, ref } from 'vue';
+
 
 const props = withDefaults(defineProps<{ tags: string }>(), {});
 
@@ -54,22 +55,12 @@ const data = reactive<any>({
   },
 });
 
-onMounted(() => {
-  ApiMenuOptions().then(({ data: res }) => {
-    if (res.code === 0) {
-      data.fields[0].options = res.data;
-    } else {
-      MessageError(res.message);
-    }
-  });
-});
-
 function init(row?: MenuItem) {
   data.save = !!row;
   data.saveId = row?.id;
   dialogRef.value?.show();
   nextTick(() => formRef.value?.ref.clearValidate());
-  data.form = (row && rewriteObj(row, ['name', 'keys', 'tags', 'types', 'values', 'state', 'sort'])) || { tags: props.tags, state: 0 };
+  data.form = (row && rewriteObj(row, ['name', 'keys', 'tags', 'types', 'values', 'state'])) || { tags: props.tags, state: 0 };
 }
 
 function save(row: MenuItem) {

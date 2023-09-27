@@ -1,69 +1,69 @@
-.var-admin {
-  .var-layoutAdmin__header {
-    padding-left: 5px;
-    padding-right: 10px;
-
-    > * + * {
-      margin-left: 10px;
-    }
-  }
-
-  &__headerNav {
-    width: 35px;
-    height: 35px;
-    display: flex;
-    cursor: pointer;
-    border-radius: 50%;
-    align-items: center;
-    justify-content: center;
-    transition: border-radius .4s;
-
-    &:hover {
-      border-radius: 4px;
-      background-color: #eee;
-    }
-  }
-
-  .var-admin__headerNav.sideBtn {
-    transform: rotateY(180deg);
-  }
-
-  &.is-mini .var-admin__headerNav.sideBtn {
-    transform: rotateY(0);
-  }
-
-  &__userPopover {
-    cursor: pointer;
-  }
-
-  &__user {
-    display: flex;
-    align-items: center;
-
-    &--body {
-      padding-left: 10px;
-    }
-
-    &--item {
-      height: 30px;
-      display: flex;
-      cursor: pointer;
-      padding: 0 10px;
-      border-radius: 4px;
-      align-items: center;
-
-      & + & {
-        margin-top: 5px;
-      }
-
-      &:hover {
-        background-color: #eee;
-        color: var(--el-color-primary);
-      }
-
-      > span {
-        padding-left: 10px;
-      }
-    }
-  }
-}
+//.var-admin {
+//  .var-layoutAdmin__header {
+//    //padding-left: 5px;
+//    padding-right: 10px;
+//
+//    > * + * {
+//      margin-left: 10px;
+//    }
+//  }
+//
+//  &__headerNav {
+//    width: 35px;
+//    height: 35px;
+//    display: flex;
+//    cursor: pointer;
+//    border-radius: 50%;
+//    align-items: center;
+//    justify-content: center;
+//    transition: border-radius .4s;
+//
+//    &:hover {
+//      border-radius: 4px;
+//      background-color: #eee;
+//    }
+//  }
+//
+//  .var-admin__headerNav.sideBtn {
+//    transform: rotateY(180deg);
+//  }
+//
+//  &.is-mini .var-admin__headerNav.sideBtn {
+//    transform: rotateY(0);
+//  }
+//
+//  &__userPopover {
+//    cursor: pointer;
+//  }
+//
+//  &__user {
+//    display: flex;
+//    align-items: center;
+//
+//    &--body {
+//      padding-left: 10px;
+//    }
+//
+//    &--item {
+//      height: 30px;
+//      display: flex;
+//      cursor: pointer;
+//      padding: 0 10px;
+//      border-radius: 4px;
+//      align-items: center;
+//
+//      & + & {
+//        margin-top: 5px;
+//      }
+//
+//      &:hover {
+//        background-color: #eee;
+//        color: var(--el-color-primary);
+//      }
+//
+//      > span {
+//        padding-left: 10px;
+//      }
+//    }
+//  }
+//}

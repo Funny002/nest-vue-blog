@@ -8,11 +8,14 @@ export interface MenuItem {
   tags: string;
   name: string;
   types: string;
+  sort: number;
+  icon: string;
   state: number;
   values: string;
   create_time: string;
   update_time: string;
   mutex: null | string[],
+  children?: MenuItem[];
 }
 
 interface MenuData {
@@ -42,3 +45,7 @@ export const ApiMenuList = (params?: Partial<MenuParams>) => Axios.get<PageParam
 export const ApiMenuTree = (params: BaseTree, id?: number) => Axios.get<PageParams<MenuItem[]>>(baseUrl + 'tree/' + id, { params });
 
 export const ApiMenuRemove = (...ids: number[]) => Axios.delete<AxiosResponse<number>>(baseUrl, { data: { ids } });
+
+export const ApiMenuRouter = () => Axios.get<AxiosResponse<MenuItem[]>>(baseUrl + 'router');
+
+export const ApiMenuOptions = () => Axios.get<AxiosResponse<MenuItem[]>>(baseUrl + 'options');

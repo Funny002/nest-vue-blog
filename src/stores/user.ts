@@ -12,14 +12,16 @@ interface UsersStores {
 }
 
 export const useUsers = defineStore('users', {
-  state: (): { data: UsersStores } => ({
+  state: (): { data: UsersStores, hasLogin: boolean } => ({
     data: {
       info: storage.get('users.info'),
       token: storage.get('users.token'),
       expires: storage.get('users.expires'),
     },
+    hasLogin: sessionStorage.getItem('hasLogin') === 'true',
   }),
   getters: {
+    has: ({ hasLogin }) => hasLogin,
     getInfo: ({ data: { info } }) => info,
     accessToken: ({ data: { token } }) => token?.access,
     refreshToken: ({ data: { token } }) => token?.refresh,
@@ -27,6 +29,10 @@ export const useUsers = defineStore('users', {
     refreshExpires: ({ data: { expires } }) => (expires?.refresh || 0) - ~~(Date.now() / 1000),
   },
   actions: {
+    setHas(state: boolean) {
+      this.hasLogin = state;
+      sessionStorage.setItem('hasLogin', String(state));
+    },
     updateStorage() {
       storage.set('users.info', this.data.info, 0, false, false);
       storage.set('users.token', this.data.token, 0, false, false);

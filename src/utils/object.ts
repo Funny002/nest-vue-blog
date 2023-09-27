@@ -20,3 +20,21 @@ export function rewriteObj(target: { [k: string]: any }, array: string[]) {
     return value;
   }, {});
 }
+
+export function listToTree(target: any[], key = 'id', parent = 'parent') {
+  const roots: any[] = [];
+  const map = target.reduce(function (value: { [k: string]: any }, item: any) {
+    value[item[key]] = item;
+    return value;
+  }, {});
+  for (const item of target) {
+    if (item[parent]) {
+      const parentItem = map[item[parent]];
+      if (!parentItem.children) parentItem.children = [];
+      parentItem.children.push(item);
+    } else {
+      roots.push(item);
+    }
+  }
+  return roots;
+}

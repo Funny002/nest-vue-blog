@@ -1,54 +1,65 @@
 <template>
-  <div class="var-layoutAdmin" :class="{'is-mini': props.isMini}">
+  <div class="var-layoutAdmin">
     <div class="var-layoutAdmin__side">
-      <div class="var-layoutAdmin__side--logo"></div>
-      <div class="var-layoutAdmin__side--active" :style="{top: (menuActive.index * 50) + 'px'}">
+      <div class="var-layoutAdmin__side--logo">
+        <img :src="data.config.logo" :alt="data.config.title"/>
+      </div>
+      <div class="var-layoutAdmin__side--active">
+        <!--        :style="{top: (menuActive.index * 50) + 'px'}"-->
         <div></div>
       </div>
+      <i class="bi bi-123"></i>
       <template v-for="item in props.menu">
-        <el-tooltip v-if="item.icon" :content="item.label" :visible="item.label ? undefined : false" placement="right" effect="light">
-          <div class="var-layoutAdmin__side--item" @click="onClick(item)">
-            <el-icon>
-              <component :is="item.icon"/>
-            </el-icon>
-          </div>
-        </el-tooltip>
+        {{ item.name }}
+        {{ item.icon }}
+        <!--              <el-tooltip v-if="item.icon" :content="item.label" :visible="item.label ? undefined : false" placement="right" effect="light">-->
+        <!--                <div class="var-layoutAdmin__side&#45;&#45;item" @click="onClick(item)">-->
+        <!--                  <el-icon>-->
+        <!--                    <component :is="item.icon"/>-->
+        <!--                  </el-icon>-->
+        <!--                </div>-->
+        <!--              </el-tooltip>-->
       </template>
     </div>
-    <div class="var-layoutAdmin__nesting" style="flex-direction: column;">
+    <div class="var-layoutAdmin__body">
       <header class="var-layoutAdmin__header">
-        <slot name="header" :isMini="props.isMini" :hasSideMenu="hasSideMenu"/>
+        <div class="var-layoutAdmin__header--btn" :style="`transform: rotateY(${data.isMini ? 0 : 180}deg)`" v-if="isExpand" @click.stop="data.isMini = !data.isMini">
+          <el-icon>
+            <Expand/>
+          </el-icon>
+        </div>
+        <slot name="header"/>
       </header>
       <div class="var-layoutAdmin__nesting">
-        <div class="var-layoutAdmin__menu" v-show="hasSideMenu">
-          <el-menu class="var-layoutAdmin__menu--body" :collapse="props.isMini">
-            <template v-for="item of props.menuChildren">
-              <el-sub-menu v-if="(item.childList || []).length" :index="item.name">
-                <template #title>
-                  <el-icon v-if="item.icon">
-                    <component :is="item.icon"/>
-                  </el-icon>
-                  <span>{{ item.label }}</span>
-                </template>
-                <el-menu-item v-for="child of item.childList" :index="child.name" @click="onMenuClick(item)">
-                  <el-icon v-if="child.icon">
-                    <component :is="child.icon"/>
-                  </el-icon>
-                  <span>{{ child.label }}</span>
-                </el-menu-item>
-              </el-sub-menu>
-              <el-menu-item v-else :index="item.name" @click="onMenuClick(item)">
-                <el-icon v-if="item.icon">
-                  <component :is="item.icon"/>
-                </el-icon>
-                <span>{{ item.label }}</span>
-              </el-menu-item>
-            </template>
-          </el-menu>
+        <div class="var-layoutAdmin__menu" :class="{'is-mini': data.isMini}" v-if="isExpand">
+          <!--          <el-menu class="var-layoutAdmin__menu&#45;&#45;body" :collapse="props.isMini">-->
+          <!--            <template v-for="item of props.menuChildren">-->
+          <!--              <el-sub-menu v-if="(item.childList || []).length" :index="item.name">-->
+          <!--                <template #title>-->
+          <!--                  <el-icon v-if="item.icon">-->
+          <!--                    <component :is="item.icon"/>-->
+          <!--                  </el-icon>-->
+          <!--                  <span>{{ item.label }}</span>-->
+          <!--                </template>-->
+          <!--                <el-menu-item v-for="child of item.childList" :index="child.name" @click="onMenuClick(item)">-->
+          <!--                  <el-icon v-if="child.icon">-->
+          <!--                    <component :is="child.icon"/>-->
+          <!--                  </el-icon>-->
+          <!--                  <span>{{ child.label }}</span>-->
+          <!--                </el-menu-item>-->
+          <!--              </el-sub-menu>-->
+          <!--              <el-menu-item v-else :index="item.name" @click="onMenuClick(item)">-->
+          <!--                <el-icon v-if="item.icon">-->
+          <!--                  <component :is="item.icon"/>-->
+          <!--                </el-icon>-->
+          <!--                <span>{{ item.label }}</span>-->
+          <!--              </el-menu-item>-->
+          <!--            </template>-->
+          <!--          </el-menu>-->
         </div>
-        <div class="var-layoutAdmin__container" :class="{'is-side': hasSideMenu }">
+        <main class="var-layoutAdmin__container" :class="{'is-expand': isExpand, 'is-mini': data.isMini}">
           <slot/>
-        </div>
+        </main>
       </div>
     </div>
   </div>
@@ -56,63 +67,35 @@
 
 <script lang="ts">export default { name: 'LayoutAdmin' };</script>
 <script lang="ts" setup>
-import { CaretRight } from '@element-plus/icons-vue';
-import { computed, onMounted, reactive } from 'vue';
+import { Expand } from '@element-plus/icons-vue';
+import { useWebConfig } from '@stores/config';
+import { computed, reactive } from 'vue';
+import { storeToRefs } from 'pinia';
+import { icons } from '@plugin/bootstrap-icon';
 
-interface Menu {
-  icon?: any,
-  name: string,
-  label: string,
-  hasShow?: boolean,
-  childList?: Menu[]
-}
 
 interface Props {
-  isMini?: boolean;
-  //
-  menu: Menu[];
-  menuActive?: string;
-  menuChildren?: Menu[];
-  menuChildrenActive?: string;
+  menu: any[];
 }
 
-const emits = defineEmits(['update:menuActive', 'change:menuActive']);
+const props = withDefaults(defineProps<Props>(), { menu: () => [] });
 
-const props = withDefaults(defineProps<Props>(), {
+const webConfig = useWebConfig();
+
+const data = reactive<{
+  isMini: boolean;
+  config: ReturnType<typeof storeToRefs>
+}>({
   isMini: false,
-  menuChildren: () => [],
+  config: storeToRefs(webConfig),
 });
 
-const hasSideMenu = computed(() => (props.menuChildren || []).length);
-
-const data = reactive({
-  menuActive: props.menuActive,
+const isExpand = computed(() => {
+  return true;
 });
 
-const menuActive = computed<any>({
-  get() {
-    const name = props.menuActive || data.menuActive || '';
-    const index = props.menu.findIndex(v => v.name === name);
-    return { name, index };
-  },
-  set(name: string) {
-    data.menuActive = name;
-    emits('update:menuActive', name);
-    emits('change:menuActive', name);
-  },
-});
-
-onMounted(() => {
-  if (!props.menuActive) menuActive.value = props.menu[0]?.name || '';
-});
-
-function onClick(item: any) {
-  menuActive.value = item.name;
-}
-
-function onMenuClick(item: any) {
-  console.log(item);
-}
+console.log('layoutAdmin -> icon', icons);
+console.log('layoutAdmin -> menu', props.menu);
 </script>
 
-<style lang="scss" src="./src/style.scss"/>
+<style lang="scss" src="./style.scss"/>

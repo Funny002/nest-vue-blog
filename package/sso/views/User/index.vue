@@ -8,7 +8,7 @@
       <div class="var-viewMenu__header">
         <dynamic-form class="var-viewMenu__header-form" ref="formRef" :gutter="10" :fields="data.fields" :rules="data.rules" v-model="data.formData"/>
         <div class="var-viewMenu__header-button">
-          <el-button type="primary" @click.stop="AddDialogRef?.init()" :icon="Plus">添加</el-button>
+          <el-button type="primary" @click.stop="AddDialogRef?.init" :icon="Plus">添加</el-button>
         </div>
       </div>
       <var-table ref="tableRef" :value="data.list" :data="data.columns"/>
