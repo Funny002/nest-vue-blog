@@ -128,7 +128,7 @@ export abstract class BaseModel extends BaseEntity {
   /** 修改数据 */
   static async saveData<T extends BaseModel>(this: { new(): T } & typeof BaseModel, id: number, data: any): Promise<{ status: boolean; message: string; data?: UpdateResult }> {
     const verify = await this.hasVerify(data, id);
-    if (!verify.status) return verify as { status: false, message: string };
+    if (!verify.status) return verify as { status: false; message: string };
     //
     return { status: true, data: await this.getRepository().update({ id }, data), message: '' };
   }

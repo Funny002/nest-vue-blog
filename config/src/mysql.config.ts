@@ -17,6 +17,7 @@ export const Mysql = registerAs(Mysql_NAME, (): TypeOrmModuleOptions => {
     charset: 'utf8',
     //
     debug: false,
+    logging: ['query'],
     logger: 'simple-console',
     synchronize: true,
     retryDelay: 5000,

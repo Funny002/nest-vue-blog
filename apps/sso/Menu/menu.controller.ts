@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MenuService } from './menu.service';
 import { Repository } from 'typeorm';
 import { Menu } from '@app/mysql';
+import { reWriteObj } from '@app/tools';
 
 @ApiTags('Menu 菜单')
 @Controller('menu')
@@ -47,7 +48,7 @@ export class MenuController {
   @ApiOperation({ summary: '列表' })
   async getList(@PaginationParams() page: PaginationRequest<SsoMenuPageDto>) {
     const params = page.params;
-    if ('name' in params) params.name = `%${params.name}%`;
+    if ('name' in params) params.name = `%${ params.name }%`;
     const data = await Menu.getList(page, Menu.handleWhere(params));
     return Pagination.of(page, data.count, data.list);
   }
@@ -66,6 +67,23 @@ export class MenuController {
 
     if (!(await Menu.hasKeys({ id }))) ManualException('未找到数据');
 
-    return await Menu[`get${Boolean(query.tree) ? 'Tree' : 'Find'}Children`]({ id }, +(query.deep || 0));
+    return await Menu[`get${ Boolean(query.tree) ? 'Tree' : 'Find' }Children`]({ id }, +(query.deep || 0));
+  }
+
+  @Get('router')
+  @ApiOperation({ summary: '路由' })
+  async getRouter(@Query('tags') tags: string) {
+    const where = Menu.handleWhere({ types: 'router', state: 1, tags });
+    const list = await this.menuRepository.createQueryBuilder().where(where).select('*').addSelect('pidId', 'parent').getRawMany();
+    return list.map(item => reWriteObj(item, ['id', 'sort', 'keys', 'name', 'values', 'icon', 'parent']));
+    // return nestedParseList(await this.menuRepository.manager.getTreeRepository(Menu).findTrees());
+    // return await Menu.getList({}, Menu.handleWhere({ types: 'router', state: 1, tags }));
+  }
+
+  @Get('options')
+  @ApiOperation({ summary: '路由选项' })
+  async getOptions(@Query('tags') tags: string) {
+    const data = await Menu.getList({}, Menu.handleWhere({ tags }));
+    return (<Menu[]>data.list).map(item => ({ label: item.name, value: item.id }));
   }
 }

@@ -22,7 +22,11 @@ export class Menu extends PowerModel {
 
   @Column({ /* 名称 */ length: 100 }) name: string;
 
+  @Column({ /* 排序*/ default: 0 }) sort: number;
+
   @Column({ /* 标识 */ length: 100 }) keys: string;
+
+  @Column({ /* 图标 */ length: 50, nullable: true }) icon: string;
 
   @Column({ /* 内容 */ length: 255, nullable: true }) values: string;
 
@@ -35,6 +39,8 @@ export class Menu extends PowerModel {
     target.tags = body.tags;
     target.name = body.name;
     target.keys = body.keys;
+    target.sort = body.sort;
+    target.icon = body.icon;
     target.types = body.types;
     target.state = body.state;
     target.values = body.values;
@@ -48,6 +54,7 @@ export class Menu extends PowerModel {
       keys: { name: 'keys' },
       types: { name: 'types' },
       name: { name: 'name', handle: Like },
+      state: { name: 'state', handle: String },
     };
   }
 }

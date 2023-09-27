@@ -21,6 +21,14 @@ export class SsoMenuCreateDto {
   @ApiProperty({ description: '标识' })
   keys: string;
 
+  @IsOptional()
+  @ApiProperty({ description: '排序', required: false })
+  sort: number;
+
+  @IsOptional()
+  @ApiProperty({ description: '图标', required: false })
+  icon: string;
+
   @IsString()
   @ApiProperty({ description: '内容' })
   values: string;
