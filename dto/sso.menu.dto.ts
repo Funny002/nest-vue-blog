@@ -1,6 +1,6 @@
 import { IsEnum, IsNumber, IsNumberString, IsOptional, IsString } from 'class-validator';
-import { BaseState, MenuTypes } from '@app/mysql';
 import { ApiProperty } from '@nestjs/swagger';
+import { MenuTypes } from '@app/mysql';
 
 /* 创建 */
 export class SsoMenuCreateDto {
@@ -37,9 +37,10 @@ export class SsoMenuCreateDto {
   @ApiProperty({ enum: MenuTypes, description: '分类' })
   types: MenuTypes;
 
-  @IsEnum(BaseState)
-  @ApiProperty({ enum: BaseState, description: '状态' })
-  state: BaseState;
+  @IsString()
+  @IsEnum(['0', '1'])
+  @ApiProperty({ enum: ['0', '1'], description: '状态' })
+  state: string;
 }
 
 export class SsoMenuPageDto {
@@ -68,10 +69,11 @@ export class SsoMenuPageDto {
   @ApiProperty({ enum: MenuTypes, description: '分类', required: false })
   types: MenuTypes;
 
+  @IsString()
   @IsOptional()
-  @IsEnum(BaseState)
-  @ApiProperty({ enum: BaseState, description: '状态', required: false })
-  state: BaseState;
+  @IsEnum(['0', '1'])
+  @ApiProperty({ enum: ['0', '1'], description: '状态' })
+  state: string;
 }
 
 /* 树 */

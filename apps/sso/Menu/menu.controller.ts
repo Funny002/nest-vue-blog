@@ -5,7 +5,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ManualException } from '@app/common/error';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MenuService } from './menu.service';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Menu } from '@app/mysql';
 import { reWriteObj } from '@app/tools';
 
@@ -49,8 +49,24 @@ export class MenuController {
   async getList(@PaginationParams() page: PaginationRequest<SsoMenuPageDto>) {
     const params = page.params;
     if ('name' in params) params.name = `%${ params.name }%`;
-    const data = await Menu.getList(page, Menu.handleWhere(params));
-    return Pagination.of(page, data.count, data.list);
+    const sql = this.menuRepository.createQueryBuilder().select('*').addSelect('pidId', 'parent');
+    const list = await sql.where(Menu.handleWhere(params)).getRawMany();
+
+    async function getParents(ids: number[]) {
+      if (!ids.length) return [];
+      const data = await sql.where({ id: In(ids) }).getRawMany();
+      return data.concat(await getParents(data.map(item => item.parent)));
+    }
+
+    const data: any[] = [];
+    const ids: number[] = [];
+    for (const item of list.concat(await getParents(list.map(item => item.parent)))) {
+      if (!ids.includes(item.id)) {
+        ids.push(item.id);
+        data.push(item);
+      }
+    }
+    return data;
   }
 
   @Get('info/:id')
@@ -76,8 +92,6 @@ export class MenuController {
     const where = Menu.handleWhere({ types: 'router', state: 1, tags });
     const list = await this.menuRepository.createQueryBuilder().where(where).select('*').addSelect('pidId', 'parent').getRawMany();
     return list.map(item => reWriteObj(item, ['id', 'sort', 'keys', 'name', 'values', 'icon', 'parent']));
-    // return nestedParseList(await this.menuRepository.manager.getTreeRepository(Menu).findTrees());
-    // return await Menu.getList({}, Menu.handleWhere({ types: 'router', state: 1, tags }));
   }
 
   @Get('options')
