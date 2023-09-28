@@ -8,17 +8,10 @@
         <!--        :style="{top: (menuActive.index * 50) + 'px'}"-->
         <div></div>
       </div>
-      <i class="bi bi-123"></i>
       <template v-for="item in props.menu">
-        {{ item.name }}
-        {{ item.icon }}
-        <!--              <el-tooltip v-if="item.icon" :content="item.label" :visible="item.label ? undefined : false" placement="right" effect="light">-->
-        <!--                <div class="var-layoutAdmin__side&#45;&#45;item" @click="onClick(item)">-->
-        <!--                  <el-icon>-->
-        <!--                    <component :is="item.icon"/>-->
-        <!--                  </el-icon>-->
-        <!--                </div>-->
-        <!--              </el-tooltip>-->
+        <el-tooltip v-if="item.icon" :content="item.name " :visible="item.name  ? undefined : false" placement="right" effect="light">
+          <bootstrap-icon class="var-layoutAdmin__side--item" :name="item.icon" @click="onClick(item)"/>
+        </el-tooltip>
       </template>
     </div>
     <div class="var-layoutAdmin__body">
@@ -67,12 +60,11 @@
 
 <script lang="ts">export default { name: 'LayoutAdmin' };</script>
 <script lang="ts" setup>
+import BootstrapIcon from '@plugin/bootstrap-icon/index.vue';
 import { Expand } from '@element-plus/icons-vue';
 import { useWebConfig } from '@stores/config';
 import { computed, reactive } from 'vue';
 import { storeToRefs } from 'pinia';
-import { icons } from '@plugin/bootstrap-icon';
-
 
 interface Props {
   menu: any[];
@@ -94,8 +86,6 @@ const isExpand = computed(() => {
   return true;
 });
 
-console.log('layoutAdmin -> icon', icons);
-console.log('layoutAdmin -> menu', props.menu);
 </script>
 
 <style lang="scss" src="./style.scss"/>

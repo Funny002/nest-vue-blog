@@ -1,4 +1,4 @@
-import 'bootstrap-icons/font/bootstrap-icons.min.css';
 import bootstrapIcons from 'bootstrap-icons/font/bootstrap-icons.json';
+import 'bootstrap-icons/font/bootstrap-icons.min.css';
 
-export const icons = Object.keys(bootstrapIcons);
+export const IconList = Object.keys(bootstrapIcons);

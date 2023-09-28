@@ -7,6 +7,7 @@ export interface Field {
   label?: string;
   labelWidth?: string;
   // ----------------------------------------------------------------
+  slot?: string;
   type: FieldType;
   placeholder?: string;
   options?: Array<{ value: string, label: string }>;

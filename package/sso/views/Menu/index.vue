@@ -8,22 +8,15 @@
       <div class="var-viewMenu__header">
         <dynamic-form class="var-viewMenu__header-form" ref="formRef" :gutter="10" :fields="data.fields" :rules="data.rules" v-model="data.formData"/>
         <div class="var-viewMenu__header-button">
+          <el-button type="primary" @click.stop="getList" :icon="Search">搜索</el-button>
           <el-button type="primary" @click.stop="AddDialogRef?.init()" :icon="Plus">添加</el-button>
         </div>
       </div>
-      <var-table ref="tableRef" :value="data.list" :data="data.columns"/>
-      <el-pagination
-        small
-        background
-        hide-on-single-page
-        :total="data.page.total"
-        @current-change="getList"
-        class="var-viewMenu__footer"
-        @size-change="onPageSizeChange"
-        :page-sizes="[10, 20, 50, 100]"
-        v-model:page-size="data.page.pageSize"
-        v-model:page-count="data.page.pageCount"
-        layout="prev, pager, next, sizes, total, ->, jumper"/>
+      <var-table ref="tableRef" :value="data.list" :data="data.columns" row-key="id">
+        <template v-slot:icon="{row}">
+          <bootstrap-icon :name="row['icon']"/>
+        </template>
+      </var-table>
     </div>
   </div>
   <menu-dialog ref="AddDialogRef" :tags="data.tagsValue" @callback="getList"/>
@@ -34,13 +27,14 @@
 import MenuDialog from './src/dialog.vue';
 import VarTable from '@models/VatTable/index.vue';
 import DynamicForm from '@models/DynamicForm/index.vue';
+import BootstrapIcon from '@plugin/bootstrap-icon/index.vue';
 //
 import { ApiMenuList, ApiMenuRemove, ApiMenuSaveState, MenuItem } from '@api/menu';
 import { TableFieldsItem } from '@models/VatTable/types';
+import { Plus, Search } from '@element-plus/icons-vue';
+import { listToTree, treeSort } from '@utils/object';
 import { onMounted, reactive, ref } from 'vue';
-import { Plus } from '@element-plus/icons-vue';
 import { MessageError } from '@utils/message';
-import { rewriteObj } from '@utils/object';
 import { ElMessage } from 'element-plus';
 import { throttle } from '@utils/limit';
 import { useRoute } from 'vue-router';
@@ -61,17 +55,16 @@ const data = reactive<any>({
   // table
   list: [],
   columns: [
-    // { label: '序号', type: 'index', width: '50px', align: 'center' },
-    { label: '排序', prop: 'sort', width: '50px', align: 'center' },
     { label: '标题', prop: 'name' },
+    { label: '排序', prop: 'sort', width: '50px', align: 'center' },
     { label: '标识', prop: 'keys' },
     { label: '分类', prop: 'types', type: 'tags', options: typesOptions },
+    { label: '图标', prop: 'icon', slot: 'icon', width: '50px', align: 'center' },
     { label: '内容', prop: 'values' },
-    { label: '状态', prop: 'state', type: 'status', activeText: '启用', inactiveText: '禁用', activeValue: 1, inactiveValue: 0, inlinePrompt: true, change: onStateChange },
+    { label: '状态', prop: 'state', type: 'status', activeText: '启用', inactiveText: '禁用', activeValue: '1', inactiveValue: '0', inlinePrompt: true, change: onStateChange },
     { label: '创建时间', prop: 'create_time', type: 'date', format: 'Y-M-D H:I:S' },
     { label: '操作', type: 'button', width: '240px', options: ButtonOptions, group: true, align: 'center', click: onButtonClick },
   ],
-  page: { pageCount: 1, pageSize: 20, total: 0, orderBy: 'sort', orderKey: 'ASC' },
   // form
   formData: {},
   fields: [
@@ -86,23 +79,14 @@ const data = reactive<any>({
 const onTagsChange = throttle(getList, 300, () => data.load = true);
 
 function getParams() {
-  const page = rewriteObj(data.page, ['pageCount', 'pageSize', 'orderBy', 'orderKey']);
-  return Object.assign({ tags: data.tagsValue }, data.formData, page);
-}
-
-function onPageSizeChange() {
-  data.page.pageCount = 1;
-  console.log(data.page);
-  getList();
+  return Object.assign({ tags: data.tagsValue }, data.formData);
 }
 
 function getList() {
   data.load = true;
   ApiMenuList(getParams()).then(({ data: res }) => {
     if (res.code === 0) {
-      const { list, ...page } = res.data;
-      data.list = list;
-      data.page = page;
+      data.list = treeSort(listToTree(res.data));
     } else {
       ElMessage.error(res.message);
     }
@@ -110,7 +94,6 @@ function getList() {
 }
 
 onMounted(() => {
-  data.columns[0].page = data.page;
   data.tagsValue = route.query.tags || 'sso';
   getList();
 });
@@ -135,19 +118,18 @@ function onRemoveButton(row: MenuItem) {
   });
 }
 
-function onButtonClick(keys: number, name: string) {
-  const FuncMap: { [Name: string]: (row: MenuItem, keys: number) => void } = {
+function onButtonClick(row: any, name: string) {
+  const FuncMap: { [Name: string]: (row: MenuItem) => void } = {
     'view': onViewButton,
     'remove': onRemoveButton,
     'save': AddDialogRef.value?.save,
     'addChild': AddDialogRef.value?.addChild,
   };
-  FuncMap[name] && FuncMap[name](data.list[keys], keys);
+  FuncMap[name] && FuncMap[name](row);
 }
 
-function onStateChange(index: number, state: number) {
+function onStateChange(row: any, state: number) {
   data.load = true;
-  const row = data.list[index];
   ApiMenuSaveState(row.id, state).then(({ data: res }) => {
     if (res.code === 0) {
       row.state = state;

@@ -38,3 +38,18 @@ export function listToTree(target: any[], key = 'id', parent = 'parent') {
   }
   return roots;
 }
+
+export function treeSort(target: any[], type: 'asc' | 'desc' = 'asc', key = 'sort', children = 'children') {
+  function handlerTreeSort(a: any, b: any) {
+    return type === 'asc' ? a[key] - b[key] : b[key] - a[key];
+  }
+
+  for (const item of target) {
+    if (item[children] && item[children].length) {
+      treeSort(item[children], type, key, children);
+      item[children] = item[children].sort(handlerTreeSort);
+    }
+  }
+
+  return target.sort(handlerTreeSort);
+}

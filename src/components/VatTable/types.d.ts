@@ -9,11 +9,11 @@ export interface Fields {
   minWidth?: string;
   align?: FieldsAlign;
   headerAlign?: FieldsAlign;
-  sortable?: 'custom' | boolean;
   showOverflowTooltip?: boolean;
+  sortable?: 'custom' | boolean;
 }
 
-export type handleCallback<T = any> = (index: number, value: T) => void
+export type handleCallback<T = any> = (row: any, value: T, index: number) => void
 
 // =================================================================================
 export interface ButtonFieldItem {
@@ -81,9 +81,9 @@ export interface TagsField {
   types: 'primary' | 'success' | 'info' | 'warning' | 'danger'; // options[Name].type 优先级高
   options: { [Name: string]: string | { value: string, type: 'primary' | 'success' | 'info' | 'warning' | 'danger' } };
 
-  click($index: number, value: string, event: MouseEvent): void;
+  click(row: any, value: string, $index: number, event: MouseEvent): void;
 
-  close($index: number, value: string, event: MouseEvent): void;
+  close(row: any, value: string, $index: number, event: MouseEvent): void;
 }
 
 // =================================================================================

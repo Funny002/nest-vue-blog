@@ -3,7 +3,10 @@
     <el-row v-bind="getLayout">
       <template v-for="(fields, key) in props.fields">
         <el-col v-show="('show' in fields) ? fields.show : true" v-bind="rewriteObj(fields,['span', 'offset', 'push', 'pull'])">
-          <dynamic-form-field :fields="fields" :key="`${key}-${fields.type}`"/>
+          <dynamic-form-item v-if="fields.slot" :fields="fields">
+            <slot :name="fields.slot" :fields="fields" :value="props.modelValue[fields.prop]"/>
+          </dynamic-form-item>
+          <dynamic-form-field v-else :fields="fields" :key="`${key}-${fields.type}`"/>
         </el-col>
       </template>
     </el-row>
@@ -13,6 +16,7 @@
 <script lang="ts">export default { name: 'DynamicForm', inheritAttrs: true };</script>
 <script lang="ts" setup>
 import DynamicFormField from './src/field.vue';
+import DynamicFormItem from './src/item.vue';
 import { computed, provide, ref } from 'vue';
 import { rewriteObj } from '@utils/object';
 import { Fields } from './types';

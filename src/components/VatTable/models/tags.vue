@@ -8,7 +8,7 @@ import { rewriteObj } from '@utils/object';
 import { TagsField } from '../types';
 import { computed } from 'vue';
 
-const props = withDefaults(defineProps<{ fields: TagsField; value: any; index: number }>(), {});
+const props = withDefaults(defineProps<{ fields: TagsField; value: any; index: number, row: any }>(), {});
 const values = computed(() => props.fields.options[props.value] || props.value);
 
 const bindProps = computed(() => {
@@ -20,7 +20,8 @@ const bindProps = computed(() => {
 });
 
 function onClick(keys: 'click' | 'close', event: MouseEvent) {
-  const func = props.fields[keys];
-  func && func(props.index, props.fields.name || values.value || values, event);
+  const { fields, row } = props;
+  const func = fields[keys];
+  func && func(row, fields.name || values.value || values, props.index, event);
 }
 </script>

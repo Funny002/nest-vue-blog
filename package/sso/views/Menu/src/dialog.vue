@@ -1,6 +1,10 @@
 <template>
   <var-dialog ref="dialogRef" :title="`${data.save ?' 修改' : '添加'}菜单`" :modal="false" width="400px" :loading="data.load">
-    <dynamic-form ref="formRef" v-model="data.form" :fields="data.fields" :rules="data.rules" label-width="50px"/>
+    <dynamic-form ref="formRef" v-model="data.form" :fields="data.fields" :rules="data.rules" label-width="50px">
+      <template v-slot:icon="{fields: {prop}}">
+        <bootstrap-icon-select v-model="data.form[prop]"/>
+      </template>
+    </dynamic-form>
     <template v-slot:footer>
       <el-button type="primary" :icon="Check" :loading="data.load" @click.stop="onSubmit">提交</el-button>
     </template>
@@ -18,6 +22,7 @@ import { Check } from '@element-plus/icons-vue';
 import verify from '@models/DynamicForm/utils';
 import { MessageError } from '@utils/message';
 import { rewriteObj } from '@utils/object';
+import BootstrapIconSelect from '@plugin/bootstrap-icon/select.vue';
 
 const props = withDefaults(defineProps<{ tags: string }>(), {});
 
@@ -43,8 +48,9 @@ const data = reactive<any>({
     { prop: 'keys', type: 'text', label: '标识', clearable: true },
     { prop: 'types', type: 'select', label: '分类', clearable: true, options: typesOptions },
     { prop: 'values', type: 'text', label: '内容', clearable: true },
+    { prop: 'icon', slot: 'icon', label: '图标' },
     { prop: 'sort', type: 'number', label: '排序', clearable: true, min: 0 },
-    { prop: 'state', type: 'status', label: '状态', clearable: true, activeText: '启用', inactiveText: '禁用', activeValue: 1, inactiveValue: 0 },
+    { prop: 'state', type: 'status', label: '状态', clearable: true, activeText: '启用', inactiveText: '禁用', activeValue: '1', inactiveValue: '0' },
   ],
   rules: {
     name: [{ required: true, validator: verify(), trigger: 'change' }],
@@ -69,7 +75,7 @@ function init(row?: MenuItem) {
   data.saveId = row?.id;
   dialogRef.value?.show();
   nextTick(() => formRef.value?.ref.clearValidate());
-  data.form = (row && rewriteObj(row, ['name', 'keys', 'tags', 'types', 'values', 'state', 'sort'])) || { tags: props.tags, state: 0 };
+  data.form = (row && rewriteObj(row, ['name', 'keys', 'tags', 'types', 'values', 'state', 'sort', 'icon'])) || { tags: props.tags, state: 0 };
 }
 
 function save(row: MenuItem) {

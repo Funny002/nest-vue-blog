@@ -28,7 +28,7 @@ import { ButtonField, ButtonFieldItem } from '../types';
 import { ArrowDown } from '@element-plus/icons-vue';
 import { rewriteObj } from '@utils/object';
 
-const props = withDefaults(defineProps<{ fields: ButtonField; index: number }>(), {});
+const props = withDefaults(defineProps<{ fields: ButtonField; index: number, row: any }>(), {});
 
 const styleProps = computed(() => {
   const target = rewriteObj(props.fields, ['max', 'group', 'hasIcon', 'hasText']);
@@ -82,7 +82,7 @@ function handleStyle(data: ButtonFieldItem) {
 onMounted(() => reRender());
 
 function onClick(name?: string) {
-  const { index, fields: { click } } = props;
-  click && click(index, name || '');
+  const { index, fields: { click }, row } = props;
+  click && click(row, name || '', index);
 }
 </script>

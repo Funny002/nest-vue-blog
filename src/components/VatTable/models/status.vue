@@ -18,6 +18,6 @@ const bindStyle = computed(() => {
 
 function onChange(value: any) {
   const { fields: { change }, index } = props;
-  change && change(index, value);
+  change && change(props.row, value, index);
 }
 </script>

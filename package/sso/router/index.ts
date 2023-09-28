@@ -29,15 +29,17 @@ async function useMenuRouterFunc(to: any, next: any) {
     }
     menuRouter.setRouter(res.data);
     // ==========================================================
-    router.addRoute({
-      path: '/',
-      name: 'App',
-      children: handlerRouter(menuRouter.router),
-      component: () => import('@sso/layout/index.vue'),
-    });
-    next({ path: to.path, replace: true });
-    menuRouter.setHas(true);
-    return true;
+    if (menuRouter.router.length) {
+      router.addRoute({
+        path: '/',
+        name: 'App',
+        children: handlerRouter(menuRouter.router),
+        component: () => import('@sso/layout/index.vue'),
+      });
+      next({ path: to.path, replace: true });
+      menuRouter.setHas(true);
+      return true;
+    }
   }
   return false;
 }

@@ -1,11 +1,7 @@
 <template>
-  <el-table :data="props.value">
+  <el-table :data="props.value" v-bind="bindProps">
     <template v-for="item of props.data">
-      <el-table-column
-          v-if="item.slot"
-          v-bind="onBindProps(item)"
-          :show-overflow-tooltip="true"
-          v-show="'show' in item ? item.show : true">
+      <el-table-column v-if="item.slot" v-bind="onBindProps(item)" :show-overflow-tooltip="true" v-show="'show' in item ? item.show : true">
         <template v-slot="{$index, row, column}">
           <slot :name="item.slot" :$index="$index" :row="row" :column="column"/>
         </template>
@@ -24,13 +20,14 @@
 <script lang="ts">export default { name: 'VarTable' };</script>
 <script lang="ts" setup>
 import VarTableField from './src/field.vue';
-import { Fields } from './types';
-import { reactive } from 'vue';
 import { rewriteObj } from '@utils/object';
+import { computed, reactive } from 'vue';
+import { Fields } from './types';
 
 interface Props {
   value?: any[];
   data?: Fields[];
+  rowKey?: string;
   stripe?: boolean;
   border?: boolean;
   emptyText?: string;
@@ -45,6 +42,8 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const data = reactive({});
+
+const bindProps = computed(() => rewriteObj(props, ['rowKey']));
 
 function onBindProps(item: Fields) {
   if (!('showOverflowTooltip' in item)) item.showOverflowTooltip = true;

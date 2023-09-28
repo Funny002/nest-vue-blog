@@ -1,26 +1,19 @@
 <template>
-  <el-form-item v-if="data.component" v-bind="bindProps" :style="hasShow">
+  <dynamic-form-item :fields="props.fields" v-if="data.component">
     <component :is="data.component" v-bind="props.fields"/>
-  </el-form-item>
+  </dynamic-form-item>
 </template>
 
 <script lang="ts">export default { name: 'DynamicFormField', inheritAttrs: false };</script>
 <script lang="ts" setup>
-import { computed, onMounted, reactive, shallowRef, watch } from 'vue';
-import { rewriteObj } from '@utils/object';
+import { onMounted, reactive, shallowRef, watch } from 'vue';
+import DynamicFormItem from './item.vue';
 import * as Module from './module';
 import { Fields } from '../types';
 
 interface Props {fields: Fields;}
 
 const props = withDefaults(defineProps<Props>(), {});
-
-const hasShow = computed(() => {
-  const state = 'show' in props.fields ? props.fields.show : true;
-  return { display: state ? 'flex' : 'none' };
-});
-
-const bindProps = computed(() => rewriteObj(props.fields, ['label', 'prop', 'labelWidth']));
 
 const data = reactive({ component: undefined, keys: '' });
 
