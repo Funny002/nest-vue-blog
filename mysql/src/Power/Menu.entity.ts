@@ -50,7 +50,7 @@ export class Menu extends PowerModel {
 
   protected handleWhere(): { [p: string]: { name?: string; handle?: any } } {
     return {
-      tags: { name: 'tags' },
+      tag: { name: 'tags' },
       keys: { name: 'keys' },
       types: { name: 'types' },
       name: { name: 'name', handle: Like },

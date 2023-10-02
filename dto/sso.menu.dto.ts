@@ -47,7 +47,7 @@ export class SsoMenuPageDto {
   @IsString()
   @IsOptional()
   @ApiProperty({ description: '标签', required: false })
-  tags: string;
+  tag: string;
 
   @IsString()
   @IsOptional()
