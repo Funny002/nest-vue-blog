@@ -58,28 +58,22 @@
         </div>
       </el-popover>
     </template>
-    <var-nav :data="data.nav.list" v-model="data.nav.active"/>
-    <router-view/>
   </layout-admin>
 </template>
 
 <script lang="ts">export default { name: 'Admin' };</script>
 <script lang="ts" setup>
-import { Bell, ChatDotSquare, Expand, Search, SwitchButton } from '@element-plus/icons-vue';
+import { Bell, ChatDotSquare, Expand, Search, SwitchButton, User } from '@element-plus/icons-vue';
 import LayoutAdmin from '@/layoutAdmin/index.vue';
 import { useMenuRouter } from '@stores/router';
-import VarNav from '@models/VarNav/index.vue';
 import { ElMessage } from 'element-plus';
 import { useUsers } from '@stores/user';
 import { ApiLogout } from '@api/sign';
-import { MenuItem } from '@api/menu';
-import { reactive } from 'vue';
 import { storeToRefs } from 'pinia';
+import { reactive } from 'vue';
 
 const user = useUsers();
-
 const menuRouter = useMenuRouter();
-
 const data = reactive<any>({
   isMini: false,
   nav: {
@@ -93,10 +87,10 @@ const data = reactive<any>({
 });
 
 function onUserInfo() {
-
 }
 
-function onMyMeg() {}
+function onMyMeg() {
+}
 
 function onLogout() {
   ApiLogout().then(({ data: res }) => {

@@ -12,7 +12,7 @@ export const useWebConfig = defineStore('web-config', {
     title: storage.get('title') || '',
   }),
   getters: {
-    logo: ({ logo }) => logo,
+    getLogo: ({ logo }) => logo,
   },
   actions: {
     setLogo(value: string) {

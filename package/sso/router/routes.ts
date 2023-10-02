@@ -17,8 +17,8 @@ export const routes: RouteRecordRaw [] = [
     redirect: '/sign/login',
     component: () => import('@sso/sign/index.vue'),
     children: [
-      { name: '登录', path: 'login', component: () => import('@sso/sign/login.vue') },
-      { name: '注册', path: 'register', component: () => import('@sso/sign/register.vue') },
+      { name: '/sign/login', path: 'login', meta: { name: '登录' }, component: () => import('@sso/sign/login.vue') },
+      { name: '/sign/register', path: 'register', meta: { name: '注册' }, component: () => import('@sso/sign/register.vue') },
     ],
   },
   { name: 'Error', path: '/:pathMatch(.*)*', component: () => import('@sso/error/index.vue') },

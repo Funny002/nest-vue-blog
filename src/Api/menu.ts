@@ -12,10 +12,11 @@ export interface MenuItem {
   icon: string;
   state: number;
   values: string;
+  router?: string;
   create_time: string;
   update_time: string;
-  mutex: null | string[],
   children?: MenuItem[];
+  mutex: null | string[];
 }
 
 interface MenuData {

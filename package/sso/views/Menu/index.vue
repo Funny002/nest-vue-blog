@@ -79,7 +79,7 @@ const data = reactive<any>({
 const onTagsChange = throttle(getList, 300, () => data.load = true);
 
 function getParams() {
-  return Object.assign({ tags: data.tagsValue }, data.formData);
+  return Object.assign({ tag: data.tagsValue }, data.formData);
 }
 
 function getList() {

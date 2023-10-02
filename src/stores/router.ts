@@ -1,10 +1,11 @@
 import { MenuItem } from '@api/menu';
 import { defineStore } from 'pinia';
 
-function useSort(target: MenuItem[]) {
+function useSort(target: MenuItem[], route = '') {
   for (const item of target) {
+    item['router'] = [route, item.keys].join('/').toLowerCase();
     if (item.children && item.children.length) {
-      item.children = useSort(item.children);
+      item.children = useSort(item.children, item['router']);
     }
   }
   return target.sort((a, b) => a.sort - b.sort);
@@ -31,16 +32,15 @@ function handlerTree(data: (MenuItem & { parent?: number })[]) {
 }
 
 export const useMenuRouter = defineStore('menuRouter', {
-  state: (): { list: MenuItem[]; hasRouter: boolean; } => ({ list: [], hasRouter: false }),
+  state: (): { list: MenuItem[]; hasRouter: boolean; tree: MenuItem[] } => ({ list: [], hasRouter: false, tree: [] }),
   getters: {
     has: ({ hasRouter }) => hasRouter,
-    tree: ({ list }) => handlerTree(list),
-    router: ({ list }) => {
+    router: ({ tree }) => {
       function handlerRouter(list: any[]) {
         const data: any[] = [];
         for (const item of list) {
-          const { keys, name, values: component, children } = item;
-          const target = { path: keys.toLowerCase(), name: keys, mate: { name }, component, children };
+          const { keys, name, values: component, children, router } = item;
+          const target = { path: keys.toLowerCase(), name: router, mate: { name }, component, children };
           if (children && children.length) {
             target.children = handlerRouter(children);
           }
@@ -49,7 +49,7 @@ export const useMenuRouter = defineStore('menuRouter', {
         return data;
       }
 
-      return handlerRouter(handlerTree(list));
+      return handlerRouter(tree);
     },
   },
   actions: {
@@ -57,7 +57,8 @@ export const useMenuRouter = defineStore('menuRouter', {
       this.hasRouter = state;
     },
     setRouter(router: MenuItem[]) {
-      this.list = router;
+      this.list = [...router.map(v => Object.assign({}, v))];
+      this.tree = handlerTree(router);
     },
   },
 });

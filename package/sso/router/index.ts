@@ -33,8 +33,8 @@ async function useMenuRouterFunc(to: any, next: any) {
       router.addRoute({
         path: '/',
         name: 'App',
-        children: handlerRouter(menuRouter.router),
         component: () => import('@sso/layout/index.vue'),
+        children: handlerRouter(menuRouter.router).concat(routes[2]),
       });
       next({ path: to.path, replace: true });
       menuRouter.setHas(true);

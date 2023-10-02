@@ -16,7 +16,7 @@
           :show-fill="data.fill"
           :search="data.search"
           :active="props.modelValue"
-          :style="{width:`calc(1em * ${props.width})`}"/>
+          :style="{width:`calc((1em + 10px) * ${props.width})`}"/>
       </div>
     </div>
     <template v-slot:reference>
