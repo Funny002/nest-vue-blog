@@ -1,19 +1,20 @@
+// 防抖
 export function document(func: any, timeout = 300) {
   let state: NodeJS.Timeout;
   return function (...args: any[]) {
-    if (state) return;
-    state = setTimeout(() => {
-      // ...
-    }, timeout);
-    func(...args);
+    state && clearTimeout(state);
+    state = setTimeout(() => func(...args), timeout);
   };
 }
 
-export function throttle(func: any, timeout = 300, before?: (...args: any[]) => any) {
-  let state: NodeJS.Timeout;
+// 节流
+export function throttle(func: any, timeout = 300, before?: (...args: any[]) => any[]) {
+  let state: boolean = false;
   return function (...args: any[]) {
-    if (state) clearTimeout(state);
-    args = before && (before(...args) || args); // 特殊调用方法
-    state = setTimeout(() => func(args), timeout);
+    if (state) return;
+    state = true;
+    setTimeout(() => state = false, timeout);
+    args = (before && before(...args)) || args;
+    func(...args);
   };
 }

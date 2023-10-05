@@ -25,8 +25,8 @@
         v-model:page-count="data.page.pageCount"
         layout="prev, pager, next, sizes, total, ->, jumper"/>
     </div>
+    <menu-dialog ref="AddDialogRef" :tags="data.tagsValue" @callback="getList"/>
   </div>
-  <menu-dialog ref="AddDialogRef" :tags="data.tagsValue" @callback="getList"/>
 </template>
 
 <script lang="ts">export default { name: 'Router' };</script>
@@ -83,7 +83,7 @@ const data = reactive<any>({
   rules: {},
 } as { columns: TableFieldsItem[] });
 
-const onTagsChange = throttle(getList, 300, () => data.load = true);
+const onTagsChange = throttle(getList, 300);
 
 function getParams() {
   const page = rewriteObj(data.page, ['pageCount', 'pageSize', 'orderBy', 'orderKey']);

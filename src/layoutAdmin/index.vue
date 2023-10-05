@@ -34,21 +34,26 @@
                 </template>
                 <el-menu-item v-for="child of item.children" :index="child['router']" @click="onMenuClick(item)">
                   <bootstrap-icon :name="child.icon"/>
-                  <span>{{ child.name }}</span>
+                  <template #title>{{ child.name }}</template>
                 </el-menu-item>
               </el-sub-menu>
               <el-menu-item v-else :index="item['router']" @click="onMenuClick(item)">
                 <bootstrap-icon :name="item.icon"/>
-                <span>{{ item.name }}</span>
+                <template #title>{{ item.name }}</template>
               </el-menu-item>
             </template>
           </el-menu>
         </div>
         <div class="var-layoutAdmin__container">
-          <var-nav/>
-          <main class="var-layoutAdmin__container--main">
-            <router-view/>
-          </main>
+          <var-nav v-model="data.navModel" v-model:data="data.navData" :default="data.navDefault" @change="onNavChange"/>
+          <router-view v-slot="{Component, route}">
+            <transition v-bind="handlerTransition(route)">
+              <main class="var-layoutAdmin__container--main" :key="route.fullPath">
+                <component v-if="Boolean(Component)" :is="Component"/>
+                <page-error v-else/>
+              </main>
+            </transition>
+          </router-view>
         </div>
       </div>
     </div>
@@ -57,58 +62,113 @@
 
 <script lang="ts">export default { name: 'LayoutAdmin' };</script>
 <script lang="ts" setup>
+import 'animate.css/animate.compat.css';
+import PageError from './src/PageError.vue';
+import VarNav from '@models/VarNav/index.vue';
 import BootstrapIcon from '@plugin/bootstrap-icon/index.vue';
+//
 import { computed, onBeforeMount, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import VarNav from '@models/VarNav/index.vue';
 import { useWebConfig } from '@stores/config';
 import { MenuItem } from '@api/menu';
 import { storeToRefs } from 'pinia';
 
-interface Props {
-  menu: MenuItem[];
-}
-
-const props = withDefaults(defineProps<Props>(), { menu: () => [] });
-
-const webConfig = useWebConfig();
-
-const data = reactive<{
-  config: any;
-  active: number;
-  isMini: boolean;
-}>({
-  active: 0,
-  isMini: false,
-  config: storeToRefs(webConfig),
-});
-
-const menuExpand = computed(() => {
-  const item = props.menu[data.active];
-  return !item ? [] : (item.children || []);
-});
+const props = withDefaults(defineProps<{ menu: MenuItem[]; }>(), { menu: () => [] });
 
 const route = useRoute();
 const router = useRouter();
+const webConfig = useWebConfig();
+
+interface State {
+  config: any;
+  active: number;
+  isMini: boolean;
+  navModel: string;
+  navDefault?: { icon: string; label: string; name: string; },
+  navData: { icon?: any, label: string; name: string; hasClose?: boolean; }[];
+}
+
+const data = reactive<State>({
+  active: -1,
+  navData: [],
+  isMini: false,
+  config: storeToRefs(webConfig),
+  navModel: route.fullPath.toLowerCase(),
+});
+
+const menuExpand = computed(() => (props.menu[data.active] || {})?.children || []);
+
+// 添加 nav 路由
+function setNavData({ icon, router: name, name: label }: MenuItem & { router: string }) {
+  const names = data.navData.map(({ name }) => name);
+  if (!names.includes(name)) data.navData.push({ icon, label, name });
+}
 
 onBeforeMount(() => {
   for (const [index, item] of Object.entries(props.menu)) {
-    if (route.fullPath.toLowerCase().indexOf('/' + item.keys.toLowerCase()) === 0) {
+    if (data.navModel.indexOf('/' + item.keys.toLowerCase()) === 0) {
       data.active = Number(index);
       break;
     }
   }
+  if (data.active === -1) {
+    data.active = 0;
+    let menu = props.menu;
+    for (let i = 0; i < menu.length; i++) {
+      if ((menu[i].children || []).length) {
+        menu = menu[i].children || [];
+        i--;
+      } else {
+        const { icon, router: name, name: label } = menu[i] as (MenuItem & { router: string });
+        data.navDefault = { icon, label, name };
+        onMenuClick(menu[i]);
+        break;
+      }
+    }
+  } else {
+    if (menuExpand.value.length) {
+      function initNavData(list: MenuItem[]) {
+        for (const item of list) {
+          if (item.router === data.navModel) {
+            setNavData(<any>item);
+            return true;
+          }
+          if (item.children && initNavData(item.children)) return true;
+        }
+        return false;
+      }
+
+      initNavData(menuExpand.value);
+    } else {
+      setNavData(<any>props.menu[data.active]);
+    }
+    const { icon, router: name, name: label } = props.menu[0] as (MenuItem & { router: string });
+    data.navDefault = { icon, label, name };
+  }
 });
 
-function onMenuClick(menu: MenuItem) {
-  // 所有的菜单路由切换都经过这个，所以这里可以做一些统一的处理
-  router.push({ path: <string>menu['router'] });
-  // 统一管理操作 var-nav
+// 切换路由
+function onNavChange(path: string) {
+  data.navModel = path;
+  router.push({ path });
 }
 
+// 菜单点击
+function onMenuClick(menu: MenuItem) {
+  setNavData(<any>menu);
+  onNavChange(<string>menu['router']);
+}
+
+// 图标菜单点击
 function onClick(menu: MenuItem) {
   data.active = props.menu.indexOf(menu);
   if (!menu.children || !menu.children.length) onMenuClick(menu);
+}
+
+// 处理过度动画
+function handlerTransition(route: any) {
+  const { duration, enter = 'fadeInLeft', leave = 'fadeOutDown' } = route.mate?.transition || {};
+  return { duration, type: 'animation', enterActiveClass: 'animated ' + enter, leaveActiveClass: 'animated ' + leave };
 }
 </script>
 

@@ -15,6 +15,7 @@
 
   &__header {
     width: 100%;
+    z-index: 20;
     height: 50px;
     display: flex;
     padding: 0 10px;
@@ -53,6 +54,7 @@
   }
 
   &__menu {
+    z-index: 10;
     width: 190px;
     background-color: #fff;
     border-right: 1px solid #ddd;
@@ -85,11 +87,18 @@
   }
 
   &__container {
+    position: relative;
     width: calc(100vw - 50px);
+    height: calc(100vh - 50px);
 
     &--main {
+      width: 100%;
       overflow: hidden auto;
-      height: calc(100vh - 90px);
+      height: calc(100vh - 94px);
+
+      &.animated {
+        position: absolute;
+      }
     }
   }
 
@@ -122,6 +131,7 @@
 .var-layoutAdmin__side {
   width: 50px;
   color: #fff;
+  z-index: 30;
   height: 100vh;
   position: relative;
   background-color: #5e91f8;

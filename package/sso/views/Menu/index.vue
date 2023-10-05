@@ -36,7 +36,7 @@ import { listToTree, treeSort } from '@utils/object';
 import { onMounted, reactive, ref } from 'vue';
 import { MessageError } from '@utils/message';
 import { ElMessage } from 'element-plus';
-import { throttle } from '@utils/limit';
+import { document } from '@utils/limit';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
@@ -76,7 +76,7 @@ const data = reactive<any>({
   rules: {},
 } as { columns: TableFieldsItem[] });
 
-const onTagsChange = throttle(getList, 300, () => data.load = true);
+const onTagsChange = document(getList, 300);
 
 function getParams() {
   return Object.assign({ tag: data.tagsValue }, data.formData);

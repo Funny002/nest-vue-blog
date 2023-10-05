@@ -1,7 +1,16 @@
 .var-nav {
+  height: 44px;
   display: flex;
-  padding: 8px 10px;
+  padding: 10px 10px;
   align-items: center;
+
+  > * {
+    flex: 0 0 auto;
+
+    + * {
+      margin-left: 10px;
+    }
+  }
 
   > .el-button,
   > .el-dropdown > .el-button {
@@ -14,35 +23,24 @@
     }
   }
 
-  > * {
-    flex: 0 0 auto;
-
-    + * {
-      margin-left: 10px;
-    }
-  }
-
   &__container {
-    height: 24px;
+    height: 34px;
     flex: 1 1 auto;
-    overflow: auto hidden;
+    overflow: hidden;
+    align-self: flex-start;
   }
 
-  &__boyd {
-    height: 24px;
+  &__body {
     display: flex;
-    align-items: center;
 
     > * + * {
-      margin-left: 10px;
+      margin-left: 10px !important;
     }
   }
 
-  &__item {
-    &:hover .var-nav__icon {
-      width: 12px;
-      margin-left: 5px;
-    }
+  &__item:hover .var-nav__icon {
+    width: 12px;
+    margin-left: 5px;
   }
 
   &__icon {
@@ -50,5 +48,9 @@
     margin-left: 0;
     transition-duration: 0.1s;
     transition-property: width, margin-left;
+
+    &:hover {
+      color: #f44;
+    }
   }
 }
