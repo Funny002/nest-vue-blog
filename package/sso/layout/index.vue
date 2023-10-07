@@ -1,30 +1,23 @@
 <template>
   <layout-admin class="var-admin" :menu="data.menu">
     <template v-slot:header="{hasSideMenu}">
-      <div class="var-admin__headerNav sideBtn" @click="() => (data.isMini = !data.isMini)" v-show="hasSideMenu">
-        <el-icon>
-          <Expand/>
-        </el-icon>
-      </div>
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item>首页</el-breadcrumb-item>
-        <el-breadcrumb-item>组 - 1</el-breadcrumb-item>
-        <el-breadcrumb-item>菜单 - 1</el-breadcrumb-item>
-      </el-breadcrumb>
+      <el-tree-select :data="data.menu" filterable :props="{label: 'name', value: 'router'}">
+        <template v-slot="{ data: { name ,router} }">
+          <div>
+            <div>{{ name }}</div>
+            <div>{{ router }}</div>
+          </div>
+        </template>
+      </el-tree-select>
       <span style="margin: 0 auto;"></span>
-      <el-autocomplete :prefix-icon="Search" placeholder="菜单搜索" clearable/>
-      <div class="var-admin__headerNav">
+      <div class="var-layoutAdmin__header--btn">
         <el-badge>
-          <el-icon>
-            <ChatDotSquare/>
-          </el-icon>
+          <bootstrap-icon name="chat-left-dots"/>
         </el-badge>
       </div>
-      <div class="var-admin__headerNav">
+      <div class="var-layoutAdmin__header--btn">
         <el-badge is-dot>
-          <el-icon>
-            <Bell/>
-          </el-icon>
+          <bootstrap-icon name="bell"/>
         </el-badge>
       </div>
       <el-popover>
@@ -39,21 +32,15 @@
         </div>
         <el-divider style="margin: 10px 0 5px;"/>
         <div class="var-admin__user--item" @click.stop="onUserInfo">
-          <el-icon>
-            <User/>
-          </el-icon>
+          <bootstrap-icon name="person-circle"/>
           <span>个人资料</span>
         </div>
         <div class="var-admin__user--item" @click.stop="onMyMeg">
-          <el-icon>
-            <ChatDotSquare/>
-          </el-icon>
+          <bootstrap-icon name="chat-left-dots"/>
           <span>我的消息</span>
         </div>
         <div class="var-admin__user--item" @click.stop="onLogout">
-          <el-icon>
-            <SwitchButton/>
-          </el-icon>
+          <bootstrap-icon name="power"/>
           <span>退出登录</span>
         </div>
       </el-popover>
@@ -63,34 +50,30 @@
 
 <script lang="ts">export default { name: 'Admin' };</script>
 <script lang="ts" setup>
-import { Bell, ChatDotSquare, Expand, Search, SwitchButton, User } from '@element-plus/icons-vue';
 import LayoutAdmin from '@/layoutAdmin/index.vue';
+import BootstrapIcon from '@plugin/bootstrap-icon/index.vue';
+//
 import { useMenuRouter } from '@stores/router';
 import { ElMessage } from 'element-plus';
 import { useUsers } from '@stores/user';
 import { ApiLogout } from '@api/sign';
+import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { reactive } from 'vue';
 
 const user = useUsers();
+const router = useRouter();
 const menuRouter = useMenuRouter();
+
 const data = reactive<any>({
-  isMini: false,
-  nav: {
-    active: 'home',
-    list: [
-      { label: '首页', name: 'home', hasClose: false },
-      { label: '首页', name: 'huasji' },
-    ],
-  },
   menu: storeToRefs(menuRouter).tree,
 });
 
-function onUserInfo() {
-}
+console.log(data);
 
-function onMyMeg() {
-}
+function onUserInfo() {}
+
+function onMyMeg() {}
 
 function onLogout() {
   ApiLogout().then(({ data: res }) => {

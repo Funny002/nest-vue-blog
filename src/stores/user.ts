@@ -2,7 +2,9 @@ import storage from '@utils/storage';
 import { defineStore } from 'pinia';
 
 export interface UserInfo {
-
+  uid: number;
+  name: string;
+  email: string;
 }
 
 interface UsersStores {
@@ -12,17 +14,16 @@ interface UsersStores {
 }
 
 export const useUsers = defineStore('users', {
-  state: (): { data: UsersStores, hasLogin: boolean } => ({
+  state: (): { data: UsersStores } => ({
     data: {
       info: storage.get('users.info'),
       token: storage.get('users.token'),
       expires: storage.get('users.expires'),
     },
-    hasLogin: sessionStorage.getItem('hasLogin') === 'true',
   }),
   getters: {
-    has: ({ hasLogin }) => hasLogin,
     getInfo: ({ data: { info } }) => info,
+    has: () => () => storage.get('hasLogin'),
     accessToken: ({ data: { token } }) => token?.access,
     refreshToken: ({ data: { token } }) => token?.refresh,
     accessExpires: ({ data: { expires } }) => (expires?.access || 0) - ~~(Date.now() / 1000),
@@ -30,8 +31,7 @@ export const useUsers = defineStore('users', {
   },
   actions: {
     setHas(state: boolean) {
-      this.hasLogin = state;
-      sessionStorage.setItem('hasLogin', String(state));
+      storage.set('hasLogin', state, 10 * 1000);
     },
     updateStorage() {
       storage.set('users.info', this.data.info, 0, false, false);

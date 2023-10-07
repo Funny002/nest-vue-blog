@@ -8,7 +8,7 @@
         <div></div>
       </div>
       <template v-for="item in props.menu">
-        <el-tooltip v-if="item.icon" :content="item.name " :visible="item.name  ? undefined : false" placement="right" effect="light">
+        <el-tooltip v-if="item.icon" :content="item.name" :visible="item.name  ? undefined : false" placement="right" effect="light" :key="item.name">
           <div class="var-layoutAdmin__side--item" @click="onClick(item)">
             <bootstrap-icon :name="item.icon"/>
           </div>

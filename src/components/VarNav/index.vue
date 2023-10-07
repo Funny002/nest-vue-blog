@@ -19,7 +19,7 @@
     <el-button plain v-if="data.hasMoveBtn" @click.stop="onMove('right')">
       <bootstrap-icon name="chevron-double-right"/>
     </el-button>
-    <el-dropdown>
+    <el-dropdown v-if="navData.length">
       <el-button plain>
         <bootstrap-icon name="chevron-double-down"/>
       </el-button>
@@ -85,10 +85,10 @@ function itemHasClose(item: Nav) {
 
 const navData = computed<any>(() => {
   return [
-    { icon: '', label: '关闭左侧', command: 'left', show: true },
-    { icon: '', label: '关闭右侧', command: 'right', show: true },
-    { icon: '', label: '关闭其他', command: 'left', divided: true, show: true },
-    { icon: '', label: '关闭全部', command: 'all', show: true },
+    // { icon: '', label: '关闭左侧', command: 'left', show: true },
+    // { icon: '', label: '关闭右侧', command: 'right', show: true },
+    // { icon: '', label: '关闭其他', command: 'left', divided: true, show: true },
+    // { icon: '', label: '关闭全部', command: 'all', show: true },
   ];
 });
 

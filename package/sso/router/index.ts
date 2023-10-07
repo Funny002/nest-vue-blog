@@ -52,7 +52,7 @@ router.beforeEach(async function (to, from, next) {
     // 令牌不存在
     if (!users.accessToken) return next({ path: '/sign' });
     // 令牌为验证
-    if (!users.has) {
+    if (!users.has()) {
       const { data: res } = (await ApiHasToken(tags, users.accessToken));
       users.setHas(res.data);
       if (!res.data) {
@@ -65,7 +65,7 @@ router.beforeEach(async function (to, from, next) {
   }
 
   // 重定向
-  if (users.accessToken && users.has) {
+  if (users.accessToken && users.has()) {
     const redirect = (to.query.redirect as undefined | string) || window.location.origin;
     if (redirect !== window.location.origin) {
       const url = new URL(redirect);

@@ -42,7 +42,7 @@ const icons = computed(() => {
     });
     return props.name ? [props.name] : [];
   })();
-  return props.search ? data.filter(icon => icon.indexOf(<string>props.search) >= 0) : data;
+  return props.search ? data.filter(icon => icon.toLowerCase().indexOf((<string>props.search).toLowerCase()) >= 0) : data;
 });
 
 const emits = defineEmits(['click']);

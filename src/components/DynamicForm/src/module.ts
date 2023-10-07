@@ -11,3 +11,5 @@ export const status = defineAsyncComponent(() => import('../module/status.vue'))
 export const number = defineAsyncComponent(() => import('../module/number.vue')); // ?
 
 export const password = defineAsyncComponent(() => import('../module/password.vue')); // ?
+
+export const selectTree = defineAsyncComponent(() => import('../module/selectTree.vue')); // ?
