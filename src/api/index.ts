@@ -9,7 +9,7 @@ export interface AxiosConfig extends AxiosToolsConfig {
 
 export type AxiosRequest = AxiosRequestConfig & AxiosConfig
 
-export class Axios {
+export class Index {
   public readonly axios: AxiosInstance;
   public readonly request: AxiosTools;
   public readonly response: AxiosTools;
@@ -105,10 +105,10 @@ export class Axios {
   }
 }
 
-let http: Axios;
+let http: Index;
 
 export function useAxios(request?: (conf: AxiosRequest) => Promise<AxiosRequest>) {
-  return http || (http = new Axios(request));
+  return http || (http = new Index(request));
 }
 
 export default useAxios().axios;

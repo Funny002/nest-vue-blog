@@ -13,16 +13,16 @@
 
 <script lang="ts">export default { name: 'MenuDialog' };</script>
 <script lang="ts" setup>
-import DynamicForm from '@models/DynamicForm/index.vue';
 import VarDialog from '@models/VarDialog/index.vue';
+import DynamicForm from '@models/DynamicForm/index.vue';
+import BootstrapIconSelect from '@plugin/bootstrap-icon/select.vue';
 //
-import { ApiMenuOptions, ApiMenuPost, ApiMenuSave, MenuItem } from '@api/menu';
+import { ApiMenuOptions, ApiMenuPost, ApiMenuSave, MenuItem } from '@sso/api/menu';
 import { nextTick, onMounted, reactive, ref } from 'vue';
 import { Check } from '@element-plus/icons-vue';
 import verify from '@models/DynamicForm/utils';
 import { MessageError } from '@utils/message';
 import { rewriteObj } from '@utils/object';
-import BootstrapIconSelect from '@plugin/bootstrap-icon/select.vue';
 
 const props = withDefaults(defineProps<{ tags: string }>(), {});
 

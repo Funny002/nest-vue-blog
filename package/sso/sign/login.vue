@@ -41,10 +41,9 @@ import { onBeforeMount, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import verify from '@models/DynamicForm/utils';
 import { ElMessage } from 'element-plus';
+import { ApiLogin } from '@sso/api/sign';
 import { useUsers } from '@stores/user';
-import { ApiLogin } from '@api/sign';
 import storage from '@utils/storage';
-import { MessageError } from '@utils/message';
 
 const route = useRoute();
 const routes = useRouter();

@@ -1,5 +1,5 @@
 <template>
-  <div class="var-viewMenu">
+  <div class="var-admin__body var-viewMenu">
     <el-tabs v-model="data.tagsValue" @tab-change="onTagsChange">
       <el-tab-pane name="sso" label="Sso 服务"/>
       <!--      <el-tab-pane name="blog" label="Blog 服务"/>-->
@@ -31,7 +31,7 @@ import VarTable from '@models/VatTable/index.vue';
 import DynamicForm from '@models/DynamicForm/index.vue';
 import BootstrapIcon from '@plugin/bootstrap-icon/index.vue';
 //
-import { ApiMenuList, ApiMenuRemove, ApiMenuSaveState, MenuItem } from '@api/menu';
+import { ApiMenuList, ApiMenuRemove, ApiMenuSaveState, MenuItem } from '@sso/api/menu';
 import { TableFieldsItem } from '@models/VatTable/types';
 import { Delete, Plus, Search } from '@element-plus/icons-vue';
 import { listToTree, treeSort } from '@utils/object';

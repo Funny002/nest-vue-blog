@@ -1,4 +1,4 @@
-import Axios from './utils/Axios';
+import Axios from '@api';
 
 const baseUrl = window.__CONFIG__.baseApi + '/auth/';
 

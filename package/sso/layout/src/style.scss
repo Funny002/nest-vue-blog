@@ -33,4 +33,12 @@
       }
     }
   }
+
+  &__body {
+    padding: 20px;
+    margin: 0 10px;
+    border-radius: 6px;
+    background-color: #fff;
+    box-shadow: 0 0 2px #ddd;
+  }
 }

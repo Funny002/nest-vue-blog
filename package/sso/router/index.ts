@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useMenuRouter } from '@stores/router';
-import { ApiMenuRouter } from '@api/menu';
+import { ApiMenuRouter } from '@sso/api/menu';
+import { ApiHasToken } from '@sso/api/sign';
 import { ElMessage } from 'element-plus';
 import { useUsers } from '@stores/user';
-import { ApiHasToken } from '@api/sign';
 import { routes } from './routes';
 
 const modules = import.meta.glob('../views/**/**.*');
