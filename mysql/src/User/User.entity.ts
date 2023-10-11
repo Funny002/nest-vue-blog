@@ -4,7 +4,7 @@ import { Column, Entity, ILike, Index, Like } from 'typeorm';
 @Entity()
 @Index('unique', ['uid', 'name', 'email'], { unique: true })
 export class Users extends BaseModel {
-  @Column({ /* uid */ }) uid: number;
+  @Column({ /* uid */ length: 100 }) uid: string;
 
   @Column({ /* 昵称 */ length: 50 }) name: string;
 
@@ -18,7 +18,9 @@ export class Users extends BaseModel {
 
   @Column({ /* 个性说明 */ length: 250, nullable: true }) explain: string;
 
-  @Column({ /* 登录时间 */ type: 'datetime', nullable: true }) login_time: Date;
+  @Column({ /* 最后登录时间 */ type: 'datetime', nullable: true }) lest_login_time: Date;
+
+  @Column({ /* 角色 */ type: 'simple-array', nullable: true }) role: string[];
 
   @Column({ /* 权限 */ type: 'simple-array', nullable: true }) rower: string[];
 

@@ -10,10 +10,11 @@ import { Module } from '@nestjs/common';
 // 应用模块
 import { AuthModule } from './Auth/auth.module';
 // import { FileModule } from './File/file.module';
-import { RoleModule } from './Role/role.module';
+// import { RoleModule } from './Role/role.module';
 import { MenuModule } from './Menu/menu.module';
-import { PowerModule } from './Power/power.module';
-import { SettingModule } from './Setting/setting.module';
+// import { PowerModule } from './Power/power.module';
+import { UsersModule } from './Users/users.module';
+// import { SettingModule } from './Setting/setting.module';
 
 @Module({
   imports: [
@@ -31,10 +32,11 @@ import { SettingModule } from './Setting/setting.module';
     // module
     AuthModule,
     // FileModule,
-    RoleModule,
+    // RoleModule,
     MenuModule,
-    PowerModule,
-    SettingModule,
+    // PowerModule,
+    UsersModule,
+    // SettingModule,
   ],
   providers: [
     JwtService,

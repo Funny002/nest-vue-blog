@@ -9,8 +9,8 @@ import { In, Repository } from 'typeorm';
 import { Menu } from '@app/mysql';
 import { reWriteObj } from '@app/tools';
 
-@ApiTags('Menu 菜单')
 @Controller('menu')
+@ApiTags('Menu 菜单')
 export class MenuController {
   constructor(
     private readonly menuService: MenuService,

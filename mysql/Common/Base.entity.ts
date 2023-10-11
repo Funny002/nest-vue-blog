@@ -141,13 +141,11 @@ export abstract class BaseModel extends BaseEntity {
   }
 
   /** 列表数据 */
-  static async getList<T extends BaseModel>(this: { new(): T } & typeof BaseModel, page: PaginationRequest, where: FindOptionsWhere<T>[] | FindOptionsWhere<T>) {
+  static async getList<T extends BaseModel>(this: { new(): T } & typeof BaseModel, page: PaginationRequest, where: FindOptionsWhere<T>[] | FindOptionsWhere<T>, handlerList?: (list: T[]) => (any[] | Promise<any[]>)) {
     const { order, pageSize: take, pageSkip: skip } = page;
-    // const where = this.handleWhere(page.params);
-    return {
-      count: await this.getRepository().countBy(where),
-      list: await this.getRepository().find({ where, order, skip, take }),
-    };
+    const count = await this.getRepository().countBy(where);
+    const list = await this.getRepository().find({ where, order, skip, take });
+    return { count, list: (handlerList && (await handlerList(<T[]>list))) || list };
   }
 }
 
