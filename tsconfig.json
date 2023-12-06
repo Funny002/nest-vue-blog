@@ -14,19 +14,18 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "@/*":["src/*"],
-      "@api":["src/Api"],
-      "@api/*":["src/Api/*"],
-      "@utils":["src/utils"],
-      "@utils/*":["src/utils/*"],
-      "@stores/*":["src/stores/*"],
-      "@plugin/*":["src/plugin/*"],
+      // app
+      "@admin/*":["src/admin/*"],
+      // common
+      "@utils":["src/common/utils"],
       "@models/*":["src/components/*"],
-      "@directive":["src/directive"],
-      "@directive/*":["src/directive/*"],
-      "@sso/*":["package/sso/*"],
-    }
+      "@utils/*":["src/common/utils/*"],
+      "@stores/*":["src/common/stores/*"],
+      "@plugins/*":["src/common/plugins/*"],
+      "@layouts/*":["src/common/layouts/*"],
+      "@directives/*":["src/common/directives/*"]
+    },
   },
-  "include": ["package/**/*.ts", "package/**/*.d.ts", "package/**/*.tsx", "package/**/*.vue", "src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "include": ["src/**/*.ts", "src/**/*.vue"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

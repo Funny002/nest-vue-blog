@@ -24,31 +24,16 @@ export default defineConfig({
   publicDir: resolve(__dirname, './public'),
   resolve: {
     alias: {
-      '@': resolve(__dirname, './src'),
-      '@api': resolve(__dirname, './src/Api'),
-      '@utils': resolve(__dirname, './src/utils'),
-      '@stores': resolve(__dirname, './src/stores'),
-      '@plugin': resolve(__dirname, './src/plugin'),
-      '@scss': resolve(__dirname, './src/assets/scss'),
-      '@models': resolve(__dirname, './src/components'),
-      '@directive': resolve(__dirname, './src/directive'),
-      // client
-      '@sso': resolve(__dirname, './package/sso'),
+      // app
+      '@admin': resolve(__dirname, 'src/admin'),
+      // common
+      '@utils': resolve(__dirname, 'src/common/utils'),
+      '@stores': resolve(__dirname, 'src/common/stores'),
+      '@plugins': resolve(__dirname, 'src/common/plugins'),
+      '@layouts': resolve(__dirname, 'src/common/layouts'),
+      '@models': resolve(__dirname, 'src/common/components'),
+      '@directives': resolve(__dirname, 'src/common/directives'),
     },
-  },
-  server: {
-    port: 6412,
-    open: true,
-    // proxy: {
-    //   '/baiduApi': {
-    //     changeOrigin: true,
-    //     target: 'http://openapi.baidu.com',
-    //     rewrite: path => {
-    //       console.log('baiduApi ->>', path.replace(/^\/baiduApi/, ''));
-    //       return path.replace(/^\/baiduApi/, '');
-    //     },
-    //   },
-    // },
   },
   build: {
     target: 'esnext',
@@ -58,7 +43,7 @@ export default defineConfig({
     outDir: resolve(__dirname, './dist'),
     rollupOptions: {
       input: {
-        sso: resolve(__dirname, './package/sso/index.html'),
+        admin: resolve(__dirname, './src/admin/index.html'),
       },
       output: {
         chunkFileNames: 'js/[name].[hash].js',

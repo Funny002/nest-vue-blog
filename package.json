@@ -7,8 +7,8 @@
     "dev": "vite sso",
     "preview": "vite preview",
     "build": "vue-tsc && vite build",
-    "dev:sso": "vite serve package/sso/ --config ./vite.config.ts --port 4001",
-    "build:sso": "vue-tsc --noEmit && vite build package/sso/ --config ./vite.config.ts"
+    "dev:admin": "vite serve src/admin --config ./vite.config.ts",
+    "build:admin": "vue-tsc --noEmit && vite build src/admin --config ./vite.config.ts"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
