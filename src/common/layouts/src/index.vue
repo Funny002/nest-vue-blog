@@ -34,10 +34,39 @@
 
   &__header {
     height: 50px;
+    display: flex;
+    padding: 0 10px;
+    align-items: center;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+
+    &--btn {
+      width: 35px;
+      height: 35px;
+      display: flex;
+      cursor: pointer;
+      margin-right: 10px;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      transition: border-radius .4s;
+
+      &:hover {
+        border-radius: 4px;
+        background-color: #eee;
+      }
+    }
   }
 
   &__footer {
+    display: flex;
     padding: 20px;
+    flex-wrap: wrap;
+    text-align: center;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
   }
 
   &__container {

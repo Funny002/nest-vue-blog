@@ -36,20 +36,13 @@
 
 <script lang="ts">export default { name: 'VarNav' };</script>
 <script lang="ts" setup>
-import BootstrapIcon from '@plugin/bootstrap-icon/index.vue';
 import { computed, nextTick, reactive, ref, watch } from 'vue';
+import { BootstrapIcon } from '@plugins/bootstrap-icon';
 import { Close } from '@element-plus/icons-vue';
 
-interface Nav {
-  icon?: any,
-  name: string;
-  label: string;
-  hasClose?: boolean;
-}
-
 interface Props {
-  data: Nav[];
-  default?: Nav;
+  data: NavItem[];
+  default?: NavItem;
   modelValue?: string;
 }
 
@@ -77,7 +70,7 @@ const hasClose = computed(() => {
   return props.default ? (props.default.name !== props.data[0].name) : false;
 });
 
-function itemHasClose(item: Nav) {
+function itemHasClose(item: NavItem) {
   if (!hasClose.value) return false;
   if ('hasClose' in item) return item.hasClose;
   return true;
@@ -94,13 +87,13 @@ const navData = computed<any>(() => {
 
 const emits = defineEmits(['close', 'change', 'update:modelValue', 'update:data']);
 
-function onClick(nav: Nav, event?: Event) {
+function onClick(nav: NavItem, event?: Event) {
   if (event) (<HTMLElement>event.target).scrollIntoView({ behavior: 'smooth', block: 'center' });
   emits('update:modelValue', nav.name);
   emits('change', nav.name);
 }
 
-function onClose(nav: Nav) {
+function onClose(nav: NavItem) {
   const index = props.data.indexOf(nav);
   const list = [...props.data];
   list.splice(index, 1);
@@ -121,4 +114,4 @@ function onMove(type: 'left' | 'right') {
 }
 </script>
 
-<style lang="scss" src="./src/style.scss"/>
+<style lang="scss" src="./style.scss"/>

@@ -25,7 +25,11 @@
       "@layouts/*":["src/common/layouts/*"],
       "@directives/*":["src/common/directives/*"]
     },
+    /* types */
+    "types": [
+      "src/types/index.d.ts"
+    ]
   },
-  "include": ["src/**/*.ts", "src/**/*.vue"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

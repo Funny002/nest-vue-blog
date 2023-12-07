@@ -1,142 +1,80 @@
-.var-layoutAdmin {
+.var-layout-admin {
   width: 100%;
   height: 100%;
   display: flex;
 
-  &__body {
+  > .var-layout .var-layout__container {
     display: flex;
-    align-items: stretch;
-    flex-direction: column;
-
-    &, > * {
-      width: calc(100vw - 50px);
-    }
   }
 
-  &__header {
-    width: 100%;
-    z-index: 20;
-    height: 50px;
-    display: flex;
-    padding: 0 10px;
-    align-items: center;
-    background-color: #fff;
-    border-bottom: 1px solid #ddd;
-
-    &--btn {
-      width: 35px;
-      height: 35px;
-      display: flex;
-      cursor: pointer;
-      margin-right: 10px;
-      border-radius: 50%;
-      align-items: center;
-      justify-content: center;
-      transition: border-radius .4s;
-
-      &:hover {
-        border-radius: 4px;
-        background-color: #eee;
-      }
-    }
+  &__expand,
+  &__content {
+    transition: width var(--el-transition-duration) ease-in-out;
   }
 
-  &__nesting {
-    display: flex;
-    overflow: hidden;
-    align-items: stretch;
-
-    &, > * {
-      height: calc(100vh - 50px);
-    }
-
-    > * {
-      flex: 0 0 auto;
-    }
-  }
-
-  &__menu {
-    z-index: 10;
+  &__expand {
     width: 190px;
-    background-color: #fff;
-    border-right: 1px solid #ddd;
+    overflow: hidden;
 
-    &, &--sub {
-      .var-BootstrapIcon {
-        display: flex;
-        align-items: center;
-        padding-right: 10px;
-        transition: padding var(--el-transition-duration) ease-in-out;
-      }
-
-      --el-menu-icon-width: 25px;
-      --el-menu-level-padding: 12px;
-      --el-menu-base-level-padding: 12px;
-
-      .el-menu {
-        border: none;
-
-        &--inline {
-          background-color: #f4f4f4;
-        }
-      }
-
-      .el-menu-item,
-      .el-sub-menu__title {
-        height: 40px;
-      }
-    }
-  }
-
-  &__container {
-    position: relative;
-    width: calc(100vw - 50px);
-    height: calc(100vh - 50px);
-
-    &--main {
-      width: 100%;
-      overflow: hidden auto;
-      height: calc(100vh - 94px);
-
-      &.animated {
-        position: absolute;
-      }
-    }
-  }
-
-  &.is-expand & {
-    &__menu,
-    &__container {
-      transition: width var(--el-transition-duration) ease-in-out;
+    .var-BootstrapIcon {
+      display: flex;
+      align-items: center;
+      padding-right: 10px;
+      transition: padding var(--el-transition-duration) ease-in-out;
     }
 
-    &__container {
-      width: calc(100vw - 240px);
-    }
-  }
+    --el-menu-icon-width: 25px;
+    --el-menu-item-height: 40px;
+    --el-menu-level-padding: 12px;
+    --el-menu-base-level-padding: 12px;
 
-  &.is-mini & {
-    &__menu {
+    .el-menu {
+      height: 100%;
+    }
+
+    &.is-mini {
       width: 50px;
+      //--el-menu-item-height: 60px;
 
       .var-BootstrapIcon {
         padding: 5px;
       }
     }
+  }
 
-    &__container {
-      width: calc(100vw - 100px);
+  &__content {
+    width: 100%;
+  }
+
+  .var-layout-admin__expand {
+    + .var-layout-admin__content {
+      width: calc(100% - 190px) !important;
     }
+
+    &.is-mini + .var-layout-admin__content {
+      width: calc(100% - 50px) !important;
+    }
+  }
+
+  &__body {
+    overflow: hidden auto;
+    padding: 0 10px 10px;
+    height: calc(100% - 44px);
   }
 }
 
-.var-layoutAdmin__side {
+.var-layout-admin__side {
   width: 50px;
   color: #fff;
   z-index: 30;
   height: 100vh;
+  overflow: hidden;
   position: relative;
   background-color: #5e91f8;
+
+  + .var-layout {
+    width: calc(100vw - 50px);
+  }
 
   &--logo {
     width: 50px;
@@ -151,21 +89,25 @@
     }
   }
 
-  &--active {
+  &--angle {
     top: 0;
     right: 0;
     height: 50px;
     margin-top: 50px;
     position: absolute;
-    transition: top .3s;
     pointer-events: none;
+    transition: margin-top .3s;
 
-    > div {
-      margin-top: 15px;
+    &::before {
+      top: 50%;
+      right: 0;
+      content: '';
+      position: absolute;
       border-width: 10px;
       border-style: solid;
       border-color: transparent;
       border-right-color: #fff;
+      transform: translateY(-50%);
     }
   }
 

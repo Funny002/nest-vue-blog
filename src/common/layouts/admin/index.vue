@@ -1,13 +1,56 @@
 <template>
   <div class="var-layout-admin">
-    <div class="var-layout-admin__side">
-      var-layout-admin__side
+    <div class="var-layout-admin__side" v-if="props.menu.length">
+      <div class="var-layout-admin__side--logo">
+        <img :src="props.logo" alt="logo"/>
+      </div>
+      <template v-for="item of props.menu">
+        <el-tooltip v-if="item.icon" :content="item.label" :visible="item.label ? undefined : false" placement="right" effect="light">
+          <div class="var-layout-admin__side--item" @click.stop="onMenuItem(item)">
+            <bootstrap-icon :name="item.icon"/>
+          </div>
+        </el-tooltip>
+      </template>
+      <div class="var-layout-admin__side--angle" :style="{marginTop: `${(menuActive.index + 1) * 50}px`}"/>
     </div>
     <layout>
-      <div class="var-layout-admin__expand">var-layout-admin__expand</div>
-      <div class="var-layout-admin__content">var-layout-admin__content</div>
+      <template v-slot:header v-if="$slots.header">
+        <div class="var-layout__header--btn" @click.stop="data.isMini = !data.isMini" v-if="isExpand">
+          <bootstrap-icon :name="`text-indent-${data.isMini ? 'left' : 'right'}`"/>
+        </div>
+        <slot name="header"/>
+      </template>
+      <template v-slot:footer v-if="$slots.footer">
+        <slot name="footer"/>
+      </template>
+      <div class="var-layout-admin__expand" :class="{'is-mini': data.isMini}" v-if="isExpand">
+        <el-menu :collapse="data.isMini" :default-active="route.fullPath">
+          <template v-for="item of menuActive.children">
+            <el-sub-menu popper-class="var-layoutAdmin__menu--sub" v-if="(item.children || []).length" :index="item.label">
+              <template #title>
+                <bootstrap-icon :name="item.icon"/>
+                <span>{{ item.label }}</span>
+              </template>
+              <el-menu-item v-for="child of item.children" :index="child['router']" @click="onMenuItem(item)">
+                <bootstrap-icon :name="child.icon"/>
+                <template #title>{{ item.label }}</template>
+              </el-menu-item>
+            </el-sub-menu>
+            <el-menu-item v-else :index="item['router']" @click="onMenuItem(item)">
+              <bootstrap-icon :name="item.icon"/>
+              <template #title>{{ item.label }}</template>
+            </el-menu-item>
+          </template>
+        </el-menu>
+      </div>
+      <div class="var-layout-admin__content">
+        <!--        v-model="data.navModel" v-model:data="data.navData" :default="data.navDefault" @change="onNavChange"-->
+        <var-nav/>
+        <div class="var-layout-admin__body">
+          <slot/>
+        </div>
+      </div>
     </layout>
-    LayoutAdmin
   </div>
   <!--  <div class="var-layoutAdmin" :class="{'is-expand': Boolean(menuExpand.length), 'is-mini': data.isMini}">-->
   <!--    <div class="var-layoutAdmin__side">-->
@@ -35,35 +78,10 @@
   <!--      </header>-->
   <!--      <div class="var-layoutAdmin__nesting">-->
   <!--        <div class="var-layoutAdmin__menu" v-if="Boolean(menuExpand.length)">-->
-  <!--          <el-menu :collapse="data.isMini" :default-active="route.fullPath">-->
-  <!--            <template v-for="item of menuExpand">-->
-  <!--              <el-sub-menu popper-class="var-layoutAdmin__menu&#45;&#45;sub" v-if="(item.children || []).length" :index="item.name">-->
-  <!--                <template #title>-->
-  <!--                  <bootstrap-icon :name="item.icon"/>-->
-  <!--                  <span>{{ item.name }}</span>-->
-  <!--                </template>-->
-  <!--                <el-menu-item v-for="child of item.children" :index="child['router']" @click="onMenuClick(item)">-->
-  <!--                  <bootstrap-icon :name="child.icon"/>-->
-  <!--                  <template #title>{{ child.name }}</template>-->
-  <!--                </el-menu-item>-->
-  <!--              </el-sub-menu>-->
-  <!--              <el-menu-item v-else :index="item['router']" @click="onMenuClick(item)">-->
-  <!--                <bootstrap-icon :name="item.icon"/>-->
-  <!--                <template #title>{{ item.name }}</template>-->
-  <!--              </el-menu-item>-->
-  <!--            </template>-->
-  <!--          </el-menu>-->
+
   <!--        </div>-->
   <!--        <div class="var-layoutAdmin__container">-->
-  <!--          <var-nav v-model="data.navModel" v-model:data="data.navData" :default="data.navDefault" @change="onNavChange"/>-->
-  <!--          <router-view v-slot="{Component, route}">-->
-  <!--            <transition v-bind="handlerTransition(route)">-->
-  <!--              <main class="var-layoutAdmin__container&#45;&#45;main" :key="route.fullPath">-->
-  <!--                <component v-if="Boolean(Component)" :is="Component"/>-->
-  <!--                <page-error v-else/>-->
-  <!--              </main>-->
-  <!--            </transition>-->
-  <!--          </router-view>-->
+
   <!--        </div>-->
   <!--      </div>-->
   <!--    </div>-->
@@ -72,7 +90,36 @@
 
 <script lang="ts">export default { name: 'LayoutAdmin' };</script>
 <script lang="ts" setup>
+import { BootstrapIcon } from '@plugins/bootstrap-icon';
+import { useRoute, useRouter } from 'vue-router';
+import { computed, reactive } from 'vue';
+import VarNav from '@models/VarNav';
 import { Layout } from '@layouts';
+
+interface Props {
+  logo?: string;
+  menu: MenuItem[];
+}
+
+const route = useRoute();
+const router = useRouter();
+const props = withDefaults(defineProps<Props>(), { menu: () => [] });
+
+const menuActive = computed(() => {
+  const index = props.menu.findIndex(item => route.fullPath.indexOf(item.router) === 0);
+  return { index, value: props.menu[index], children: props.menu[index].children || [] };
+});
+
+const isExpand = computed(() => menuActive.value.children.length > 0);
+
+const data = reactive({
+  isMini: false,
+});
+
+function onMenuItem(menu: MenuItem, state = false) {
+  router.push({ path: menu.router });
+  if (state) data.isMini = false;
+}
 
 // import 'animate.css/animate.compat.css';
 // import PageError from './PageError.vue';

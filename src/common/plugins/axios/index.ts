@@ -37,7 +37,6 @@ export class Axios {
     config.__retry_count = config.__retry_count || 1;
     //
     if (!config.params) config.params = {};
-    config.params['tags'] = window.__CONFIG__.tags || 'web';
     config.headers['Authorization'] = 'token ' + useUsers().accessToken;
     //
     return (this.handleRequest && await this.handleRequest(config)) || config;
