@@ -13,6 +13,8 @@ src
 |   ├── layout // 布局
 |   ├── router // 路由
 |   ├── views // 页面
+|   ├── sign // 登录页面
+|   ├── erro // 错误页面
 |   ├── main.ts // 入口
 ├── common // 共享内容
 |   ├── api // 接口

@@ -22,6 +22,7 @@ export const useUsers = defineStore('users', {
     },
   }),
   getters: {
+    avatar: ({ data: { info } }) => (info || {}).avatar,
     getInfo: ({ data: { info } }) => info,
     has: () => () => storage.get('hasLogin'),
     accessToken: ({ data: { token } }) => token?.access,

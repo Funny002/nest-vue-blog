@@ -1,3 +1,64 @@
+.var-admin .var-layout {
+  &__header {
+    z-index: 200;
+  }
+
+  &-admin {
+    &__side {
+      z-index: 300;
+    }
+
+    &__expand {
+      z-index: 100;
+    }
+
+    &__content {
+      z-index: 1;
+    }
+  }
+}
+
+.var-admin__user {
+  &--avatar {
+    cursor: pointer;
+  }
+
+  & {
+    display: flex;
+    align-items: center;
+  }
+
+  &--name {
+    padding-left: 10px;
+    width: calc(100% - 40px);
+  }
+
+  &--item {
+    height: 30px;
+    display: flex;
+    cursor: pointer;
+    padding: 0 10px;
+    border-radius: 4px;
+    align-items: center;
+
+    & + & {
+      margin-top: 5px;
+    }
+
+    &:hover {
+      background-color: #eee;
+      color: var(--el-color-primary);
+    }
+
+    > span {
+      padding-left: 10px;
+    }
+  }
+}
+
+.var-admin__main {
+  padding: 10px;
+}
 
 //.var-admin {
 //  &__userPopover {

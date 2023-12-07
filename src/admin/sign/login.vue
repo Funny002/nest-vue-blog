@@ -34,20 +34,24 @@
 
 <script lang="ts">export default { name: 'SignLogin' };</script>
 <script lang="ts" setup>
-import QrCode from '@models/QrCode/index.vue';
-import DynamicForm from '@models/DynamicForm/index.vue';
+import { QrCode } from '@plugins/qr-code';
+// import DynamicForm from '@models/DynamicForm/index.vue';
 //
 import { onBeforeMount, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import verify from '@models/DynamicForm/utils';
+// import verify from '@models/DynamicForm/utils';
 import { ElMessage } from 'element-plus';
-import { ApiLogin } from '@sso/api/sign';
+// import { ApiLogin } from '@sso/api/sign';
 import { useUsers } from '@stores/user';
 import storage from '@utils/storage';
 
 const route = useRoute();
 const routes = useRouter();
 const userStore = useUsers();
+
+function verify() {
+
+}
 
 const formRef = ref<any>(null);
 const data = reactive<any>({
@@ -100,21 +104,21 @@ function onSubmit() {
     if (!state) return false;
     const { user, pass } = data.formData;
     data.load = true;
-    ApiLogin(tags, user, pass).then(({ data: res }) => {
-      if (res.code === 0) {
-        const { info, expires, ...token } = res.data;
-        userStore.setUserData(info, token, expires);
-        if (data.memorize) storage.set('sign.memorize', { user, pass }, 0, true, false);
-        if (redirect !== window.location.origin) {
-          const url = new URL(redirect);
-          url.searchParams.append('token', token.access);
-          window.location.href = url.toString();
-        }
-        routes.push({ path: '/' });
-      } else {
-        ElMessage.error(res.message);
-      }
-    }).finally(() => setTimeout(() => data.load = false, 300));
+    // ApiLogin(tags, user, pass).then(({ data: res }) => {
+    //   if (res.code === 0) {
+    //     const { info, expires, ...token } = res.data;
+    //     userStore.setUserData(info, token, expires);
+    //     if (data.memorize) storage.set('sign.memorize', { user, pass }, 0, true, false);
+    //     if (redirect !== window.location.origin) {
+    //       const url = new URL(redirect);
+    //       url.searchParams.append('token', token.access);
+    //       window.location.href = url.toString();
+    //     }
+    //     routes.push({ path: '/' });
+    //   } else {
+    //     ElMessage.error(res.message);
+    //   }
+    // }).finally(() => setTimeout(() => data.load = false, 300));
   });
 }
 </script>

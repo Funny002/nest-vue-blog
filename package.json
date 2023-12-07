@@ -4,9 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite sso",
     "preview": "vite preview",
-    "build": "vue-tsc && vite build",
     "dev:admin": "vite serve src/admin --config ./vite.config.ts",
     "build:admin": "vue-tsc --noEmit && vite build src/admin --config ./vite.config.ts"
   },

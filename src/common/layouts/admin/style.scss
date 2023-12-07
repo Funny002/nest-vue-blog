@@ -2,6 +2,7 @@
   width: 100%;
   height: 100%;
   display: flex;
+  user-select: none;
 
   > .var-layout .var-layout__container {
     display: flex;
@@ -44,6 +45,7 @@
 
   &__content {
     width: 100%;
+    overflow: hidden auto;
   }
 
   .var-layout-admin__expand {

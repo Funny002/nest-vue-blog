@@ -1,0 +1,3 @@
+<template>
+  LoggList
+</template>
