@@ -12,7 +12,7 @@
           <bootstrap-icon name="bell"/>
         </el-badge>
       </div>
-      <el-popover>
+      <el-popover placement="bottom-end">
         <template #reference>
           <el-avatar class="var-admin__user--avatar" :size="30"/>
         </template>
@@ -30,6 +30,15 @@
         <div class="var-admin__user--item">
           <bootstrap-icon name="chat-left-dots"/>
           <span>我的消息</span>
+        </div>
+        <el-divider style="margin: 10px 0 5px;"/>
+        <div class="var-admin__user--item" v-if="!fullscreen.isFullscreen" @click="onFullscreenToggle">
+          <bootstrap-icon name="fullscreen"/>
+          <span>全屏显示</span>
+        </div>
+        <div class="var-admin__user--item" v-else @click="onFullscreenToggle">
+          <bootstrap-icon name="fullscreen-exit"/>
+          <span>退出全屏</span>
         </div>
         <div class="var-admin__user--item">
           <bootstrap-icon name="power"/>
@@ -51,6 +60,7 @@
 
 <script lang="ts" setup>
 import { BootstrapIcon } from '@plugins/bootstrap-icon';
+import fullscreen from '@utils/fullscreen';
 import 'animate.css/animate.compat.css';
 import { LayoutAdmin } from '@layouts';
 import { useRouter } from 'vue-router';
@@ -92,6 +102,15 @@ const data = reactive<State>({
 function handlerTransition(route: any) {
   const { duration, enter = 'fadeInLeft', leave = 'fadeOutDown' } = route.mate?.transition || {};
   return { duration, type: 'animation', enterActiveClass: 'animated ' + enter, leaveActiveClass: 'animated ' + leave };
+}
+
+// 全屏
+function onFullscreenToggle() {
+  if (fullscreen.isFullscreen) {
+    fullscreen.exitFullscreen();
+  } else {
+    fullscreen.fullscreen();
+  }
 }
 </script>
 
