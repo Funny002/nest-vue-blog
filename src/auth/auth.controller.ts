@@ -1,10 +1,11 @@
 import { Body, Controller, Get, Post, Put, Query, UseGuards } from '@nestjs/common';
-import { LocalStrategy } from './strategy/local.strategy';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CodeDto, LoginDto, RegisterDto } from './dto';
+import { LocalAuth } from './strategy/local.strategy';
 import { AuthService } from './auth.service';
 import { NoAuth } from '@libs/jwtAuth';
 
+@NoAuth()
 @Controller('auth')
 @ApiTags('auth 登录/注册')
 export class AuthController {
@@ -12,15 +13,13 @@ export class AuthController {
 
   // 登录
   @Post('login')
-  @UseGuards(LocalStrategy)
+  @UseGuards(LocalAuth)
   @ApiOperation({ summary: '登录' })
-  async login(@Body() body: LoginDto) {
-
-  }
+  async login(@Body() body: LoginDto) {}
 
   // 注册
   @Post('register')
-  @UseGuards(LocalStrategy)
+  @UseGuards(LocalAuth)
   @ApiOperation({ summary: '注册' })
   async register(@Body() body: RegisterDto) {}
 
@@ -40,13 +39,11 @@ export class AuthController {
   async tokenRefresh() {}
 
   // 发送验证码
-  @NoAuth()
   @Post('sendCode')
   @ApiOperation({ summary: '发送验证码' })
   async sendCode(@Body() body: CodeDto) {}
 
   // 令牌验证
-  @NoAuth()
   @Get('tokenVerify')
   @ApiOperation({ summary: '令牌验证' })
   async tokenVerify(@Query('token') token?: string) {}

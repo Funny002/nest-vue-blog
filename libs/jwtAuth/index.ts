@@ -1,7 +1,6 @@
 import { JwtAuthName, JwtAuthOptions } from '@config';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { DriverFactory } from 'typeorm/driver/DriverFactory';
 
 /** Jwt模块 */
 export const JwtAuthModel = () => {

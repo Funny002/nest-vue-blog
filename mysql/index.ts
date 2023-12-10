@@ -5,14 +5,14 @@ import { MysqlName } from '@config';
 
 //
 import { Users } from './User/User.entity';
-import { UserConf } from './User/UserConf.entity';
 import { Setting } from './Setting/Setting.entity';
+import { UsersConf } from './User/UsersConf.entity';
 
 export class MysqlModel {
   static use() {
     const entities = [
       Users,
-      UserConf,
+      UsersConf,
       Setting,
     ];
     //
@@ -32,7 +32,7 @@ export class MysqlModel {
 
 // User
 export * from './User/User.entity';
-export * from './User/UserConf.entity';
+export * from './User/UsersConf.entity';
 
 // Setting
 export * from './Setting/Setting.entity';

@@ -1,37 +1,37 @@
-// import { CommentsModule } from './comments/comments.module';
-// import { SettingsModule } from './settings/settings.module';
-// import { ArticleModule } from './article/article.module';
-// import { LoggerModule } from './logger/logger.module';
+import { CommentsModule } from './comments/comments.module';
+import { SettingsModule } from './settings/settings.module';
+import { ArticleModule } from './article/article.module';
+import { LoggerModule } from './logger/logger.module';
 import { UsersModule } from './users/users.module';
+import { FilesModule } from './files/files.module';
 import { AuthModule } from './auth/auth.module';
-// import { FilesModule } from './files/files.module';
 
 //
 import { AppName, AppSystem, ConfigGlobal } from '@config';
-import { ConfigService } from '@nestjs/config';
 import { JwtAuthGuard, JwtAuthModel } from '@libs/jwtAuth';
+import { ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { Module } from '@nestjs/common';
 import { MysqlModel } from '@mysql';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
-    // jwt
-    JwtAuthModel(),
     // mysql
     MysqlModel.use(),
     // config
     ConfigGlobal.use(),
     // module
+    CommentsModule,
+    SettingsModule,
+    ArticleModule,
+    LoggerModule,
     UsersModule,
+    FilesModule,
     AuthModule,
-    // CommentsModule,
-    // SettingsModule,
-    // ArticleModule,
-    // FilesModule,
-    // LoggerModule,
   ],
   providers: [
+    JwtService,
     ConfigService,
     { provide: APP_GUARD, useClass: JwtAuthGuard },
   ],

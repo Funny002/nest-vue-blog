@@ -6,7 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 
 // Mysql
-import { Setting, UserConf } from '@mysql';
+import { Setting, UsersConf } from '@mysql';
 
 /* 单个应用最多保留有效token */
 const maxLimit = 30;
@@ -34,12 +34,12 @@ export class tokenService {
   }
 
   /* 用户登录限制配置 */
-  private async getUserConfig(uid: number) {
+  private async getUserConfig(uid: string) {
     const redisKey = `settings:user:${uid}`;
     let conf = await this.redis.get(redisKey);
     const globalConfig = await this.getGlobalConfig();
     if (!conf) {
-      const config = await UserConf.getInfoKeys({ uid }, { login_limit: true });
+      const config = await UsersConf.getInfoKeys({ uid }, { login_limit: true });
       conf = JSON.stringify({ t: Date.now(), v: config });
       await this.redis.set(redisKey, conf, 'EX', 60 * 10);
     }
@@ -57,7 +57,7 @@ export class tokenService {
   }
 
   /* 处理 redis 的 token */
-  private async handlerExpiresToken(uid: number, tags: string, limit: number) {
+  private async handlerExpiresToken(uid: string, tags: string, limit: number) {
     const score = ~~(Date.now() / 1000);
     const accessKey = `${tags}:${uid}:access`;
     const tokensKey = `${tags}:${uid}:tokens`;
@@ -92,7 +92,7 @@ export class tokenService {
   }
 
   /* token 添加到 redis */
-  async setToken(uid: number, tags: string, token: TokenOptions) {
+  async setToken(uid: string, tags: string, token: TokenOptions) {
     const conf = await this.getUserConfig(uid);
     const allowedTags: string[] = conf['allowed_tags'] || [];
     if (allowedTags.length && allowedTags.includes(tags)) ManualHttpException('没有权限');

@@ -2,12 +2,11 @@ import { Column, Entity, ILike, Index, Like } from 'typeorm';
 import { BaseModel } from '../Common/Base.entity';
 
 export enum UserState {
-  Check = -2, // 审核/检查
-  Freeze = -1, // 冻结
-  Disable = 0, // 禁用
-  Enable = 1, // 启用
-  Delete = 2, // 删除
-  Lock = 4, // 锁定
+  LOCK = 'lock', // 锁定
+  CHECK = 'check', // 审核/检查
+  ENABLE = 'enable', // 启用
+  DELETE = 'delete', // 删除
+  DISABLE = 'disable', // 禁用
 }
 
 @Entity()
@@ -17,6 +16,8 @@ export class Users extends BaseModel {
 
   @Column({ /* 昵称 */ length: 50 }) name: string;
 
+  @Column({ /* 账号 */ length: 50 }) user: string;
+
   @Column({ /* 密码 */ length: 64 }) pass: string;
 
   @Column({ /* 邮箱 */ length: 100 }) email: string;
@@ -25,7 +26,7 @@ export class Users extends BaseModel {
 
   @Column({ /* 角色 */ type: 'simple-array', nullable: true }) role: string[];
 
-  @Column({ /* 状态 */ type: 'enum', enum: UserState, default: UserState.Disable }) state: UserState;
+  @Column({ /* 状态 */ type: 'enum', enum: UserState, default: UserState.DISABLE }) state: UserState;
 
   protected handleWhere(): { [p: string]: { name?: string; handle?: any } } {
     return {

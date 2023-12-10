@@ -1,11 +1,11 @@
-import { MysqlModel, UserConf, Users } from '@mysql';
+import { MysqlModel, UsersConf, Users } from '@mysql';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { Module } from '@nestjs/common';
 
 @Module({
   imports: [
-    MysqlModel.feature(Users, UserConf),
+    MysqlModel.feature(Users, UsersConf),
   ],
   controllers: [UsersController],
   providers: [UsersService],
