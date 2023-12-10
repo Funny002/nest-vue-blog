@@ -6,35 +6,22 @@ export interface AppSystem {
   port: number;
   prefix: string;
   version: string;
-  limit?: {
-    windowMs: number;
-    max: number;
-  };
-  verify?: ValidationPipeOptions;
+  pipes?: ValidationPipeOptions;
 }
 
-/** sso服务配置名 */
-export const SSO_NAME = 'app_system';
 /** 服务配置名 */
-export const Service_NAME = 'app_service';
-/** sso服务配置 */
-export const Sso = registerAs(SSO_NAME, (): AppSystem => {
+export const AppName = 'app_name';
+
+/** 服务配置 */
+export const AppConf = registerAs(AppName, (): AppSystem => {
   return {
     port: 9871,
     prefix: '',
     version: '1',
-    verify: {
+    pipes: {
       whitelist: true,
       transform: true,
       stopAtFirstError: true,
     },
-  };
-});
-/** 服务配置 */
-export const Service = registerAs(Service_NAME, (): AppSystem => {
-  return {
-    port: 9771,
-    prefix: '',
-    version: '1',
   };
 });

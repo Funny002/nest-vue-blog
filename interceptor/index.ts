@@ -1,8 +1,6 @@
-import { NestExpressApplication } from '@nestjs/platform-express';
 import { ResponseInterceptor } from './src/response.interceptor';
+import { INestApplication } from '@nestjs/common';
 
-// export { ResponseDto } from './src/response.interceptor';
-
-export const UseInterceptor = (app: NestExpressApplication) => {
+export const useInterceptor = (app: INestApplication) => {
   app.useGlobalInterceptors(new ResponseInterceptor());
 };

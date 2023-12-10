@@ -6,7 +6,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es2017",
+    "target": "ES2021",
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
@@ -18,51 +18,14 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@app/config": [
-        "config"
-      ],
-      "@app/common": [
-        "common"
-      ],
-      "@app/common/*": [
-        "common/*"
-      ],
-      "@app/middleware": [
-        "middleware"
-      ],
-      "@app/interceptor": [
-        "interceptor"
-      ],
-      "@app/mysql": [
-        "mysql"
-      ],
-      "@app/mysql/*": [
-        "mysql/*"
-      ],
-      "@app/tools": [
-        "tools"
-      ],
-      "@app/tools/*": [
-        "tools/*"
-      ],
-      "@app/dto": [
-        "dto"
-      ],
-      "@app/dto/*": [
-        "dto/*"
-      ],
-      "@app/pagination": [
-        "libs/pagination"
-      ],
-      "@app/captcha": [
-        "libs/captcha/src"
-      ],
-      "@app/email": [
-        "libs/email/src"
-      ],
-      "@app/email/*": [
-        "libs/email/src/*"
-      ]
+      "@utils": ["utils"],
+      "@config": ["config"],
+      "@libs/*": ["libs/*"],
+      "@mysql": ["mysql"],
+      "@utils/*": ["utils/*"],
+      "@common/*": ["common/*"],
+      "@middleware": ["middleware"],
+      "@interceptor": ["interceptor"],
     }
   }
 }

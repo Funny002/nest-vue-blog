@@ -1,126 +1,72 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/service",
-  "monorepo": true,
-  "root": "apps/service",
+  "sourceRoot": "src",
   "compilerOptions": {
-    "webpack": true,
-    "tsConfigPath": "apps/service/tsconfig.app.json"
+    "deleteOutDir": true
   },
   "projects": {
-    "service": {
-      "type": "application",
-      "root": "apps/service",
-      "entryFile": "main",
-      "sourceRoot": "apps/service",
-      "compilerOptions": {
-        "plugins": [
-          "@nestjs/swagger/plugin"
-        ],
-        "tsConfigPath": "apps/service/tsconfig.app.json"
-      }
-    },
-    "sso": {
-      "type": "application",
-      "root": "apps/sso",
-      "entryFile": "main",
-      "sourceRoot": "apps/sso",
-      "compilerOptions": {
-        "plugins": [
-          "@nestjs/swagger/plugin"
-        ],
-        "tsConfigPath": "apps/sso/tsconfig.app.json"
-      }
-    },
-    "config": {
-      "type": "library",
-      "root": "config",
-      "entryFile": "index",
-      "sourceRoot": "config",
-      "compilerOptions": {
-        "tsConfigPath": "config/tsconfig.lib.json"
-      }
-    },
-    "common": {
-      "type": "library",
-      "root": "common",
-      "entryFile": "index",
-      "sourceRoot": "common",
-      "compilerOptions": {
-        "tsConfigPath": "common/tsconfig.lib.json"
-      }
-    },
     "middleware": {
       "type": "library",
       "root": "middleware",
-      "entryFile": "index",
+      "entryFile": "main",
       "sourceRoot": "middleware",
       "compilerOptions": {
         "tsConfigPath": "middleware/tsconfig.lib.json"
       }
     },
-    "interceptor": {
+    "interfaces": {
       "type": "library",
-      "root": "interceptor",
-      "entryFile": "index",
-      "sourceRoot": "interceptor",
+      "root": "interfaces",
+      "entryFile": "main",
+      "sourceRoot": "interfaces",
       "compilerOptions": {
-        "tsConfigPath": "interceptor/tsconfig.lib.json"
+        "tsConfigPath": "interfaces/tsconfig.lib.json"
+      }
+    },
+    "config": {
+      "type": "library",
+      "root": "config",
+      "entryFile": "main",
+      "sourceRoot": "config",
+      "compilerOptions": {
+        "tsConfigPath": "config/tsconfig.lib.json"
+      }
+    },
+    "libs": {
+      "type": "library",
+      "root": "libs",
+      "entryFile": "main",
+      "sourceRoot": "libs",
+      "compilerOptions": {
+        "tsConfigPath": "libs/tsconfig.lib.json"
+      }
+    },
+    "common": {
+      "type": "library",
+      "root": "common",
+      "entryFile": "main",
+      "sourceRoot": "common",
+      "compilerOptions": {
+        "tsConfigPath": "common/tsconfig.lib.json"
       }
     },
     "mysql": {
       "type": "library",
       "root": "mysql",
-      "entryFile": "index",
+      "entryFile": "main",
       "sourceRoot": "mysql",
       "compilerOptions": {
         "tsConfigPath": "mysql/tsconfig.lib.json"
       }
     },
-    "dto": {
+    "utils": {
       "type": "library",
-      "root": "dto",
-      "entryFile": "index",
-      "sourceRoot": "dto",
+      "root": "utils",
+      "entryFile": "main",
+      "sourceRoot": "utils",
       "compilerOptions": {
-        "tsConfigPath": "dto/tsconfig.lib.json"
-      }
-    },
-    "tools": {
-      "type": "library",
-      "root": "tools",
-      "entryFile": "index",
-      "sourceRoot": "tools",
-      "compilerOptions": {
-        "tsConfigPath": "tools/tsconfig.lib.json"
-      }
-    },
-    "pagination": {
-      "type": "library",
-      "root": "libs/pagination",
-      "entryFile": "index",
-      "sourceRoot": "libs/pagination",
-      "compilerOptions": {
-        "tsConfigPath": "libs/pagination/tsconfig.lib.json"
-      }
-    },
-    "captcha": {
-      "type": "library",
-      "root": "libs/captcha",
-      "entryFile": "index",
-      "sourceRoot": "libs/captcha",
-      "compilerOptions": {
-        "tsConfigPath": "libs/captcha/tsconfig.lib.json"
-      }
-    },
-    "email": {
-      "type": "library",
-      "root": "libs/email",
-      "entryFile": "index",
-      "sourceRoot": "libs/email",
-      "compilerOptions": {
-        "tsConfigPath": "libs/email/tsconfig.lib.json"
+        "tsConfigPath": "utils/tsconfig.lib.json"
       }
     }
   }

@@ -3,10 +3,10 @@ import { registerAs } from '@nestjs/config';
 import * as process from 'process';
 
 /** 数据库名称 */
-export const Mysql_NAME = 'app_service';
+export const MysqlName = 'app_service';
 
 /** 数据库配置 */
-export const Mysql = registerAs(Mysql_NAME, (): TypeOrmModuleOptions => {
+export const MysqlConf  = registerAs(MysqlName, (): TypeOrmModuleOptions => {
   return {
     type: 'mysql',
     port: 3306,

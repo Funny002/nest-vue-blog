@@ -1,7 +1,7 @@
 import { SentMessageInfo } from 'nodemailer/lib/smtp-transport';
 import { Options as SendOptions } from 'nodemailer/lib/mailer';
 import { createTransport, Transporter } from 'nodemailer';
-import { Email_Name, EmailOptions } from '@app/config';
+import { EmailName, EmailOptions } from '@config';
 import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
 
@@ -10,9 +10,7 @@ export class EmailService {
   private readonly emailRes: Transporter<SentMessageInfo>;
 
   constructor(private readonly configService: ConfigService) {
-    const { user, pass, ...conf } = this.configService.get<EmailOptions>(Email_Name);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    const { user, pass, ...conf } = this.configService.get<EmailOptions>(EmailName);
     this.emailRes = createTransport({ ...conf, auth: { user, pass }, jsonTransport: true });
   }
 

@@ -5,8 +5,7 @@ import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
 import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
 import { EntityManager } from 'typeorm/entity-manager/EntityManager';
 import { Repository } from 'typeorm/repository/Repository';
-import { PaginationRequest } from '@app/pagination';
-import * as Decimal from 'decimal.js';
+import { PaginationRequest } from '@libs/pagination';
 
 export abstract class BaseModel extends BaseEntity {
   @PrimaryGeneratedColumn({ /* 主键 */ }) id: number;
@@ -37,34 +36,34 @@ export abstract class BaseModel extends BaseEntity {
     // return (await this.getRepository().countBy(where)) > 0;
   }
 
-  /** 引入 `Decimal` 修复 js 精度问题
-   * 创建一个方法，可能没用
-   */
-  static async saveAmount<T extends BaseModel>(this: { new(): T } & typeof BaseModel, where: FindOptionsWhere<T>, prop: string, value: number, state: boolean): Promise<number> {
-    const list = await this.getRepository().find({ where });
-    let count = 0;
-    for (const item of list) {
-      const val = new Decimal(item[prop]);
-      const data = { [prop]: val[state ? 'plus' : 'minus'](value).toNumber() };
-      await this.getRepository().update({ id: item.id }, data);
-      count++;
-    }
-    return count;
-  }
+  // /** 引入 `Decimal` 修复 js 精度问题
+  //  * 创建一个方法，可能没用
+  //  */
+  // static async saveAmount<T extends BaseModel>(this: { new(): T } & typeof BaseModel, where: FindOptionsWhere<T>, prop: string, value: number, state: boolean): Promise<number> {
+  //   const list = await this.getRepository().find({ where });
+  //   let count = 0;
+  //   for (const item of list) {
+  //     const val = new Decimal(item[prop]);
+  //     const data = { [prop]: val[state ? 'plus' : 'minus'](value).toNumber() };
+  //     await this.getRepository().update({ id: item.id }, data);
+  //     count++;
+  //   }
+  //   return count;
+  // }
 
-  /** 根据 `where` 查询的数据 `prop` 增加数值
-   * 创建一个方法，可能没用
-   */
-  static increment<T extends BaseModel>(this: { new(): T } & typeof BaseModel, where: FindOptionsWhere<T>, prop: string, value: number): Promise<number> {
-    return this.saveAmount(where, prop, value, true);
-  }
-
-  /** 根据 `where` 查询的数据 `prop` 减少数值
-   * 创建一个方法，可能没用
-   */
-  static decrement<T extends BaseModel>(this: { new(): T } & typeof BaseModel, where: FindOptionsWhere<T>, prop: string, value: number): Promise<number> {
-    return this.saveAmount(where, prop, value, false);
-  }
+  // /** 根据 `where` 查询的数据 `prop` 增加数值
+  //  * 创建一个方法，可能没用
+  //  */
+  // static increment<T extends BaseModel>(this: { new(): T } & typeof BaseModel, where: FindOptionsWhere<T>, prop: string, value: number): Promise<number> {
+  //   return this.saveAmount(where, prop, value, true);
+  // }
+  //
+  // /** 根据 `where` 查询的数据 `prop` 减少数值
+  //  * 创建一个方法，可能没用
+  //  */
+  // static decrement<T extends BaseModel>(this: { new(): T } & typeof BaseModel, where: FindOptionsWhere<T>, prop: string, value: number): Promise<number> {
+  //   return this.saveAmount(where, prop, value, false);
+  // }
 
   /** 事务聚合 */
   static async transaction<T extends BaseModel, V extends any>(this: { new(): T } & typeof BaseModel, handler: (query: EntityManager, repository: Repository<T>) => Promise<V>): Promise<V> {
@@ -91,7 +90,7 @@ export abstract class BaseModel extends BaseEntity {
   static handleWhere<T extends BaseModel>(this: { new(): T } & typeof BaseModel, data: any): { [Name: string]: any } {
     if ('handleWhere' in this.prototype) {
       const whereObj = this.prototype.handleWhere();
-      return Object.entries<{ name?: string; handle?: any }>(whereObj).reduce(function(value, obj) {
+      return Object.entries<{ name?: string; handle?: any }>(whereObj).reduce(function (value, obj) {
         const [keys, { name, handle }] = obj;
         if (keys in data) value[name || keys] = handle ? handle(data[keys]) : data[keys];
         return value;
@@ -147,13 +146,4 @@ export abstract class BaseModel extends BaseEntity {
     const list = await this.getRepository().find({ where, order, skip, take });
     return { count, list: (handlerList && (await handlerList(<T[]>list))) || list };
   }
-}
-
-export enum BaseState {
-  Check = -2, // 审核/检查
-  Freeze = -1, // 冻结
-  Disable = 0, // 禁用
-  Enable = 1, // 启用
-  Delete = 2, // 删除
-  Lock = 4, // 锁定
 }
