@@ -23,7 +23,6 @@
       "@libs/*": ["libs/*"],
       "@mysql": ["mysql"],
       "@utils/*": ["utils/*"],
-      "@common/*": ["common/*"],
       "@middleware": ["middleware"],
       "@interceptor": ["interceptor"],
     }

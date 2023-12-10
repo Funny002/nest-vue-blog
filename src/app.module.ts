@@ -9,11 +9,15 @@ import { AuthModule } from './auth/auth.module';
 //
 import { AppName, AppSystem, ConfigGlobal } from '@config';
 import { ConfigService } from '@nestjs/config';
+import { JwtAuthGuard, JwtAuthModel } from '@libs/jwtAuth';
+import { APP_GUARD } from '@nestjs/core';
 import { Module } from '@nestjs/common';
 import { MysqlModel } from '@mysql';
 
 @Module({
   imports: [
+    // jwt
+    JwtAuthModel(),
     // mysql
     MysqlModel.use(),
     // config
@@ -27,7 +31,10 @@ import { MysqlModel } from '@mysql';
     // FilesModule,
     // LoggerModule,
   ],
-  providers: [ConfigService],
+  providers: [
+    ConfigService,
+    { provide: APP_GUARD, useClass: JwtAuthGuard },
+  ],
 })
 export class AppModule {
   // pipes 管道验证

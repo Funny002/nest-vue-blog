@@ -1,10 +1,11 @@
-// import { HttpException, HttpStatus } from '@nestjs/common';
+import { HttpException, HttpStatus } from '@nestjs/common';
+
+/** 手动抛出一个前端可响应异常 {code, message}  */
+export function ManualHttpException(message: string, code = 1) {
+  throw new HttpException({ message, code }, HttpStatus.OK);
+}
+
 // import { BaseState } from '@app/mysql/common';
-//
-// /** 手动抛出一个前端可响应异常 {code, message}  */
-// export function ManualException(message: string, code = 1) {
-//   throw new HttpException({ message, code }, HttpStatus.OK);
-// }
 //
 // const BaseStateMap = {
 //   [BaseState.Check]: '账号正在审核',
@@ -38,5 +39,3 @@
 // //     }
 // //   }
 // // }
-
-export default {};

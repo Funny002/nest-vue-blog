@@ -42,15 +42,6 @@
         "tsConfigPath": "libs/tsconfig.lib.json"
       }
     },
-    "common": {
-      "type": "library",
-      "root": "common",
-      "entryFile": "main",
-      "sourceRoot": "common",
-      "compilerOptions": {
-        "tsConfigPath": "common/tsconfig.lib.json"
-      }
-    },
     "mysql": {
       "type": "library",
       "root": "mysql",
