@@ -15,6 +15,7 @@
     "baseUrl": ".",
     "paths": {
       // app
+      "@home/*":["src/home/*"],
       "@admin/*":["src/admin/*"],
       // common
       "@utils":["src/common/utils"],

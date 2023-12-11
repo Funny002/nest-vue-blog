@@ -6,7 +6,9 @@
   "scripts": {
     "preview": "vite preview",
     "dev:admin": "vite serve src/admin --config ./vite.config.ts",
-    "build:admin": "vue-tsc --noEmit && vite build src/admin --config ./vite.config.ts"
+    "build:admin": "vue-tsc --noEmit && vite build src/admin --config ./vite.config.ts",
+    "dev:home": "vite serve src/home --config ./vite.config.ts",
+    "build:home": "vue-tsc --noEmit && vite build src/home --config ./vite.config.ts"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",

@@ -25,6 +25,7 @@ export default defineConfig({
   resolve: {
     alias: {
       // app
+      '@home': resolve(__dirname, 'src/home'),
       '@admin': resolve(__dirname, 'src/admin'),
       // common
       '@utils': resolve(__dirname, 'src/common/utils'),
