@@ -12,7 +12,7 @@ import { Setting, UsersConf } from '@mysql';
 const maxLimit = 30;
 
 @Injectable()
-export class tokenService {
+export class TokenService {
   private redis: Redis;
 
   constructor(
@@ -92,7 +92,7 @@ export class tokenService {
   }
 
   /* token 添加到 redis */
-  async setToken(uid: string, tags: string, token: TokenOptions) {
+  async setToken(uid: string, token: TokenOptions, tags = 'web') {
     const conf = await this.getUserConfig(uid);
     const allowedTags: string[] = conf['allowed_tags'] || [];
     if (allowedTags.length && allowedTags.includes(tags)) ManualHttpException('没有权限');
@@ -121,7 +121,7 @@ export class tokenService {
   }
 
   /* token 删除 */
-  async delToken(access: string, uid?: number, tags?: string) {
+  async delToken(access: string, uid?: number, tags = 'web') {
     if (!uid) {
       const conf = this.jwtService.decode(access);
       uid = conf.uid;

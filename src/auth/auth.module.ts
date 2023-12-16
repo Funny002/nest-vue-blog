@@ -1,8 +1,10 @@
 import { LocalStrategy } from './strategy/local.strategy';
 import { MysqlModel, UsersConf, Users } from '@mysql';
+import { TokenService } from './token/token.service';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtAuthModel } from '@libs/jwtAuth';
+import { EmailService } from '@libs/email';
 import { Module } from '@nestjs/common';
 
 @Module({
@@ -13,6 +15,6 @@ import { Module } from '@nestjs/common';
     MysqlModel.feature(Users, UsersConf),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy],
+  providers: [AuthService, TokenService, EmailService, LocalStrategy],
 })
 export class AuthModule {}

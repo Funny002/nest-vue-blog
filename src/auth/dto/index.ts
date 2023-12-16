@@ -10,7 +10,7 @@ export class LoginDto {
 
   @IsNotEmpty({ message: '密码不能为空' })
   @IsString({ message: '密码必须是字符串' })
-  @Length(6, 20, { message: '密码长度必须在6-20之间' })
+  @Length(6, 30, { message: '密码长度必须在6-30之间' })
   @ApiProperty({ description: '密码' })
   pass: string;
 }

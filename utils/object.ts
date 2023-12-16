@@ -2,13 +2,13 @@ export const getType = (target: any): string => Object.prototype.toString.call(t
 
 export const hasType = (target: any, ...types: string[]): boolean => types.map(v => v.toLocaleLowerCase()).includes(getType(target));
 
-// export function reWriteObj(target: { [key: string]: any }, array: string[]) {
-//   return array.reduce(function (value: { [key: string]: any }, keys: string) {
-//     target.hasOwnProperty(keys) && (value[keys] = target[keys]);
-//     return value;
-//   }, {});
-// }
-//
+export function reWriteObj(target: { [key: string]: any }, array: string[]) {
+  return array.reduce(function (value: { [key: string]: any }, keys: string) {
+    target.hasOwnProperty(keys) && (value[keys] = target[keys]);
+    return value;
+  }, {});
+}
+
 // export function reWriteDiffObj(target: { [key: string]: any }, array: string[]) {
 //   return array.reduce(function (value: { [key: string]: any }, keys: string) {
 //     value.hasOwnProperty(keys) && delete value[keys];

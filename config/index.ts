@@ -8,7 +8,6 @@ dotenv.config();
 import { JwtAuthConf } from './src/jwtAuth.config';
 import { MysqlConf } from './src/mysql.config';
 import { RedisConf } from './src/redis.config';
-import { EmailConf } from './src/email.config';
 import { AppConf } from './src/app.config';
 
 /** 引用 Config */
@@ -17,7 +16,6 @@ export class ConfigGlobal {
     load = load || [
       AppConf,
       RedisConf,
-      EmailConf,
       MysqlConf,
       JwtAuthConf,
     ];
@@ -28,5 +26,4 @@ export class ConfigGlobal {
 export * from './src/app.config';
 export * from './src/mysql.config';
 export * from './src/redis.config';
-export * from './src/email.config';
 export * from './src/jwtAuth.config';

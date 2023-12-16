@@ -8,12 +8,13 @@ import { AuthModule } from './auth/auth.module';
 
 //
 import { AppName, AppSystem, ConfigGlobal } from '@config';
-import { JwtAuthGuard, JwtAuthModel } from '@libs/jwtAuth';
+import { JwtAuthGuard } from '@libs/jwtAuth';
 import { ConfigService } from '@nestjs/config';
+import { RedisModule } from '@libs/redis';
 import { APP_GUARD } from '@nestjs/core';
+import { JwtService } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { MysqlModel } from '@mysql';
-import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -21,6 +22,8 @@ import { JwtService } from '@nestjs/jwt';
     MysqlModel.use(),
     // config
     ConfigGlobal.use(),
+    // redis
+    RedisModule.forRoot(undefined, true),
     // module
     CommentsModule,
     SettingsModule,

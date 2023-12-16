@@ -16,7 +16,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, LocalAuthName) {
   }
 
   async validate(user: string, pass: string) {
-    const where = HasEmail(user) ? { email: user } : { name: user };
+    const where = HasEmail(user) ? { email: user } : { user };
 
     // 获取信息
     const userInfo = await Users.getInfoKeys(where);
@@ -35,7 +35,8 @@ export class LocalStrategy extends PassportStrategy(Strategy, LocalAuthName) {
   }
 
   async handlerUserVerify(userInfo: Users, pass: string) {
-    const conf = await UsersConf.getInfoKeys({ uid: userInfo.uid });
+    let conf = await UsersConf.getInfoKeys({ uid: userInfo.uid });
+    if (!conf) conf = await UsersConf.save({ uid: userInfo.uid });
 
     // 锁定
     let isLock = false;
