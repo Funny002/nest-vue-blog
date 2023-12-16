@@ -13,8 +13,8 @@ import { AppConf } from './src/app.config';
 
 /** 引用 Config */
 export class ConfigGlobal {
-  static use(): DynamicModule {
-    const load = [
+  static use(load?: any[]): DynamicModule {
+    load = load || [
       AppConf,
       RedisConf,
       EmailConf,

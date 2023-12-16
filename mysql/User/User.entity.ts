@@ -9,6 +9,11 @@ export enum UserState {
   DISABLE = 'disable', // 禁用
 }
 
+export enum UserRole {
+  ADMIN = 'admin', // 管理员
+  USER = 'user', // 普通用户
+}
+
 @Entity()
 @Index('unique', ['uid', 'name', 'email'], { unique: true })
 export class Users extends BaseModel {
@@ -24,9 +29,11 @@ export class Users extends BaseModel {
 
   @Column({ /* 头像 */ nullable: true }) avatar: string;
 
-  @Column({ /* 角色 */ type: 'simple-array', nullable: true }) role: string[];
+  @Column({ /* 是否改名 */ type: 'tinyint', default: 0 }) is_save_name: number;
 
-  @Column({ /* 状态 */ type: 'enum', enum: UserState, default: UserState.DISABLE }) state: UserState;
+  @Column({ /* 角色 */ type: 'enum', enum: UserRole, default: UserRole.USER }) role: string | UserRole;
+
+  @Column({ /* 状态 */ type: 'enum', enum: UserState, default: UserState.DISABLE }) state: string | UserState;
 
   protected handleWhere(): { [p: string]: { name?: string; handle?: any } } {
     return {

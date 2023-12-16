@@ -9,8 +9,8 @@ import { Setting } from './Setting/Setting.entity';
 import { UsersConf } from './User/UsersConf.entity';
 
 export class MysqlModel {
-  static use() {
-    const entities = [
+  static use(entities?: any[], options: { [key: string]: any } = {}) {
+    entities = entities || [
       Users,
       UsersConf,
       Setting,
@@ -20,7 +20,7 @@ export class MysqlModel {
       inject: [ConfigService],
       useFactory: async (config: ConfigService) => {
         const conf = config.get<TypeOrmModuleOptions>(MysqlName);
-        return Object.assign({ ...conf }, { entities });
+        return Object.assign({ ...conf }, { ...options }, { entities });
       },
     });
   }

@@ -25,7 +25,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, LocalAuthName) {
     if (!userInfo) ManualHttpException('账号/邮箱不存在');
 
     // 验证状态
-    if (userInfo.state !== UserState.ENABLE) new UsersException(userInfo.state);
+    if (userInfo.state !== UserState.ENABLE) new UsersException(<UserState>userInfo.state);
 
     // 验证
     await this.handlerUserVerify(userInfo, pass);

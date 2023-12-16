@@ -6,6 +6,12 @@
     "deleteOutDir": true
   },
   "projects": {
+    "cli": {
+      "type": "application",
+      "root": "cli",
+      "entryFile": "index",
+      "sourceRoot": "cli"
+    },
     "middleware": {
       "type": "library",
       "root": "middleware",

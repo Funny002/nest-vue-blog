@@ -6,6 +6,8 @@ import { Column, Entity, Index } from 'typeorm';
 export class UsersConf extends BaseModel {
   @Column({ /* uid */ }) uid: string;
 
+  @Column({ /* 登录限制 */  default: 0 }) login_limit: number;
+
   @Column({ /* 用户链接 */ length: 200, nullable: true }) href: string;
 
   @Column({ /* 个性说明 */ length: 250, nullable: true }) explain: string;
