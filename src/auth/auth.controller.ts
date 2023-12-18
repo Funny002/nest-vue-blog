@@ -8,7 +8,8 @@ import { AuthService } from './auth.service';
 import { reWriteObj } from '@utils/object';
 import { IpAddress } from '@libs/other';
 import { NoAuth } from '@libs/jwtAuth';
-import { Users } from '@mysql';
+import { Setting, Users, UsersConf, UserState } from '@mysql';
+import { createPass } from '@libs/crypto';
 
 @NoAuth()
 @Controller('auth')
@@ -33,9 +34,19 @@ export class AuthController {
   // 注册
   @Post('register')
   @ApiOperation({ summary: '注册' })
-  async register(@Req() req: Request, @Body() body: RegisterDto) {
-    if (await Users.findOne({ where: { email: body.user } })) return ManualHttpException('邮箱已注册');
-    return { body, headers: req.headers };
+  async register(@IpAddress() ip: string, @Body() body: RegisterDto) {
+    const config = (await Setting.getInfoKeys({ type: 'system', keys: 'register', state: 'enable' })) || { value: 'true' };
+    if (config.value.toLowerCase() !== 'true') return ManualHttpException('账号注册已关闭');
+    //
+    const email = body.user;
+    if (await Users.findOne({ where: { email } })) return ManualHttpException('邮箱已注册');
+    await this.auth.verifyCode(ip, body.user, body.code);
+    //
+    const uid = await this.auth.getUid();
+    const newPass = createPass(email, body.pass);
+    const userInfo = await Users.save({ email, user: email, name: email, pass: newPass, uid: String(uid), state: UserState.ENABLE });
+    await UsersConf.save({ uid: userInfo.uid });
+    return this.login(<any>{ user: userInfo }, { user: email, pass: body.pass });
   }
 
   // 退出登录

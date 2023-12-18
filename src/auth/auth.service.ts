@@ -3,7 +3,7 @@ import { EmailService } from '@libs/email';
 import { RedisService } from '@libs/redis';
 import Redis from 'ioredis';
 import { resolve } from 'path';
-import { Setting } from '@mysql';
+import { Setting, Users } from '@mysql';
 import { ManualHttpException } from '@libs/error';
 
 @Injectable()
@@ -56,7 +56,36 @@ export class AuthService {
     return await emailConnect.send('注册验证码', name);
   }
 
-  async verifyCode(email: string, code: string) {
+  async verifyCode(ip: string, email: string, code: string) {
+    if (code.length !== 5) return ManualHttpException('验证码错误');
+    const res = await this.redis.hget(`code:${ip}`, email);
+    if (!res) return ManualHttpException('验证码错误');
+    const conf = JSON.parse(await this.redis.hget(`code:${ip}`, email));
+    if (conf.code === code) {
+      if (Date.now() - conf.time <= 5 * 60000) {
+        await this.redis.hdel(`code:${ip}`, email);
+        return true;
+      } else {
+        return ManualHttpException('验证码过期');
+      }
+    } else {
+      return ManualHttpException('验证码错误');
+    }
+  }
 
+  async getUid(digits = 8, maxIndex = 100) {
+    digits = Math.max(7, digits);
+    const getUid = () => Math.floor(Math.random() * Math.pow(digits, digits - 1));
+    let index = 0;
+    for (let uid = getUid(); true; uid = getUid()) {
+      if (index > maxIndex) {
+        digits += 1;
+        index = 0;
+      }
+      if (!(await Users.hasKeys({ uid: String(getUid()) }))) {
+        return uid;
+      }
+      index++;
+    }
   }
 }
