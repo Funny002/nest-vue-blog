@@ -33,7 +33,7 @@ export class AuthService {
     await this.redis.hset(`code:${ip}`, email, JSON.stringify({ code, time }));
     await this.redis.hset(`code:${ip}`, 'count', JSON.stringify(count.concat(time)));
     try {
-      return await this.setEmailCode(email, { code, time });
+      return await this.setEmailCode(email, { code, time: 5 });
     } catch (e) {
       console.log(e.message);
       ManualHttpException('邮件发送失败，请稍后再试');
