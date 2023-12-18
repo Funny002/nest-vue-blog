@@ -6,6 +6,7 @@ import { TokenService } from './token/token.service';
 import { ManualHttpException } from '@libs/error';
 import { AuthService } from './auth.service';
 import { reWriteObj } from '@utils/object';
+import { IpAddress } from '@libs/other';
 import { NoAuth } from '@libs/jwtAuth';
 import { Users } from '@mysql';
 
@@ -32,9 +33,9 @@ export class AuthController {
   // 注册
   @Post('register')
   @ApiOperation({ summary: '注册' })
-  async register(@Body() body: RegisterDto) {
+  async register(@Req() req: Request, @Body() body: RegisterDto) {
     if (await Users.findOne({ where: { email: body.user } })) return ManualHttpException('邮箱已注册');
-    return body;
+    return { body, headers: req.headers };
   }
 
   // 退出登录
@@ -55,7 +56,11 @@ export class AuthController {
   // 发送验证码
   @Post('sendCode')
   @ApiOperation({ summary: '发送验证码' })
-  async sendCode(@Body() body: CodeDto) {}
+  async sendCode(@IpAddress() ip: string, @Body() body: CodeDto) {
+    if (await Users.findOne({ where: { email: body.email } })) return ManualHttpException('邮箱已注册');
+    await this.auth.sendCode(ip, body.email);
+    return '邮件发送成功';
+  }
 
   // 令牌验证
   @Get('tokenVerify')

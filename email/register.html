@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <title>账号注册验证</title>
+  <style>
+    body {
+      color: #5a5a5a;
+      font-size: 14px;
+    }
+
+    .container {
+      margin: 0 auto;
+      max-width: 600px;
+      border-radius: 5px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+    }
+
+    .header {
+      font-weight: bold;
+      line-height: 1.4em;
+      padding: 20px 20px 10px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .content {
+      padding: 10px 20px;
+    }
+
+    .content-controls {
+      color: #e55;
+      margin: 0 5px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .content-message {}
+
+    .content-main {
+      padding: 20px 0;
+      font-weight: bold;
+    }
+
+    .content-code {
+      margin: 0 10px;
+      font-size: 18px;
+    }
+
+    .footer {
+      font-size: 12px;
+      padding: 10px 20px;
+      border-top: 1px solid #ddd;
+    }
+
+    .note {
+      color: #999;
+      font-size: 12px;
+      margin-top: 10px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <div>尊敬的用户，您好！</div>
+    </div>
+    <div class="content">
+      <div class="content-message">您正在进行<span class="content-controls">注册账号</span>操作，请输入以下验证码完成操作！</div>
+      <div class="content-main">验证码：<span class="content-code">{{code}}</span>有效期为<span
+          class="content-controls">{{time}}分钟</span>，请在有效期内完成验证。</div>
+      <div class="content-message">如果您未进行<span class="content-controls">注册账号</span>操作，请忽略该邮件。</div>
+    </div>
+    <div class="footer">
+      <div>注意：如非本人操作，请及时修改密码以保证帐户安全（工作人员不会向你索取验证码，请勿泄漏！)</div>
+    </div>
+  </div>
+  <div class="note">
+    <div>请保管好您的邮箱，避免账号被他人盗用。</div>
+    <div>此为系统邮件，请勿回复。</div>
+  </div>
+</body>
+
+</html>

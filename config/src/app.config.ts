@@ -6,6 +6,8 @@ export interface AppSystem {
   port: number;
   prefix: string;
   version: string;
+  //
+  cookieSecret?: string;
   pipes?: ValidationPipeOptions;
 }
 
@@ -23,5 +25,6 @@ export const AppConf = registerAs(AppName, (): AppSystem => {
       transform: true,
       stopAtFirstError: true,
     },
+    cookieSecret: process.env['COOKIE_SECRET'],
   };
 });

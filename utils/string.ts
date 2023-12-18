@@ -13,10 +13,10 @@
 //   return target.slice(0, long);
 // }
 //
-export function ranString(c: 'x' | 'y' = 'x') {
+export function ranString(c: 'x' | 'y' = 'x', radix = 16) {
   const time = Date.now() || performance.now();
-  const random = (time + Math.random() * 16) % 16 | 0;
-  return (c === 'x' ? random : (random & 0x3) | 0x8).toString(16);
+  const random = (time + Math.random() * radix) % radix | 0;
+  return (c === 'x' ? random : (random & 0x3) | 0x8).toString(radix);
 }
 
 // export function UuidToNumber(uuid: string) {
