@@ -14,11 +14,14 @@ export class Pagination {
    * @param page
    * @param total
    * @param list
+   * @param params
    */
-  static of<T = any>(page: PaginationRequest, total: number, list: T[]): PaginationResponse<T> {
+  static of<T = any>(page: PaginationRequest, total: number, list: T[], params: { [key: string]: any } = {}): PaginationResponse<T> {
     let pageOrder = {};
 
-    const { pageSize, pageCount, order, params } = page;
+    params = params || page.params;
+
+    const { pageSize, pageCount, order } = page;
 
     const maxPage = pageSize ? Math.floor(total / pageSize) + (total % pageCount ? 1 : 0) : undefined;
 

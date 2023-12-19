@@ -107,21 +107,27 @@ export class TokenService {
 
   /* token 查询 */
   async hasToken(token: string, types: 'access' | 'refresh' = 'access') {
-    const { uid, tags } = this.jwtService.decode(token);
-    const score = await this.redis.zscore(`${tags}:${uid}:${types}`, token);
-    if (!score) return false;
-    if (parseInt(score) < ~~(Date.now() / 1000)) {
-      if (types === 'refresh') {
-        token = await this.redis.hget(`${tags}:${uid}:tokens`, token);
+    if (!token) return false;
+    try {
+      const { uid, tags } = this.jwtService.decode(token);
+      const score = await this.redis.zscore(`${tags}:${uid}:${types}`, token);
+      if (!score) return false;
+      if (parseInt(score) < ~~(Date.now() / 1000)) {
+        if (types === 'refresh') {
+          token = await this.redis.hget(`${tags}:${uid}:tokens`, token);
+        }
+        await this.delToken(token, uid, tags);
+        return false;
       }
-      await this.delToken(token, uid, tags);
+      return true;
+    } catch (e) {
+      console.log(e.message);
       return false;
     }
-    return true;
   }
 
   /* token 删除 */
-  async delToken(access: string, uid?: number, tags = 'web') {
+  async delToken(access: string, uid?: string, tags = 'web') {
     if (!uid) {
       const conf = this.jwtService.decode(access);
       uid = conf.uid;
@@ -130,8 +136,9 @@ export class TokenService {
     const tokensKey = `${tags}:${uid}:tokens`;
     const refresh = await this.redis.hget(tokensKey, access);
     //
-    await this.redis.hdel(tokensKey, access, refresh);
-    await this.redis.zrem(`${tags}:${uid}:access`, access);
     await this.redis.zrem(`${tags}:${uid}:refresh`, refresh);
+    await this.redis.zrem(`${tags}:${uid}:access`, access);
+    await this.handlerExpiresToken(uid, tags, maxLimit);
+    await this.redis.hdel(tokensKey, access, refresh);
   }
 }

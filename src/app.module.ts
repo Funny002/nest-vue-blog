@@ -7,8 +7,9 @@ import { FilesModule } from './files/files.module';
 import { AuthModule } from './auth/auth.module';
 
 //
+import { JwtAuthGuard, JwtAuthStrategy } from '@libs/jwtAuth';
+import { TokenService } from './auth/token/token.service';
 import { AppName, AppSystem, ConfigGlobal } from '@config';
-import { JwtAuthGuard } from '@libs/jwtAuth';
 import { ConfigService } from '@nestjs/config';
 import { RedisModule } from '@libs/redis';
 import { APP_GUARD } from '@nestjs/core';
@@ -36,6 +37,8 @@ import { MysqlModel } from '@mysql';
   providers: [
     JwtService,
     ConfigService,
+    TokenService,
+    JwtAuthStrategy,
     { provide: APP_GUARD, useClass: JwtAuthGuard },
   ],
 })

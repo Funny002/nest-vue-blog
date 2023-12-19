@@ -9,12 +9,13 @@ export function reWriteObj(target: { [key: string]: any }, array: string[]) {
   }, {});
 }
 
-// export function reWriteDiffObj(target: { [key: string]: any }, array: string[]) {
-//   return array.reduce(function (value: { [key: string]: any }, keys: string) {
-//     value.hasOwnProperty(keys) && delete value[keys];
-//     return value;
-//   }, { ...target });
-// }
+export function reWriteDiffObj(target: { [key: string]: any }, array: string[]) {
+  return array.reduce(function (value: { [key: string]: any }, keys: string) {
+    value.hasOwnProperty(keys) && delete value[keys];
+    return value;
+  }, { ...target });
+}
+
 //
 // export function mergeOptions<T = any>(option: T, ...options: any[]) {
 //   const result: any = option || {};
