@@ -4,9 +4,10 @@ import { ConfigService } from '@nestjs/config';
 import { MysqlName } from '@config';
 
 //
-import { Users } from './User/User.entity';
+import { Users } from './User/Users.entity';
 import { Setting } from './Setting/Setting.entity';
 import { UsersConf } from './User/UsersConf.entity';
+import { UsersNameRecord } from './User/UsersNameRecord.entity';
 
 export class MysqlModel {
   static use(entities?: any[], options: { [key: string]: any } = {}) {
@@ -14,6 +15,7 @@ export class MysqlModel {
       Users,
       UsersConf,
       Setting,
+      UsersNameRecord,
     ];
     //
     return TypeOrmModule.forRootAsync({
@@ -31,8 +33,9 @@ export class MysqlModel {
 }
 
 // User
-export * from './User/User.entity';
+export * from './User/Users.entity';
 export * from './User/UsersConf.entity';
+export * from './User/UsersNameRecord.entity';
 
 // Setting
 export * from './Setting/Setting.entity';

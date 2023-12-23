@@ -1,11 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, UsePipes, ValidationPipe } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { reWriteDiffObj } from '@utils/object';
-import { UsersService } from './users.service';
-import { IsAdmin } from '@libs/jwtAuth';
-import { Users } from '@mysql';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req } from '@nestjs/common';
 import { Pagination, PaginationParams, PaginationRequest } from '@libs/pagination';
 import { UsersPageDto, UsersSaveDto } from './dto/index.dto';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Setting, Users, UsersNameRecord } from '@mysql';
+import { ManualHttpException } from '@libs/error';
+import { reWriteDiffObj } from '@utils/object';
+import { UsersService } from './users.service';
+import { BetweenMonth } from '@utils/date';
+import { IsAdmin } from '@libs/jwtAuth';
+import { Not } from 'typeorm';
 
 @ApiTags('user 用户')
 @Controller('users')
@@ -27,17 +30,39 @@ export class UsersController {
   async delUser() {}
 
   @Put()
-  @ApiOperation({ summary: '更新用户' })
+  @ApiOperation({ summary: '更新用户信息' })
   async user(@Req() req: Request, @Body() body: UsersSaveDto) {
-    return reWriteDiffObj(await this.userSave(req['user'].uid, body), ['role', 'state']);
+    const userInfo = await this.userSave(req['user'].uid, body, true);
+    if (userInfo) return reWriteDiffObj(userInfo, ['role', 'state']);
+    return ManualHttpException('未知异常');
   }
 
   // 更新用户
   @IsAdmin()
   @Put(':uid')
-  @ApiOperation({ summary: '更新用户, 管理员' })
-  async userSave(@Param('uid') uid: string, @Body() body: UsersSaveDto) {
-    return {};
+  @ApiOperation({ summary: '更新用户信息, 管理员' })
+  async userSave(@Param('uid') uid: string, @Body() body: UsersSaveDto, isUser = false) {
+    if (!uid) return ManualHttpException('用户不存在');
+    const userInfo = await Users.getInfoKeys({ uid });
+    if (!userInfo) return ManualHttpException('用户不存在');
+    if (body.name && body.name !== userInfo.name) {
+      if (isUser) {
+        // @ts-ignore
+        const count = await UsersNameRecord.countBy({ uid, create_time: BetweenMonth() });
+        const NameLimit = parseInt(((await Setting.getInfoKeys({ type: 'system', keys: 'userNameLimit' }, { value: true })) || { value: '0' }).value);
+        if (NameLimit && count >= NameLimit) return ManualHttpException('本月名称修改已达上限');
+      }
+      if (await Users.countBy({ uid: Not(uid), name: body.name })) return ManualHttpException('用户名已存在');
+      if (isUser) {
+        await UsersNameRecord.save({ uid, name: body.name, lest_name: userInfo.name, is_user: 1, message: `用户手动将用户名 [${userInfo.name}] 更改为 [${body.name}]` });
+      } else {
+        await UsersNameRecord.save({ uid, name: body.name, lest_name: userInfo.name, message: `管理员手动将用户名 [${userInfo.name}] 更改为 [${body.name}]` });
+      }
+      userInfo.name = body.name;
+      await Users.update({ uid }, { name: body.name });
+    }
+    await Users.update({ uid }, this.usersService.handleSave(body));
+    return reWriteDiffObj(await Users.getInfoKeys({ uid }), ['pass']);
   }
 
   // 用户信息

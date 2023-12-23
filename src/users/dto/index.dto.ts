@@ -3,11 +3,15 @@ import { IsNotEmpty, IsOptional, IsString, Length } from 'class-validator';
 
 export class UsersSaveDto {
   @IsOptional()
-  @IsNotEmpty({ message: '用户名不能为空' })
   @IsString({ message: '用户名必须是字符串' })
   @Length(4, 16, { message: '用户名长度必须在4-16之间' })
-  @ApiPropertyOptional({ description: '用户名', example: 'admin' })
+  @ApiPropertyOptional({ description: '用户名' })
   name?: string;
+
+  @IsOptional()
+  @IsString({ message: '头像必须是字符串' })
+  @ApiPropertyOptional({ description: '头像' })
+  avatar?: string;
 }
 
 export class UsersPageDto {

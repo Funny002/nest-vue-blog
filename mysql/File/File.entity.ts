@@ -1,6 +1,6 @@
 import { BaseModel } from '../Common/Base.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
-import { Users } from '../User/User.entity';
+import { Users } from '../User/Users.entity';
 
 export enum FileTypes {
   Cloud, // 云盘

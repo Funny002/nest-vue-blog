@@ -29,8 +29,6 @@ export class Users extends BaseModel {
 
   @Column({ /* 头像 */ nullable: true }) avatar: string;
 
-  @Column({ /* 是否改名 */ type: 'tinyint', default: 0 }) is_save_name: number;
-
   @Column({ /* 角色 */ type: 'enum', enum: UserRole, default: UserRole.USER }) role: string | UserRole;
 
   @Column({ /* 状态 */ type: 'enum', enum: UserState, default: UserState.DISABLE }) state: string | UserState;

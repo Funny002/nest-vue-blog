@@ -4,6 +4,7 @@
 
 # dependencies
 .env
+structure.txt
 
 # Logs
 logs
