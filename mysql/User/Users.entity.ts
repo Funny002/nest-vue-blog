@@ -21,8 +21,6 @@ export class Users extends BaseModel {
 
   @Column({ /* 昵称 */ length: 50 }) name: string;
 
-  @Column({ /* 账号 */ length: 50 }) user: string;
-
   @Column({ /* 密码 */ length: 64 }) pass: string;
 
   @Column({ /* 邮箱 */ length: 100 }) email: string;
@@ -39,5 +37,23 @@ export class Users extends BaseModel {
       name: { name: 'name', handle: Like },
       email: { name: 'email', handle: ILike },
     };
+  }
+
+  /* getUid */
+  static async getUid<T extends Users>(this: { new(): T } & typeof Users, digits = 8, maxIndex = 100): Promise<number> {
+    digits = Math.max(7, digits);
+    const getUid = () => Math.floor(Math.random() * Math.pow(digits, digits - 1));
+    //
+    let index = 0;
+    for (let uid = getUid(); true; uid = getUid()) {
+      if (index > maxIndex) {
+        digits += 1;
+        index = 0;
+      }
+      if (!(await Users.hasKeys({ uid: String(getUid()) }))) {
+        return uid;
+      }
+      index++;
+    }
   }
 }

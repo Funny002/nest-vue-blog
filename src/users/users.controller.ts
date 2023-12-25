@@ -1,14 +1,14 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req } from '@nestjs/common';
+import { UsersCreateDto, UsersDelDto, UsersPageDto, UsersSaveDto } from './dto/index.dto';
 import { Pagination, PaginationParams, PaginationRequest } from '@libs/pagination';
-import { UsersPageDto, UsersSaveDto } from './dto/index.dto';
+import { Setting, Users, UsersNameRecord, UserState } from '@mysql';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Setting, Users, UsersNameRecord } from '@mysql';
 import { ManualHttpException } from '@libs/error';
 import { reWriteDiffObj } from '@utils/object';
 import { UsersService } from './users.service';
 import { BetweenMonth } from '@utils/date';
 import { IsAdmin } from '@libs/jwtAuth';
-import { Not } from 'typeorm';
+import { In, Not } from 'typeorm';
 
 @ApiTags('user 用户')
 @Controller('users')
@@ -19,15 +19,29 @@ export class UsersController {
   @Post()
   @IsAdmin()
   @ApiOperation({ summary: '创建用户, 管理员' })
-  async createUser() {
-    return 'createUser';
+  async createUser(@Body() body: UsersCreateDto) {
+    if (await Users.countBy({ name: body.name })) return ManualHttpException('昵称已存在');
+    if (await Users.countBy({ email: body.email })) return ManualHttpException('邮箱已注册');
+    //
+    return await Users.save(await this.usersService.createUser(body));
   }
 
   // 删除用户
   @Delete()
   @IsAdmin()
   @ApiOperation({ summary: '删除用户, 管理员' })
-  async delUser() {}
+  async delUser(@Body() body: UsersDelDto) {
+    body.isDelete = body.isDelete || false;
+    if (body.ids.length < 1) return ManualHttpException('不能为空数组');
+    const count = await Users.countBy({ uid: In(body.ids) });
+    if (count < body.ids.length) return ManualHttpException('部分用户不存在');
+    //
+    if (!body.isDelete) {
+      return Users.update({ uid: In(body.ids) }, { state: UserState.DELETE });
+    } else {
+      return Users.delete({ uid: In(body.ids) });
+    }
+  }
 
   @Put()
   @ApiOperation({ summary: '更新用户信息' })

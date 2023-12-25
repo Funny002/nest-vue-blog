@@ -2,9 +2,9 @@ import { ManualHttpException, UsersException } from '@libs/error';
 import { AuthGuard, PassportStrategy } from '@nestjs/passport';
 import { Users, UsersConf, UserState } from '@mysql';
 import { Injectable } from '@nestjs/common';
+import { createPass } from '@libs/crypto';
 import { Strategy } from 'passport-local';
 import { HasEmail } from '@utils/verify';
-import { createPass } from '@libs/crypto';
 
 const LocalAuthName = 'localAuth';
 

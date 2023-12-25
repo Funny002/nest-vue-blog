@@ -44,9 +44,9 @@ export class AuthController {
     if (await Users.findOne({ where: { email } })) return ManualHttpException('邮箱已注册');
     await this.auth.verifyCode(ip, body.user, body.code);
     //
-    const uid = await this.auth.getUid();
+    const uid = await Users.getUid();
     const newPass = createPass(email, body.pass);
-    const userInfo = await Users.save({ email, user: email, name: email, pass: newPass, uid: String(uid), state: UserState.ENABLE });
+    const userInfo = await Users.save({ email, name: email, pass: newPass, uid: String(uid), state: UserState.ENABLE });
     await UsersConf.save({ uid: userInfo.uid });
     return this.login(<any>{ user: userInfo }, { user: email, pass: body.pass });
   }

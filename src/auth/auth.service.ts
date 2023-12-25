@@ -1,10 +1,10 @@
+import { ManualHttpException } from '@libs/error';
 import { Injectable } from '@nestjs/common';
 import { EmailService } from '@libs/email';
 import { RedisService } from '@libs/redis';
-import Redis from 'ioredis';
+import { Setting } from '@mysql';
 import { resolve } from 'path';
-import { Setting, Users } from '@mysql';
-import { ManualHttpException } from '@libs/error';
+import Redis from 'ioredis';
 
 @Injectable()
 export class AuthService {
@@ -70,22 +70,6 @@ export class AuthService {
       }
     } else {
       return ManualHttpException('验证码错误');
-    }
-  }
-
-  async getUid(digits = 8, maxIndex = 100) {
-    digits = Math.max(7, digits);
-    const getUid = () => Math.floor(Math.random() * Math.pow(digits, digits - 1));
-    let index = 0;
-    for (let uid = getUid(); true; uid = getUid()) {
-      if (index > maxIndex) {
-        digits += 1;
-        index = 0;
-      }
-      if (!(await Users.hasKeys({ uid: String(getUid()) }))) {
-        return uid;
-      }
-      index++;
     }
   }
 }

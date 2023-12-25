@@ -22,22 +22,6 @@ export class UsersService {
   ])
   async options() {}
 
-  async getUid(digits = 8, maxIndex = 100) {
-    digits = Math.max(7, digits);
-    const getUid = () => Math.floor(Math.random() * Math.pow(digits, digits - 1));
-    let index = 0;
-    for (let uid = getUid(); true; uid = getUid()) {
-      if (index > maxIndex) {
-        digits += 1;
-        index = 0;
-      }
-      if (!(await Users.hasKeys({ uid: String(getUid()) }))) {
-        return uid;
-      }
-      index++;
-    }
-  }
-
   // 创建用户
   @CommandOptions([{ flags: 'create', alias: 'c', description: '创建用户' }])
   async create({ email, pass, role }: UserOptions) {
@@ -47,9 +31,9 @@ export class UsersService {
     if (pass.length < 6) return console.log('<%s>长度不能小于6', pass);
     if (!emailReg.test(email)) return console.log('<%s>格式不正确', email);
     //
-    const uid = await this.getUid();
+    const uid = await Users.getUid();
     const newPass = createPass(email, pass);
-    console.log(await Users.save({ role, email, user: email, name: email, pass: newPass, uid: String(uid), state: UserState.ENABLE }));
+    console.log(await Users.save({ role, email, name: email, pass: newPass, uid: String(uid), state: UserState.ENABLE }));
   }
 
   // 修改用户
