@@ -16,6 +16,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { MysqlModel } from '@mysql';
+import { UploadModule } from './upload/upload.module';
+import { FolderModule } from './folder/folder.module';
 
 @Module({
   imports: [
@@ -33,6 +35,8 @@ import { MysqlModel } from '@mysql';
     UsersModule,
     FilesModule,
     AuthModule,
+    UploadModule,
+    FolderModule,
   ],
   providers: [
     JwtService,

@@ -1,4 +1,4 @@
-import { BaseEntity, CreateDateColumn, In, Not, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { BaseEntity, CreateDateColumn, In, Not, PrimaryGeneratedColumn, QueryRunner, UpdateDateColumn } from 'typeorm';
 import { FindOptionsSelect } from 'typeorm/find-options/FindOptionsSelect';
 import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
@@ -7,8 +7,6 @@ import { EntityManager } from 'typeorm/entity-manager/EntityManager';
 import { Repository } from 'typeorm/repository/Repository';
 import { PaginationRequest } from '@libs/pagination';
 import Decimal from 'decimal.js';
-
-// import * as Decimal from 'Decimal';
 
 export abstract class BaseModel extends BaseEntity {
   @PrimaryGeneratedColumn({ /* 主键 */ }) id: number;
@@ -70,9 +68,14 @@ export abstract class BaseModel extends BaseEntity {
     return this.saveAmount(where, prop, value, 'decrement');
   }
 
+  /** 获取 QueryRunner */
+  static getQueryRunner<T extends BaseModel, V extends any>(this: { new(): T } & typeof BaseModel): QueryRunner {
+    return this.getRepository().metadata.connection.createQueryRunner();
+  }
+
   /** 事务聚合 */
   static async transaction<T extends BaseModel, V extends any>(this: { new(): T } & typeof BaseModel, handler: (query: EntityManager, repository: Repository<T>) => Promise<V>): Promise<V> {
-    const queryRunner = this.getRepository().metadata.connection.createQueryRunner();
+    const queryRunner = this.getQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {

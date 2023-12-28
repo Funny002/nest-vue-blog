@@ -5,8 +5,10 @@ import { MysqlName } from '@config';
 
 //
 import { Users } from './User/Users.entity';
+import { Files } from './File/Files.entity';
 import { Setting } from './Setting/Setting.entity';
 import { UsersConf } from './User/UsersConf.entity';
+import { FilesFolder } from './File/FilesFolder.entity';
 import { UsersNameRecord } from './User/UsersNameRecord.entity';
 
 export class MysqlModel {
@@ -14,8 +16,10 @@ export class MysqlModel {
     entities = entities || [
       Users,
       UsersConf,
-      Setting,
       UsersNameRecord,
+      Files,
+      FilesFolder,
+      Setting,
     ];
     //
     return TypeOrmModule.forRootAsync({
@@ -36,6 +40,10 @@ export class MysqlModel {
 export * from './User/Users.entity';
 export * from './User/UsersConf.entity';
 export * from './User/UsersNameRecord.entity';
+
+// File
+export * from './File/Files.entity';
+export * from './File/FilesFolder.entity';
 
 // Setting
 export * from './Setting/Setting.entity';
