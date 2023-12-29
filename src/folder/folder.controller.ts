@@ -1,11 +1,13 @@
-import { Body, Controller, Delete, Get, Post, Req } from '@nestjs/common';
 import { FolderCreateDto, FolderDeleteDto, FolderGroupDto } from './dto/index.dto';
+import { Pagination, PaginationParams, PaginationRequest } from '@libs/pagination';
+import { Body, Controller, Delete, Get, Post, Query, Req } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Files, FilesFolder, Users } from '@mysql';
 import { ManualHttpException } from '@libs/error';
 import { FolderService } from './folder.service';
-import { Files, FilesFolder } from '@mysql';
-import { In } from 'typeorm';
+import { reWriteDiffObj } from '@utils/object';
 import { IsAdmin } from '@libs/jwtAuth';
+import { In } from 'typeorm';
 
 @Controller('folder')
 @ApiTags('folder 文件夹')
@@ -61,7 +63,10 @@ export class FolderController {
   @IsAdmin()
   @Get('group')
   @ApiOperation({ summary: '文件夹列表' })
-  async list(@Body() body: FolderGroupDto) {
-    return body;
+  async list(@PaginationParams() page: PaginationRequest, @Query() query: FolderGroupDto) {
+    if (query.uid) return await FilesFolder.getKeys({ uid: query.uid });
+    const listMap = await FilesFolder.createQueryBuilder('folder').select('uid').groupBy('uid').getRawMany();
+    const { count, list } = await Users.getList(page, { uid: In(listMap.map(v => v.uid)) });
+    return Pagination.of(page, count, list.map(item => reWriteDiffObj(item, ['pass', 'update_time', 'role'])), {});
   }
 }

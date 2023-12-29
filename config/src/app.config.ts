@@ -7,6 +7,7 @@ export interface AppSystem {
   prefix: string;
   version: string;
   //
+  filesPath?: string;
   cookieSecret?: string;
   pipes?: ValidationPipeOptions;
 }
@@ -26,5 +27,6 @@ export const AppConf = registerAs(AppName, (): AppSystem => {
       stopAtFirstError: true,
     },
     cookieSecret: process.env['COOKIE_SECRET'],
+    filesPath: process.env['FILES_PATH'] || './upload',
   };
 });

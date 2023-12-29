@@ -51,9 +51,4 @@ export class FolderGroupDto {
   @IsString({ message: 'uid 必须是字符串' })
   @ApiProperty({ description: '用户 uid', required: false })
   uid?: string;
-
-  @IsOptional()
-  @IsNumber(undefined, { message: 'id 必须是数字' })
-  @ApiProperty({ description: '文件夹 id', required: false })
-  id?: number;
 }

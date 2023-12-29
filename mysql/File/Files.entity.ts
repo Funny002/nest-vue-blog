@@ -14,8 +14,6 @@ export enum FileFormat {
 export class Files extends BaseModel {
   @Column({ /* uid */ }) uid: string;
 
-  @Column({ /* 分类 */ }) tags: string;
-
   @Column({ /* 扩展名 */ }) ext: string;
 
   @Column({ /* 上级id */ default: 0 }) pid: number;
@@ -28,7 +26,13 @@ export class Files extends BaseModel {
 
   @Column({ /* 大小 */ type: 'int', default: 0 }) size: number;
 
+  @Column({ /* 分类 */ length: 50, nullable: true }) tags: string;
+
   @Column({ /* 格式 */ type: 'enum', enum: FileFormat }) format: string | FileFormat;
+
+  @Column({ /* 宽 */  nullable: true }) width: number;
+
+  @Column({ /* 高 */  nullable: true }) height: number;
 
   @Column({ /* 备注 */ length: 200, default: '' }) remark: string;
 
