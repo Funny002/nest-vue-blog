@@ -28,7 +28,7 @@ export class UploadController {
     const fileInfo = await this.uploadService.createFile(uid, file, isAvatar);
     if (!fileInfo) return ManualHttpException('文件上传失败');
     //
-    if (isAvatar && (fileInfo.width !== fileInfo.height || fileInfo.height > 200)) {
+    if (isAvatar && (fileInfo.width !== fileInfo.height || fileInfo.height > 300)) {
       this.uploadService.removeFile(fileInfo.path);
       return ManualHttpException('头像尺寸不符合要求');
     }

@@ -1,11 +1,11 @@
 import { FileFormat, Files, FilesFolder } from '@mysql';
-import { Features, identify } from 'imagemagick';
 import { ConfigService } from '@nestjs/config';
 import { AppName, AppSystem } from '@config';
 import { Injectable } from '@nestjs/common';
 import { reWriteObj } from '@utils/object';
 import { ranString } from '@utils/string';
 import { sha256 } from '@libs/crypto';
+import Sharp from 'sharp';
 import path from 'path';
 import fs from 'fs';
 
@@ -13,8 +13,16 @@ import fs from 'fs';
 export class UploadService {
   private readonly dirPath: string;
 
-  constructor(private readonly ConfigService: ConfigService) {
-    this.dirPath = path.resolve('./', this.ConfigService.get<AppSystem>(AppName).filesPath);
+  constructor(private readonly config: ConfigService) {
+    this.dirPath = path.resolve('./', this.config.get<AppSystem>(AppName).filesPath);
+  }
+
+  handlerFilePath(value: string, state = true) {
+    if (state) {
+      return value.replace(/(\\|\/)+/g, '|');
+    } else {
+      return value.split('|').join(path.sep);
+    }
   }
 
   async verifyFolder(uid: string, folder: number): Promise<[boolean, string]> {
@@ -54,13 +62,8 @@ export class UploadService {
     return info;
   }
 
-  identify(file: string) {
-    return new Promise<Features>((resolve, reject) => {
-      identify(file, (err, result) => {
-        if (err) return reject(err);
-        return resolve(result);
-      });
-    });
+  identify(file: Buffer) {
+    return Sharp(file).metadata();
   }
 
   async createFile(uid: string, file: Express.Multer.File, isAvatar: boolean): Promise<Files | null> {
@@ -70,12 +73,12 @@ export class UploadService {
     const dirPath = path.resolve(this.dirPath, uid, isAvatar ? 'avatar' : fileInfo.format);
     if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath, { recursive: true });
     const filePath = [dirPath, fileName].join(path.sep);
-    fileInfo.path = filePath.slice(this.dirPath.length);
+    fileInfo.path = this.handlerFilePath(filePath.slice(this.dirPath.length));
     fs.writeFileSync(filePath, file.buffer);
     //
     try {
       if (fileInfo.format === 'image') {
-        const info = await this.identify(filePath);
+        const info = await this.identify(file.buffer);
         fileInfo.height = info.height;
         fileInfo.width = info.width;
       }
@@ -87,11 +90,11 @@ export class UploadService {
   }
 
   removeFile(filePath: string) {
-    fs.rmSync(this.dirPath + filePath);
+    fs.rmSync(this.dirPath + this.handlerFilePath(filePath, false));
   }
 
   handlerFileInfo(file: Files) {
-    const info = reWriteObj(file, ['id', 'size', 'name', 'ext', 'width', 'height']);
+    const info = reWriteObj(file, ['id', 'size', 'name', 'ext', 'width', 'height', 'mimetype']);
     info['fileName'] = [file.name, file.ext].join('');
     return info;
   }

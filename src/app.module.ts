@@ -2,22 +2,22 @@ import { CommentsModule } from './comments/comments.module';
 import { SettingsModule } from './settings/settings.module';
 import { ArticleModule } from './article/article.module';
 import { LoggerModule } from './logger/logger.module';
+import { UploadModule } from './upload/upload.module';
+import { FolderModule } from './folder/folder.module';
 import { UsersModule } from './users/users.module';
 import { FilesModule } from './files/files.module';
 import { AuthModule } from './auth/auth.module';
 
 //
 import { JwtAuthGuard, JwtAuthStrategy } from '@libs/jwtAuth';
-import { TokenService } from './auth/token/token.service';
 import { AppName, AppSystem, ConfigGlobal } from '@config';
+import { TokenService } from './auth/token/token.service';
 import { ConfigService } from '@nestjs/config';
 import { RedisModule } from '@libs/redis';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { MysqlModel } from '@mysql';
-import { UploadModule } from './upload/upload.module';
-import { FolderModule } from './folder/folder.module';
 
 @Module({
   imports: [
