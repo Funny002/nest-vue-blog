@@ -29,3 +29,8 @@ src
 ## 临时预览图
 
 ![Home.png](./Image/Home.png)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FFunny002%2Fnest-vue-blog.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FFunny002%2Fnest-vue-blog?ref=badge_shield)
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FFunny002%2Fnest-vue-blog.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FFunny002%2Fnest-vue-blog?ref=badge_large)
