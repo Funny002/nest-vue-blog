@@ -14,6 +14,6 @@ async function bootstrap() {
 
 window.__CONFIG__ = new BaseConfig('后台管理', 'localhost', 8080);
 
-bootstrap().then(() => {
+bootstrap().then(async () => {
   console.log('bootstrap');
 });
