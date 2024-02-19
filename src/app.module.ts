@@ -10,8 +10,8 @@ import { AuthModule } from './auth/auth.module';
 
 //
 import { JwtAuthGuard, JwtAuthStrategy } from '@libs/jwtAuth';
-import { AppName, AppSystem, ConfigGlobal } from '@config';
 import { TokenService } from './auth/token/token.service';
+import { AppName, AppSystem, ConfigGlobal } from '@config';
 import { ConfigService } from '@nestjs/config';
 import { RedisModule } from '@libs/redis';
 import { APP_GUARD } from '@nestjs/core';

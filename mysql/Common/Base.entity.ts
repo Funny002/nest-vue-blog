@@ -1,4 +1,4 @@
-import { BaseEntity, CreateDateColumn, In, Not, PrimaryGeneratedColumn, QueryRunner, UpdateDateColumn } from 'typeorm';
+import { BaseEntity, CreateDateColumn, In, Not, PrimaryGeneratedColumn, QueryRunner, TreeRepository, UpdateDateColumn } from 'typeorm';
 import { FindOptionsSelect } from 'typeorm/find-options/FindOptionsSelect';
 import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
@@ -14,6 +14,14 @@ export abstract class BaseModel extends BaseEntity {
   @CreateDateColumn({ /* 创建时间 */ type: 'datetime', default: null }) create_time: Date;
 
   @UpdateDateColumn({ /* 更新时间 */ type: 'datetime', default: null }) update_time: Date;
+
+  /** 获取树形结构的 Repository
+   * 创建一个方法，可能没用
+   */
+  static getTreeRepository<T extends BaseModel>(this: { new(): T } & typeof BaseModel): TreeRepository<T> {
+    // @ts-ignore
+    return this.getRepository().manager.getTreeRepository(this);
+  }
 
   /** 根据 `where` 获取多条数据
    * 创建一个方法，可能没用

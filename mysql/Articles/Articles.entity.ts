@@ -13,11 +13,11 @@ export enum ArticleState {
 export class Articles extends BaseModel {
   @Column({ /* 标题 */ }) title: string;
 
-  @Column({ /* 作者id */ }) suer_id: number;
+  @Column({ /* 作者id */ }) uid: number;
 
-  @Column({ /* 作者名称 */ }) user_name: string;
+  @Column({ /* 作者名称 */ }) name: string;
 
-  @Column({ /* 作者头像 */ }) user_avatar: string;
+  @Column({ /* 作者头像 */ }) avatar: string;
 
   @Column({ /* 点赞 */ default: 0 }) star: number;
 

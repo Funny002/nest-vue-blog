@@ -17,8 +17,10 @@ export class MysqlModel {
       Users,
       UsersConf,
       UsersNameRecord,
+      //
       Files,
       FilesFolder,
+      //
       Setting,
     ];
     //
@@ -47,3 +49,5 @@ export * from './File/FilesFolder.entity';
 
 // Setting
 export * from './Setting/Setting.entity';
+
+// Article

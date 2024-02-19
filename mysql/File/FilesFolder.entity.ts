@@ -1,9 +1,9 @@
 import { Column, Entity, Tree, TreeChildren, TreeParent } from 'typeorm';
-import { TreeModel } from '../Common/Tree.entity';
+import { BaseModel } from '../Common/Base.entity';
 
 @Entity()
 @Tree('closure-table')
-export class FilesFolder extends TreeModel {
+export class FilesFolder extends BaseModel {
   @TreeParent() parent: FilesFolder;
 
   @TreeChildren() children: FilesFolder[];
