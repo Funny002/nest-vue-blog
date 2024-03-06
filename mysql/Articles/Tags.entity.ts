@@ -1,5 +1,5 @@
-import { BaseModel } from '../Common/Base.entity';
 import { Column, Entity } from 'typeorm';
+import { BaseModel } from '../Common';
 
 @Entity()
 export class Tags extends BaseModel {

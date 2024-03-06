@@ -11,6 +11,7 @@
     "sourceMap": false,
     "outDir": "./dist",
     "baseUrl": "./",
+    "declarationDir": "./dist/types",
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,

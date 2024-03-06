@@ -31,7 +31,7 @@ export class JwtAuthGuard extends AuthGuard(JwtAuthName) {
 
     if (this.reflector.getAllAndOverride<boolean>(IS_PUBLIC, [context.getHandler(), context.getClass()])) return true;
 
-    if (!(await this.tokenService.hasToken(jwtFromRequest(request)))) return ManualHttpException('令牌无效');
+    if (!(await this.tokenService.hasToken(jwtFromRequest(request)))) return ManualHttpException('令牌无效。');
 
     const roles = this.reflector.getAllAndOverride<boolean>(IS_ADMIN, [context.getHandler(), context.getClass()]);
 

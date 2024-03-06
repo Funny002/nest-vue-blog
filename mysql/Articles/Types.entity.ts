@@ -1,8 +1,8 @@
-import { BaseModel } from '../Common/Base.entity';
 import { Column, Entity } from 'typeorm';
+import { BaseModel } from '../Common';
 
 @Entity()
-export class Classify extends BaseModel {
+export class Types extends BaseModel {
   @Column({ /* 标识 */ length: 100 }) keys: string;
 
   @Column({ /* 名称 */ length: 50 }) name: string;

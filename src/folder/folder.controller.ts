@@ -50,7 +50,7 @@ export class FolderController {
     } else {
       await Files.update({ pid: In(folderIds) }, { pid: 0 });
     }
-    return await FilesFolder.delete({ id: In(folderIds) });
+    return (await FilesFolder.delete({ id: In(folderIds) })).affected;
   }
 
   @Get('tree')

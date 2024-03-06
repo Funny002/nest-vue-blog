@@ -1,7 +1,7 @@
 import { ManualHttpException } from '@libs/error';
 import { Injectable } from '@nestjs/common';
 import { TokenOptions } from './interface';
-import { RedisService } from 'libs/redis';
+import { RedisService } from '@libs/redis';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 

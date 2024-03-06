@@ -1,5 +1,5 @@
 import { Column, Entity, ILike, Index, Like } from 'typeorm';
-import { BaseModel } from '../Common/Base.entity';
+import { BaseModel } from '../Common';
 
 export enum UserState {
   LOCK = 'lock', // 锁定

@@ -17,12 +17,14 @@ import { RedisModule } from '@libs/redis';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
-import { MysqlModel } from '@mysql';
+
+//
+import { Articles, Comments, MysqlModel, Tags, Types } from '@mysql';
 
 @Module({
   imports: [
     // mysql
-    MysqlModel.use(),
+    MysqlModel.use([Articles, Comments, Tags, Types]),
     // config
     ConfigGlobal.use(),
     // redis

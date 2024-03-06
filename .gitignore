@@ -1,12 +1,10 @@
 logs
 dist
 .idea
-upload
+uploads
 .vscode
 .DS_Store
 node_modules
-
-!src/upload
 
 .env
 structure.txt

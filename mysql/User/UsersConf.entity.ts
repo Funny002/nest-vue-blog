@@ -1,5 +1,5 @@
-import { BaseModel } from '../Common/Base.entity';
 import { Column, Entity, Index } from 'typeorm';
+import { BaseModel } from '../Common';
 
 @Entity()
 @Index('unique', ['uid'], { unique: true })
