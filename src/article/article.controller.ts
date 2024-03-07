@@ -1,6 +1,6 @@
-import { Controller, Delete, Get, Param, Post, Put, Query, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Req } from '@nestjs/common';
+import { ArticleCreateDto, ArticleDeleteDto, ArticleListDto, ArticleUpdateDto } from './dto/index.dto';
 import { PaginationParams, PaginationRequest } from '@libs/pagination';
-import { ArticleCreateDto, ArticleListDto, ArticleUpdateDto } from './dto/index.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ArticleService } from './article.service';
 import { ManualHttpException } from '@libs/error';
@@ -49,19 +49,19 @@ export class ArticleController {
 
   @Post()
   @ApiOperation({ summary: '文章创建' })
-  async create(@Req() req: Request, @Query() query: ArticleCreateDto) {
-    return `create ${ req['user'].uid }`;
+  async create(@Req() req: Request, @Body() body: ArticleCreateDto) {
+    return { body, user: req['user'] };
   }
 
-  @Put(':id')
+  @Put()
   @ApiOperation({ summary: '文章更新' })
-  async update(@Req() req: Request, @Param('id') id: number, @Query() query: ArticleUpdateDto) {
-    return `update ${ req['user'].uid } - ${ id }`;
+  async update(@Req() req: Request, @Body() body: ArticleUpdateDto) {
+    return { body, user: req['user'] };
   }
 
-  @Delete(':id')
+  @Delete()
   @ApiOperation({ summary: '文章删除' })
-  async delete(@Req() req: Request, @Param('id') id: number, @Query() query: ArticleCreateDto) {
-    return `delete ${ req['user'].uid } - ${ id }`;
+  async delete(@Req() req: Request, @Body() body: ArticleDeleteDto) {
+    return { body, user: req['user'] };
   }
 }

@@ -33,7 +33,7 @@ export class ArticleService {
     } else {
       const state = [ArticleState.PASS, ArticleState.ARCHIVE];
       if (role === 'admin') state.push(ArticleState.NOT_PASS);
-      where ['state'] = state;
+      where['state'] = state;
     }
     const info = await Articles.getInfoKeys(Articles.handleWhere(where));
     return await this.handlerArticle(info);

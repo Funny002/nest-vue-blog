@@ -1,4 +1,4 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, In } from 'typeorm';
 import { BaseModel } from '../Common';
 
 export enum ArticleState {
@@ -48,6 +48,10 @@ export class Articles extends BaseModel {
   @Column({ /* 评论状态 */ type: 'enum', enum: ArticleComment, default: ArticleComment.off }) comment_state: ArticleComment;
 
   protected handleWhere(): { [p: string]: { name?: string; handle?: any } } {
-    return {};
+    return {
+      id: { name: 'id' },
+      uid: { name: 'uid' },
+      state: { name: 'state', handle: In },
+    };
   }
 }
