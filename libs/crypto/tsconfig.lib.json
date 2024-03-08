@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "declaration": true,
-    "outDir": "../../dist/common/crypto"
+    "outDir": "../../dist/libs/crypto"
   },
   "include": ["**/*"],
   "exclude": ["node_modules", "dist"]

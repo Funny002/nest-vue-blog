@@ -1,6 +1,6 @@
 import { Pagination, PaginationRequest } from '@libs/pagination';
 import { Articles, ArticleState, Users } from '@mysql';
-import { ArticleListDto } from './dto/index.dto';
+import { ArticleCreateDto, ArticleListDto, ArticleUpdateDto } from './dto/index.dto';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -37,5 +37,27 @@ export class ArticleService {
     }
     const info = await Articles.getInfoKeys(Articles.handleWhere(where));
     return await this.handlerArticle(info);
+  }
+
+  createArticle(body: ArticleCreateDto | ArticleUpdateDto, user?: any) {
+    const info = new Articles();
+    if (user) {
+      info.uid = user.uid;
+      info.name = user.name;
+      info.avatar = user.avatar;
+    }
+    //
+    info.title = body.title;
+    info.content = body.content;
+    info.state = ArticleState.DRAFT;
+    //
+    info.files = body.files || [];
+    info.tags = body.tags || [];
+    info.types = body.types || [];
+    info.attachment = body.attachment || [];
+    //
+    info.comment_state = body.comment_state;
+    info.comment_date = new Date(body.comment_date);
+    return info;
   }
 }

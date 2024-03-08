@@ -9,26 +9,35 @@ import { FilesModule } from './files/files.module';
 import { AuthModule } from './auth/auth.module';
 
 //
+import { BullModuleOptions } from '@nestjs/bull/dist/interfaces/bull-module-options.interface';
+import { AppName, AppSystem, BullName, ConfigGlobal } from '@config';
 import { JwtAuthGuard, JwtAuthStrategy } from '@libs/jwtAuth';
 import { TokenService } from './auth/token/token.service';
-import { AppName, AppSystem, ConfigGlobal } from '@config';
+import { ArticlesQueueServer } from '@libs/bullQueue';
 import { ConfigService } from '@nestjs/config';
+import { BullModule } from '@nestjs/bull';
 import { RedisModule } from '@libs/redis';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
-
 //
-import { Articles, Comments, MysqlModel, Tags, Types } from '@mysql';
+import { Articles, ArticlesVerify, Comments, MysqlModel, Tags, Types } from '@mysql';
 
 @Module({
   imports: [
     // mysql
-    MysqlModel.use([Articles, Comments, Tags, Types]),
+    MysqlModel.use([Articles, ArticlesVerify, Comments, Tags, Types]),
     // config
     ConfigGlobal.use(),
     // redis
     RedisModule.forRoot(undefined, true),
+    // bull
+    BullModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        return configService.get<BullModuleOptions>(BullName);
+      },
+    }),
     // module
     CommentsModule,
     SettingsModule,
@@ -46,6 +55,8 @@ import { Articles, Comments, MysqlModel, Tags, Types } from '@mysql';
     TokenService,
     JwtAuthStrategy,
     { provide: APP_GUARD, useClass: JwtAuthGuard },
+    // bull
+    ArticlesQueueServer,
   ],
 })
 export class AppModule {

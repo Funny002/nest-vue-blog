@@ -1,15 +1,23 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Req } from '@nestjs/common';
 import { ArticleCreateDto, ArticleDeleteDto, ArticleListDto, ArticleUpdateDto } from './dto/index.dto';
-import { PaginationParams, PaginationRequest } from '@libs/pagination';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req } from '@nestjs/common';
+import { Pagination, PaginationParams, PaginationRequest } from '@libs/pagination';
+import { Articles, ArticleState, ArticlesVerify } from '@mysql';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ArticlesQueueName } from '@libs/bullQueue';
 import { ArticleService } from './article.service';
 import { ManualHttpException } from '@libs/error';
-import { NoAuth } from '@libs/jwtAuth';
+import { IsAdmin, NoAuth } from '@libs/jwtAuth';
+import { InjectQueue } from '@nestjs/bull';
+import { In, Like, Not } from 'typeorm';
+import { Queue } from 'bull';
 
 @Controller('article')
 @ApiTags('article 文章')
 export class ArticleController {
-  constructor(private readonly articleService: ArticleService) {}
+  constructor(
+    private readonly articleService: ArticleService,
+    @InjectQueue(ArticlesQueueName) private readonly articlesQueue: Queue,
+  ) {}
 
   @NoAuth()
   @Get('list')
@@ -50,18 +58,73 @@ export class ArticleController {
   @Post()
   @ApiOperation({ summary: '文章创建' })
   async create(@Req() req: Request, @Body() body: ArticleCreateDto) {
-    return { body, user: req['user'] };
+    const count = await Articles.countBy({ title: Like(body.title), state: ArticleState.PASS });
+    if (count) return ManualHttpException('文章标题已存在。');
+    return (await Articles.save(this.articleService.createArticle(body, req['user']))).id;
   }
 
   @Put()
   @ApiOperation({ summary: '文章更新' })
   async update(@Req() req: Request, @Body() body: ArticleUpdateDto) {
-    return { body, user: req['user'] };
+    const uid = req['user'].uid;
+    const list = await Articles.getKeys({ uid, id: In(body.ids) });
+    if (list.length !== body.ids.length) return ManualHttpException('文章不存在或无修改权限。');
+    const data = this.articleService.createArticle(body);
+    return (await Articles.update({ id: In(body.ids), uid }, data)).affected;
   }
 
   @Delete()
   @ApiOperation({ summary: '文章删除' })
   async delete(@Req() req: Request, @Body() body: ArticleDeleteDto) {
-    return { body, user: req['user'] };
+    const uid = req['user'].uid;
+    const count = await Articles.countBy({ uid, id: In(body.ids) });
+    if (count !== body.ids.length) return ManualHttpException('文章不存在或无删除权限。');
+    let data: Partial<Articles> = { state: ArticleState.REMOVE };
+    if (body.isAll) Object.assign(data, { files: [], tags: [], types: [], content: '', attachment: [] });
+    return (await Articles.update({ id: In(body.ids), uid }, data)).affected;
+  }
+
+  @Post('publish/:id')
+  @ApiOperation({ summary: '文章发布' })
+  async publish(@Req() req: Request, @Param('id') id: number) {
+    const info = await Articles.getInfoKeys({ uid: req['user'].uid, id, state: Not(ArticleState.REMOVE) });
+    if (!info) return ManualHttpException('文章不存在。');
+    //
+    const StateMap = { 'pass': '已通过', 'not_pass': '未通过', 'archive': '已归档', 'verify': '审核中' };
+    if (Object.keys(StateMap).includes(info.state)) return ManualHttpException(StateMap[info.state]);
+    //
+    try {
+      await Articles.getRepository().update({ id: info.id }, { state: ArticleState.VERIFY });
+      await this.articlesQueue.add('handler', { id });
+      return '审核中，请赖心等待';
+    } catch (e) {
+      console.log(e.message);
+      return ManualHttpException('未知异常', 3);
+    }
+  }
+
+  @IsAdmin()
+  @Put('admin')
+  @ApiOperation({ summary: '文章更新，管理员' })
+  async updateAdmin(@Body() body: ArticleUpdateDto) {
+    const data = this.articleService.createArticle(body);
+    return (await Articles.update({ id: In(body.ids) }, data)).affected;
+  }
+
+  @IsAdmin()
+  @Delete('admin')
+  @ApiOperation({ summary: '文章删除，管理员' })
+  async deleteAdmin(@Body() body: ArticleDeleteDto) {
+    let data: Partial<Articles> = { state: ArticleState.REMOVE };
+    if (body.isAll) Object.assign(data, { files: [], tags: [], types: [], content: '', attachment: [] });
+    return (await Articles.update({ id: In(body.ids) }, data)).affected;
+  }
+
+  @IsAdmin()
+  @Get('verify/list')
+  @ApiOperation({ summary: '审核列表，管理员' })
+  async verifyList(@Param('id') id: number = 0, @Query() query: ArticleListDto, @PaginationParams() page: PaginationRequest) {
+    const { count, list } = await ArticlesVerify.getList(page, ArticlesVerify.handleWhere(query));
+    return Pagination.of(page, count, list, query);
   }
 }

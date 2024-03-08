@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "declaration": true,
-    "outDir": "../../dist/libs/redis"
+    "outDir": "../../dist/libs/bullQueue"
   },
   "include": ["**/*"],
   "exclude": ["node_modules", "dist"]

@@ -1,4 +1,6 @@
-import { Column, Entity, In } from 'typeorm';
+import { Column, Entity, In, JoinColumn, OneToMany } from 'typeorm';
+import { ArticlesVerify } from './ArticlesVerify.entity';
+import { Comments } from './Comments.entity';
 import { BaseModel } from '../Common';
 
 export enum ArticleState {
@@ -7,19 +9,21 @@ export enum ArticleState {
   NOT_PASS = 'not_pass',  // 未通过
   ARCHIVE = 'archive',  // 归档
   REMOVE = 'remove',  // 删除
+  VERIFY = 'verify', // 审核
+  ERROR = 'error', // 错误
 }
 
 export enum ArticleComment {
-  on, // 开启
-  off, // 关闭
-  where // 限时
+  ON = 'on', // 开启
+  OFF = 'off', // 关闭
+  WHERE = 'where' // 限时
 }
 
-@Entity({ engine: 'MyISAM' })
+@Entity()
 export class Articles extends BaseModel {
   @Column({ /* 标题 */ }) title: string;
 
-  @Column({ /* 作者id */ }) uid: number;
+  @Column({ /* 作者id */ }) uid: string;
 
   @Column({ /* 作者名称 */ }) name: string;
 
@@ -41,11 +45,13 @@ export class Articles extends BaseModel {
 
   @Column({ /* 附件 */ type: 'simple-array' }) attachment: string[];
 
+  @Column({ /* 更新时间 */ type: 'datetime', default: null }) update_date: Date;
+
   @Column({ /* 评论时间 */ type: 'datetime', default: null }) comment_date: Date;
 
   @Column({ /* 状态 */ type: 'enum', enum: ArticleState, default: ArticleState.DRAFT }) state: ArticleState;
 
-  @Column({ /* 评论状态 */ type: 'enum', enum: ArticleComment, default: ArticleComment.off }) comment_state: ArticleComment;
+  @Column({ /* 评论状态 */ type: 'enum', enum: ArticleComment, default: ArticleComment.OFF }) comment_state: ArticleComment;
 
   protected handleWhere(): { [p: string]: { name?: string; handle?: any } } {
     return {

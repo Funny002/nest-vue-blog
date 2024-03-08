@@ -1,4 +1,4 @@
-import { ArrayNotEmpty, IsArray, IsEnum, IsInt, IsNotEmpty, IsString, Min } from 'class-validator';
+import { ArrayNotEmpty, IsArray, IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, Min } from 'class-validator';
 import { PartialType, IntersectionType } from '@nestjs/mapped-types';
 import { ArticleComment, ArticleState } from '@mysql';
 import { ApiProperty } from '@nestjs/swagger';
@@ -62,9 +62,9 @@ export class ArticleCreateDto {
   @ApiProperty({ description: '评论截止时间' })
   comment_date: number;
 
-  @IsEnum(ArticleState, { message: '状态不在枚举范围' })
-  @ApiProperty({ description: '状态', enum: ArticleState })
-  state: ArticleState;
+  // @IsEnum(ArticleState, { message: '状态不在枚举范围' })
+  // @ApiProperty({ description: '状态', enum: ArticleState })
+  // state: ArticleState;
 
   @IsEnum(ArticleComment, { message: '评论状态不在枚举范围' })
   @ApiProperty({ description: '评论状态', enum: ArticleComment })
@@ -77,6 +77,11 @@ export class ArticleDeleteDto {
   @IsInt({ each: true, message: 'ids必须是数字' })
   @ApiProperty({ description: '附件', type: 'Array<Number>' })
   ids: number[];
+
+  @IsOptional()
+  @IsInt({ message: '状态必须是数字' })
+  @ApiProperty({ description: '状态' })
+  isAll: number;
 }
 
 export class ArticleUpdateDto extends IntersectionType(
